@@ -111,7 +111,7 @@ const AuthRight = ({ className }: { className?: string }) => {
     return () => clearInterval(interval);
   }, [isAutoPlay, carouselData.length]);
 
-  const currentItem = carouselData[currentIndex];
+  // const currentItem = carouselData[currentIndex];
 
   return (
     <div
