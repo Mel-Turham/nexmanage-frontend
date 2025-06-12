@@ -58,13 +58,6 @@ api.interceptors.response.use(
     };
 
     if (error.response?.data) {
-      const data = error.response?.data as Record<string, any>;
-      apiError.message = data.message || data.error || apiError.message;
-      apiError.errors = data.errors;
-    }
-
-    // ...existing code...
-    if (error.response?.data) {
       const data = error.response?.data as Record<string, unknown>;
       apiError.message =
         (data as { message?: string; error?: string }).message ||
@@ -76,7 +69,6 @@ api.interceptors.response.use(
           ? (errors as Record<string, string[]>)
           : undefined;
     }
-    // ...existing code...
 
     // Gestion des erreurs d'authentification
     if (error.response?.status === 401) {
