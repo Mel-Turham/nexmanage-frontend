@@ -110,7 +110,7 @@ const RegisterForm = () => {
   return (
     <AuthLayout>
       <NextManageIcon />
-      <div className="flex flex-col items-center  gap-4 w-full">
+      <div className="flex flex-col items-center gap-4 w-full lg:justify-center">
         <div className="relative z-10">
           <h1 className="text-2xl font-semibold lg:text-4xl text-[#344EA2]">
             Créer un compte
@@ -306,13 +306,17 @@ const RegisterForm = () => {
                       />
                       <small>
                         J’ai lu et j’accepte les{" "}
-                        <strong className="text-[#142938]">
-                          Termes et conditions
-                        </strong>{" "}
+                        <Link href={"/terms"}>
+                          <strong className="text-[#142938] cursor-pointer">
+                            Termes et conditions
+                          </strong>
+                        </Link>{" "}
                         ainsi que{" "}
-                        <strong className="text-[#142938]">
+                        <Link href={"/police"}>
+                        <strong className="text-[#142938] cursor-pointer">
                           la Politique de confidentialité
                         </strong>{" "}
+                        </Link>
                       </small>
                     </div>
                   </FormControl>
@@ -343,7 +347,7 @@ const RegisterForm = () => {
           </form>
         </Form>
       </div>
-      <div className="px-6 flex justify-between self-end mt-6 flex-wrap  z-20 relative">
+      <div className="px-6 flex justify-between mt-6 flex-wrap  z-20 relative">
         <p className="text-muted-foreground text-xs mt-2 font-medium">
           Vous avez deja un compte ?{" "}
           <Link href="/auth/login" className="text-[#142938]">
