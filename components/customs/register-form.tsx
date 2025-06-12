@@ -324,7 +324,7 @@ const RegisterForm = () => {
               )}
             />
             <button
-              disabled={!form.formState.isValid || !watchedTerms}
+              disabled={!watchedTerms}
               type="submit"
               className="custom-button-gradient py-2 w-full disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none"
             >

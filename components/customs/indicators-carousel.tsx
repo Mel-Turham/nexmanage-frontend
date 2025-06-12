@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
-import React from 'react';
+import { cn } from "@/lib/utils";
+import React from "react";
 
 interface IndicatorsCarouselProps {
   isActif: boolean;
@@ -9,11 +9,11 @@ interface IndicatorsCarouselProps {
 const IndicatorsCarousel = ({ isActif, onClick }: IndicatorsCarouselProps) => {
   return (
     <button
-      type='button'
+      type="button"
       onClick={onClick}
       className={cn(
-        'h-2 w-10 rounded-full bg-white/25 cursor-pointer transition-all duration-200 hover:-translate-y-1.5 backdrop-blur-xl',
-        isActif && 'bg-[#344EA2]'
+        "h-2 w-10 rounded-full bg-white/25 cursor-pointer hover:bg-[#344EA2] transition-all duration-300 ease-in-out  backdrop-blur-xl",
+        isActif && "bg-[#344EA2]"
       )}
     />
   );
