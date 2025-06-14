@@ -3,11 +3,7 @@ import NextManageIcon from '@/icons/logo';
 import AuthLayout from '@/layouts/auth-layout';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import * as RPNInput from 'react-phone-number-input';
-import {
-  registerSchema,
-  RegisterSchema,
-} from '@/schemas/auth.schemas/register.schemas';
+
 import {
   Form,
   FormControl,
@@ -17,17 +13,18 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/input';
-import { FlagComponent } from './flag-component';
-import { CountrySelect } from './country-selected';
-import { useState, useMemo } from 'react';
-import { PhoneInput } from './phone-input';
-import { EyeIcon, EyeOffIcon, Frown, Meh, Smile } from 'lucide-react';
-import { Checkbox } from '../ui/checkbox';
-import { Google } from '@/icons/google';
-import Link from 'next/link';
-import { Button } from '../ui/button';
 
-const RegisterForm = () => {
+import { useState, useMemo } from 'react';
+
+import { EyeIcon, EyeOffIcon, Frown, Meh, Smile } from 'lucide-react';
+
+import Link from 'next/link';
+import {
+  NewPasswordSchema,
+  newPassWordSchema,
+} from '../../schemas/auth.schemas/new-password.shema';
+
+const ResetPasswordForm = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
@@ -50,11 +47,9 @@ const RegisterForm = () => {
     }));
   };
 
-  const form = useForm<RegisterSchema>({
-    resolver: zodResolver(registerSchema),
+  const form = useForm<NewPasswordSchema>({
+    resolver: zodResolver(newPassWordSchema),
     defaultValues: {
-      username: '',
-      telephone: '',
       password: '',
       confirmPassword: '',
     },
@@ -62,7 +57,7 @@ const RegisterForm = () => {
 
   // Surveiller les changements du mot de passe
   const watchedPassword = form.watch('password');
-  const watchedTerms = form.watch('terms');
+  const watchedConfirmePassWord = form.watch('confirmPassword');
 
   const strength = useMemo(
     () => checkStrength(watchedPassword || ''),
@@ -105,81 +100,22 @@ const RegisterForm = () => {
     );
   };
 
-  const onSubmit = (data: RegisterSchema) => console.log(data);
+  const onSubmit = (data: NewPasswordSchema) => console.log(data);
 
   return (
     <AuthLayout>
       <NextManageIcon />
-      <div className='flex flex-col items-center gap-4 w-full lg:justify-center'>
+      <div className='flex flex-col items-center  max-w-[500px] mt-8 mx-auto gap-4 w-full lg:justify-center'>
         <div className='relative z-10'>
-          <h1 className='text-3xl font-semibold  text-[#344EA2]'>
-            Créer un compte
+          <h1 className='text-3xl font-semibold  text-[#344EA2] text-center mb-6'>
+            Réinitialisation de votre <br /> mot de passe
           </h1>
-          <p className='text-base tracking-tighter font-medium text-center mt-2 text-muted-foreground'>
-            Créez facilement votre compte
-          </p>
         </div>
         <Form {...form}>
           <form
-            className='space-y-2 relative z-20 max-w-[400px]'
+            className='space-y-2 relative z-20 w-full'
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            <FormField
-              control={form.control}
-              name='username'
-              render={({ field }) => (
-                <FormItem>
-                  <div className='group relative'>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background inline-flex px-2'>
-                        {"Nom d'utilisateur"}
-                      </span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder='Votre nom'
-                        type='text'
-                        aria-label=''
-                        className=''
-                      />
-                    </FormControl>
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='telephone'
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className='w-full'>
-                      <RPNInput.default
-                        className='flex w-full'
-                        international
-                        flagComponent={FlagComponent}
-                        inputComponent={PhoneInput}
-                        countrySelectComponent={CountrySelect}
-                        placeholder='Entrez votre numéro'
-                        value={field.value}
-                        onChange={(value) => {
-                          field.onChange(value || '');
-                        }}
-                      />
-                      {fieldState.error && (
-                        <p className='text-destructive text-xs mt-1'>
-                          {fieldState.error.message}
-                        </p>
-                      )}
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name='password'
@@ -295,59 +231,13 @@ const RegisterForm = () => {
               )}
             />
 
-            <FormField
-              control={form.control}
-              name='terms'
-              render={({ field }) => (
-                <FormItem className='flex flex-col items-start gap-3.5'>
-                  <FormLabel className='sr-only'>Terms</FormLabel>
-                  <FormControl>
-                    <div className='flex gap-1.5'>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                        className='mt-0.5 cursor-pointer'
-                      />
-                      <small className='text-muted-foreground text-xs'>
-                        J'ai lu et j'accepte les{' '}
-                        <Link href={'/terms'}>
-                          <strong className='text-[#142938] cursor-pointer'>
-                            Termes et conditions
-                          </strong>
-                        </Link>{' '}
-                        ainsi que{' '}
-                        <Link href={'/police'}>
-                          <strong className='text-[#142938] cursor-pointer'>
-                            la Politique de confidentialité
-                          </strong>{' '}
-                        </Link>
-                      </small>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
             <button
-              disabled={!watchedTerms}
+              disabled={!watchedPassword || !watchedConfirmePassWord}
               type='submit'
               className='custom-button-gradient py-2 w-full disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none'
             >
-              Créer mon compte
+              Réinitialiser mon mot de passe
             </button>
-            <div className='relative z-20'>
-              <div className='absolute inset-0 flex items-center'>
-                <span className='w-full border-t' aria-hidden='true' />
-              </div>
-              <div className='relative flex justify-center text-xs uppercase'>
-                <span className='bg-background px-2 text-muted-foreground'>
-                  ou s'inscrire avec
-                </span>
-              </div>
-            </div>
-            <Button type='button' variant='outline' className='w-full'>
-              <Google className='mr-2 size-5' />
-              S'inscrire avec Google
-            </Button>
           </form>
         </Form>
       </div>
@@ -368,4 +258,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default ResetPasswordForm;
