@@ -49,12 +49,13 @@ const PlanningHeader: React.FC<PlanningHeaderProps> = ({
         <Button variant="ghost" size="icon" onClick={() => navigate("prev")}>
           <ArrowLeft01Icon className="h-4 w-4" />
         </Button>
-        <span className="text-lg font-semibold min-w-[200px] text-center">
-          {viewTitle}
-        </span>
+
         <Button variant="ghost" size="icon" onClick={() => navigate("next")}>
           <ArrowRight01Icon className="h-4 w-4" />
         </Button>
+        <span className="text-lg font-semibold min-w-[200px] text-center">
+          {viewTitle}
+        </span>
       </div>
 
       <Select
