@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Alice Dupont",
+    "email": "alice.dupont@example.com",
+    "telephone": "0102030405",
+    "Poste": "Manager",
+    "Entreprise": "TechCorp",
+    "role": "Admin"
+  },
+  {
+    "id": 21,
+    "name": "Alice Dupont",
+    "email": "alice.dupont@example",
+    "telephone": "0102030405",
+    "Poste": "Manager",
+    "Entreprise": "TechCorp",
+    "role": "Admin"
+  }
+]
