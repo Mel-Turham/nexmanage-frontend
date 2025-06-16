@@ -1,0 +1,35 @@
+[
+  {
+    "idDemande": 1,
+    "employe": {
+      "id": 1,
+      "name": "Alice Dupont",
+      "email": "alice.dupont@example.com",
+      "telephone": "0102030405",
+      "Poste": "Manager",
+      "Entreprise": "TechCorp",
+      "role": "Admin"
+    },
+    "dateDebut": "2025-04-15",
+    "dateFin": "2025-04-20",
+    "duration": "5 jours",
+    "motif": "Vacances annuelles",
+    "statut": "Approuvée"
+  },
+  {
+    "idDemande": 2,
+    "employe": {
+      "id": 2,
+      "name": "Jean Martin",
+      "email": "jean.martin@example.com",
+      "telephone": "0607080910",
+      "Poste": "Développeur",
+      "Entreprise": "SoftSolutions"
+    },
+    "dateDebut": "2025-05-01",
+    "dateFin": "2025-05-03",
+    "duration": "3 jours",
+    "motif": "Congé maladie",
+    "statut": "En attente"
+  }
+]
