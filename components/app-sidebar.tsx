@@ -1,8 +1,7 @@
 "use client";
 import * as React from "react";
+import { usePathname } from "next/navigation";
 
-import { SearchForm } from "@/components/search-form";
-import { VersionSwitcher } from "@/components/version-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -17,9 +16,9 @@ import {
 } from "@/components/ui/sidebar";
 import { TeamSwitcher } from "./team-switcher";
 import {
-  Analytics01Icon,
+
   Analytics02Icon,
-  Calendar01Icon,
+
   Calendar02Icon,
   CursorPointer02Icon,
   Home01Icon,
@@ -30,11 +29,7 @@ import {
 } from "hugeicons-react";
 
 const data = {
-  teams: [
-    { name: "Acme Inc" },
-    { name: "Acme Corp." },
-    { name: "Evil Corp." },
-  ],
+  teams: [{ name: "Acme Inc" }, { name: "Acme Corp." }, { name: "Evil Corp." }],
   navMain: [
     {
       title: "Menu principal",
@@ -49,8 +44,16 @@ const data = {
       title: "Menu Secondaire",
       url: "#",
       items: [
-        { title: "Pointages", icon: CursorPointer02Icon, url: "/admin/pointages" },
-        { title: "Ressources Humaines", icon: UserListIcon, url: "/admin/employer" },
+        {
+          title: "Pointages",
+          icon: CursorPointer02Icon,
+          url: "/admin/pointages",
+        },
+        {
+          title: "Ressources Humaines",
+          icon: UserListIcon,
+          url: "/admin/employer",
+        },
         { title: "Messages", icon: Message01Icon, url: "/admin/message" },
       ],
     },
@@ -66,13 +69,9 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // State pour garder la route active
-  const [activeUrl, setActiveUrl] = React.useState<string>("/admin/employer"); // valeur par défaut
+  const pathname = usePathname();
 
-  // Gestion du clic sur un menu
-  const handleMenuClick = (url: string) => {
-    setActiveUrl(url);
-  };
+  console.log(pathname)
 
   return (
     <Sidebar {...props}>
@@ -87,17 +86,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  const isActive = activeUrl === item.url;
+                  // Détermine si l'item est actif en comparant avec la route courante
+                  // On peut utiliser startsWith si tu veux activer aussi les sous-routes
+                  const isActive =
+                    pathname === item.url
 
                   return (
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <a
                           href={item.url}
-                          onClick={(e) => {
-                            e.preventDefault(); // Empêche le rechargement de la page
-                            handleMenuClick(item.url);
-                          }}
                           className={`flex items-center space-x-2 rounded-none px-2 py-3 h-fit transition-colors ${
                             isActive
                               ? "border-l-4 border-Primaire text-Primaire font-semibold bg-bleu-ciel"
