@@ -1,0 +1,78 @@
+import { AppSidebar } from "@/components/app-sidebar";
+import { NavUser } from "@/components/nav-user";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import {
+  ArrowDown01Icon,
+  Notification02Icon,
+  NotificationBlock02Icon,
+  Search01Icon,
+} from "hugeicons-react";
+import Image from "next/image";
+
+export default function Page() {
+  const data = {
+    user: {
+      name: "shadcn",
+      email: "m@example.com",
+      avatar: "/avatars/shadcn.jpg",
+    },
+  };
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <div className="flex flex-row items-center px-2 rounded-md border border-gray w-full">
+            <Search01Icon color="#e5e5e5" />
+            <input
+              type="search "
+              name="search"
+              placeholder="Recherche un employer, un contrat,..."
+              className="py-2 px-4 w-full outline-0"
+            />
+          </div>
+          <Button size={"icon"} variant={"outline"}>
+            <Notification02Icon />
+          </Button>
+          <NavUser user={data.user} />
+          {/* <div className="flex flex-row items-center px-3 w-fit">
+            <Image
+              src={"/user.png"}
+              alt="photo de profil"
+              width={1000}
+              height={1000}
+              className="h-full w-10"
+            />
+            <div className="flex flex-col items-start">
+              <h1 className="font-semibold text-lg">Username</h1>
+              <p className="text-gray text-sm">696 696 696</p>
+            </div>
+            <ArrowDown01Icon />
+          </div> */}
+        </header>
+        <div className="flex flex-1 flex-col gap-4 p-4">
+          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+            <div className="bg-muted/50 aspect-video rounded-xl" />
+            <div className="bg-muted/50 aspect-video rounded-xl" />
+            <div className="bg-muted/50 aspect-video rounded-xl" />
+          </div>
+          <div className="bg-muted/50 min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
