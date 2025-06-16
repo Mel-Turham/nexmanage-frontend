@@ -1,0 +1,18 @@
+ [ {
+    "id": 2,
+    "name": "Marie Curie",
+    "email": "marie.curie@example.com",
+    "phone": "+1 (438) 876-5432",
+    "duration": "15h",
+    "leaveBalance": "15 jours"
+  },
+  {
+    "id": 2,
+    "name": "Marie Curie",
+    "email": "marie.curie@example.com",
+    "phone": "+1 (438) 876-5432",
+    "duration": "15h",
+    "leaveBalance": "15 jours"
+  }
+  
+ ]
