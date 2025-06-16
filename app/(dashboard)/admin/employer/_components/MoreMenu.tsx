@@ -25,11 +25,11 @@ import Supprimer from "./supprimer";
 // import slugify from 'slugify';
 // const generateSlug = (name: string) => slugify(name, { lower: true, strict: true, locale: 'fr' });
 const generateSlug = (name: string): string => {
-  if (!name) return 'default-slug';
+  if (!name) return "default-slug";
   return name
     .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '');
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]+/g, "");
 };
 
 interface MoreMenuProps {
@@ -52,15 +52,24 @@ export function MoreMenu({ employer }: MoreMenuProps) {
           <MoreHorizontal />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[200px]"> {/* Légèrement élargi pour un meilleur affichage */}
+      <DropdownMenuContent align="end" className="w-[200px]">
+        {" "}
+        {/* Légèrement élargi pour un meilleur affichage */}
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuGroup>
           {/* L'option "Afficher" devient un lien */}
-          <Link href={`/admin/employer/${employerSlug}`} passHref legacyBehavior>
+          <Link
+            href={`/admin/employer/${employerSlug}`}
+            passHref
+            legacyBehavior
+          >
             <DropdownMenuItem asChild className="cursor-pointer">
               {/* Enveloppez le contenu dans un <a> ou un <Button> si nécessaire pour le style/comportement */}
-              <div className="flex items-center w-full px-2 py-1.5 text-sm"> {/* Classes similaires à un bouton de Dropdown */}
-                <Eye className="mr-2 h-4 w-4 text-gray-600" /> {/* Couleur pour l'icône */}
+              <div className="flex items-center w-full px-2 py-1.5 text-sm">
+                {" "}
+                {/* Classes similaires à un bouton de Dropdown */}
+                <Eye className="mr-2 h-4 w-4 text-gray-600" />{" "}
+                {/* Couleur pour l'icône */}
                 Afficher les détails
               </div>
             </DropdownMenuItem>
@@ -69,7 +78,7 @@ export function MoreMenu({ employer }: MoreMenuProps) {
           {/* Modifier le profil - utilise Dialog */}
           <Dialog>
             <DialogTrigger asChild>
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()} // Empêche la fermeture du dropdown
                 className="cursor-pointer flex items-center"
               >
@@ -77,7 +86,8 @@ export function MoreMenu({ employer }: MoreMenuProps) {
                 Modifier le profil
               </DropdownMenuItem>
             </DialogTrigger>
-            <CustomMenu employer={employer} /> {/* CustomMenu est votre Edit.tsx */}
+            <CustomMenu employer={employer} />{" "}
+            {/* CustomMenu est votre Edit.tsx */}
           </Dialog>
 
           <DropdownMenuSeparator />
@@ -85,12 +95,13 @@ export function MoreMenu({ employer }: MoreMenuProps) {
           {/* Supprimer - utilise Dialog */}
           <Dialog>
             <DialogTrigger asChild>
-              <DropdownMenuItem 
+              <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()} // Empêche la fermeture du dropdown
                 className="cursor-pointer flex items-center text-red-600 hover:!text-red-700" // Style pour suppression
               >
-                <Trash className="mr-2 h-4 w-4" /> {/* L'icône héritera de la couleur du texte */}
-                Supprimer l'employé
+                <Trash className="mr-2 h-4 w-4" />{" "}
+                {/* L'icône héritera de la couleur du texte */}
+                {"Supprimer l'employé"}
               </DropdownMenuItem>
             </DialogTrigger>
             <Supprimer employer={employer} />

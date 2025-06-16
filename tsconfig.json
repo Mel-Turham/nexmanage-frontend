@@ -22,6 +22,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/OtpInput.js", "app/pages/401.js", "app/error-exemple.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "components/OtpInput.js", "app/pages/401.js", "app/error-exemple.js", ".next/types/app/(dashboard)/admin/conges/[slug]/page.tsx"],
   "exclude": ["node_modules"]
 }

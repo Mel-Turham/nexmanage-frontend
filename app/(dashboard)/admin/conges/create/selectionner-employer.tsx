@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+// import { Calendar } from "@/components/ui/calendar";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -15,7 +15,7 @@ export default function CreerDemandeCongePage() {
   const router = useRouter();
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const [multiDays, setMultiDays] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  // const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
   const employees = Array(6).fill({ name: "Jason Kitio", role: "Poste" });
 
