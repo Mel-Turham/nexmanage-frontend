@@ -28,6 +28,7 @@ const CreateEntrepriseForm = () => {
     { value: 250, label: '101-250' },
     { value: 300, label: '250+' },
   ];
+
   const form = useForm<createEntrepriseSchema>({
     resolver: zodResolver(createEntrepriseSchema),
     defaultValues: {
@@ -52,10 +53,14 @@ const CreateEntrepriseForm = () => {
   };
 
   return (
-    <AuthLayout className='lg:justify-normal'>
+    <AuthLayout
+      url='/auth/register'
+      text="Vous n'avez pas de compte?"
+      textLink='Creer votre compte'
+    >
       <NextManageIcon />
-      <div className='flex flex-col items-center mx-auto gap-4 w-full lg:justify-center  max-w-[500px]'>
-        <div className='relative z-10'>
+      <div className='flex flex-col items-center mx-auto gap-4 w-full lg:justify-center max-w-[500px]'>
+        <div className='z-10'>
           <h1 className='text-2xl font-semibold text-center text-[#344EA2]'>
             Créez votre organisation
           </h1>
@@ -67,9 +72,10 @@ const CreateEntrepriseForm = () => {
             <span className='text-muted-foreground'>avec NextManage</span>
           </p>
         </div>
+
         <Form {...form}>
           <form
-            className='space-y-4 relative z-20 w-full mt-2'
+            className='space-y-3 relative z-20 w-full'
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField
@@ -77,19 +83,18 @@ const CreateEntrepriseForm = () => {
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <div className='group relative'>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background inline-flex px-2'>
-                        Nom de l&apos;organisation
-                      </span>
-                    </FormLabel>
+                  <div className='relative'>
                     <FormControl>
                       <Input
                         {...field}
+                        placeholder=' '
                         aria-label="Nom de l'organisation"
-                        className=''
+                        className='peer pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
                       />
                     </FormControl>
+                    <FormLabel className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-0  peer-focus:text-xs peer-focus:text-[#344EA2] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-[#344EA2] bg-background px-1'>
+                      Nom de l&apos;organisation
+                    </FormLabel>
                   </div>
                   <FormMessage />
                 </FormItem>
@@ -101,15 +106,18 @@ const CreateEntrepriseForm = () => {
               name='domaine'
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative group '>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background inline-flex px-2'>
-                        Votre domaine d&apos;activité
-                      </span>
-                    </FormLabel>
+                  <div className='relative'>
                     <FormControl>
-                      <Input {...field} aria-label="Domaine d'activité" />
+                      <Input
+                        {...field}
+                        placeholder=' '
+                        aria-label="Domaine d'activité"
+                        className='peer pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
+                      />
                     </FormControl>
+                    <FormLabel className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-0  peer-focus:text-xs peer-focus:text-[#344EA2] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-[#344EA2] bg-background px-1'>
+                      Votre domaine d&apos;activité
+                    </FormLabel>
                   </div>
                   <FormMessage />
                 </FormItem>
@@ -121,19 +129,19 @@ const CreateEntrepriseForm = () => {
               name='email'
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative group '>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background w-full inline-flex px-2'>
-                        Votre email
-                      </span>
-                    </FormLabel>
+                  <div className='relative'>
                     <FormControl>
                       <Input
                         {...field}
                         type='email'
+                        placeholder=' '
                         aria-label='Adresse email'
+                        className='peer pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
                       />
                     </FormControl>
+                    <FormLabel className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-0 peer-focus:text-xs peer-focus:text-[#344EA2] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-[#344EA2] bg-background px-1'>
+                      Votre email
+                    </FormLabel>
                   </div>
                   <FormMessage />
                 </FormItem>
@@ -145,15 +153,18 @@ const CreateEntrepriseForm = () => {
               name='address'
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative group '>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background inline-flex px-2'>
-                        Votre adresse complète
-                      </span>
-                    </FormLabel>
+                  <div className='relative'>
                     <FormControl>
-                      <Input {...field} aria-label='Adresse' />
+                      <Input
+                        {...field}
+                        placeholder=' '
+                        aria-label='Adresse'
+                        className='peer pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
+                      />
                     </FormControl>
+                    <FormLabel className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-0 peer-focus:text-xs peer-focus:text-[#344EA2] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-[#344EA2] bg-background px-1'>
+                      Votre adresse complète
+                    </FormLabel>
                   </div>
                   <FormMessage />
                 </FormItem>
@@ -169,7 +180,7 @@ const CreateEntrepriseForm = () => {
                     Nombre d&apos;employés
                   </FormLabel>
                   <FormControl>
-                    <div className=' grid grid-cols-4 gap-2'>
+                    <div className='grid grid-cols-4 gap-2'>
                       {numberEmployees.map((item) => (
                         <BadgeEmploye
                           key={item.value}
@@ -215,10 +226,10 @@ const BadgeEmploye = ({ label, isSelected, onClick }: BadgeEmployeProps) => {
       type='button'
       onClick={onClick}
       className={`
-        px-2.5 py-1.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border-2
+        px-1.5 py-0.5 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer border-2 transform hover:scale-105
         ${
           isSelected
-            ? 'bg-[#344EA2] text-white border-[#344EA2] shadow-md'
+            ? 'bg-[#344EA2] text-white border-[#344EA2] shadow-md scale-105'
             : 'bg-background text-muted-foreground border-border hover:border-[#344EA2]/50 hover:text-foreground'
         }
       `}

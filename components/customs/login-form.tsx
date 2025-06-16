@@ -35,6 +35,7 @@ interface LoginResponse {
 
 const LoginForm = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [focusedField, setFocusedField] = useState<string>('');
 
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -67,6 +68,15 @@ const LoginForm = () => {
     setIsVisible((preveState) => !preveState);
   };
 
+  // Surveiller les changements des champs
+  const watchedTelephone = form.watch('telephone');
+  const watchedMotDePasse = form.watch('motDePasse');
+
+  // Fonction utilitaire pour déterminer si le label doit être animé vers le haut
+  const shouldAnimateLabel = (fieldName: string, fieldValue: string) => {
+    return focusedField === fieldName || fieldValue.length > 0;
+  };
+
   const onSubmit = async (data: LoginSchema) => {
     try {
       await loginMutation.mutateAsync(data);
@@ -76,16 +86,20 @@ const LoginForm = () => {
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      url='/auth/register'
+      text='Pas de compte?'
+      textLink='Creer votre compte'
+      className='lg:justify-between '
+    >
       <NextManageIcon />
-      <div className='flex flex-col items-center gap-4 w-full lg:justify-center'>
+      <div className='flex flex-col items-center  gap-4 w-full lg:justify-center md:max-w-3xl mt-20 lg:mt-0'>
         <div className='relative z-10'>
-          <h1 className='text-2xl font-semibold  text-[#344EA2]'>
+          <h1 className='text-2xl font-semibold text-[#344EA2] text-center lg:text-left'>
             Connectez-vous à votre compte
           </h1>
           <p className='text-base tracking-tighter font-medium text-center mt-2 text-muted-foreground'>
             <span className='text-muted-foreground'>
-              {' '}
               Votre email est-il enregistré ?
             </span>
             <span className='ml-2'>Connectez-vous avec</span>
@@ -93,32 +107,37 @@ const LoginForm = () => {
         </div>
         <Form {...form}>
           <form
-            className='space-y-4 relative z-20 w-[400px] mt-2'
+            className='space-y-4 relative z-20 w-full lg:w-[400px] mt-2'
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField
               control={form.control}
               name='telephone'
               render={({ field }) => (
-                <FormItem className=''>
-                  <div className='group relative'>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background inline-flex px-2'>
-                        {'Numéro de téléphone'}
-                      </span>
-                    </FormLabel>
+                <FormItem>
+                  <div className='relative'>
                     <FormControl>
                       <Input
                         {...field}
-                        data-slot='phone-input'
-                        placeholder='Numéro de téléphone'
-                        aria-label=''
-                        className=''
+                        placeholder=''
+                        aria-label='Numéro de téléphone'
+                        className='pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
                         disabled={loginMutation.isPending}
+                        onFocus={() => setFocusedField('telephone')}
+                        onBlur={() => setFocusedField('')}
                       />
                     </FormControl>
+                    <FormLabel
+                      className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                        shouldAnimateLabel('telephone', watchedTelephone)
+                          ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
+                          : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                      }`}
+                    >
+                      Numéro de téléphone
+                    </FormLabel>
                   </div>
-                  <FormMessage />
+                  <FormMessage className='sr-only' />
                 </FormItem>
               )}
             />
@@ -128,22 +147,28 @@ const LoginForm = () => {
               name='motDePasse'
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative group '>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background inline-flex px-2'>
-                        Votre mot de passe
-                      </span>
-                    </FormLabel>
+                  <div className='relative'>
                     <FormControl>
-                      <div>
+                      <div className='relative'>
                         <Input
                           {...field}
-                          placeholder='*******'
+                          placeholder=''
                           type={isVisible ? 'text' : 'password'}
-                          aria-label=''
+                          aria-label='Votre mot de passe'
+                          className='pt-6 pb-2 px-3 pr-10 border focus:border-[#344EA2] transition-all duration-200'
                           disabled={loginMutation.isPending}
+                          onFocus={() => setFocusedField('motDePasse')}
+                          onBlur={() => setFocusedField('')}
                         />
-
+                        <FormLabel
+                          className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                            shouldAnimateLabel('motDePasse', watchedMotDePasse)
+                              ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
+                              : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                          }`}
+                        >
+                          Votre mot de passe
+                        </FormLabel>
                         <button
                           className='text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer'
                           type='button'
@@ -163,13 +188,13 @@ const LoginForm = () => {
                         </button>
                       </div>
                     </FormControl>
+                    <Link
+                      href={'/auth/forgot-password'}
+                      className='text-xs underline text-end mt-2 block text-[#344EA2] hover:text-[#344EA2]/80 transition-colors'
+                    >
+                      Mot de passe oublié ?
+                    </Link>
                   </div>
-                  <Link
-                    href={'/auth/forgot-password'}
-                    className='text-xs underline text-end mt-2 block'
-                  >
-                    Mot de passe oublié ?
-                  </Link>
                   <FormMessage />
                 </FormItem>
               )}
@@ -177,8 +202,8 @@ const LoginForm = () => {
 
             <button
               disabled={
-                !form.watch('telephone') ||
-                !form.watch('motDePasse') ||
+                !watchedTelephone ||
+                !watchedMotDePasse ||
                 loginMutation.isPending
               }
               type='submit'
@@ -211,13 +236,6 @@ const LoginForm = () => {
             </Button>
           </form>
         </Form>
-      </div>
-      <div className='px-6 flex justify-between mt-6 flex-wrap  z-20 relative'>
-        <p className='text-muted-foreground text-xs mt-2 font-medium'>
-          <Link href={'/terms'} className='underline '>
-            Conditions générales
-          </Link>
-        </p>
       </div>
     </AuthLayout>
   );
