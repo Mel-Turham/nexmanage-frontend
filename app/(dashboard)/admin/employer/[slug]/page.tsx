@@ -127,7 +127,7 @@ export default async function EmployerDetailPage({
           className="bg-white border-gray-300 text-gray-700 hover:bg-gray-100 rounded-md text-sm"
           asChild
         >
-          <Link href="/employes" className="flex items-center">
+          <Link href="/admin/employer" className="flex items-center">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour
           </Link>
