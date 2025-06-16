@@ -12,7 +12,7 @@ const Header = () => {
     },
   };
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2 px-4">
+    <header className="flex h-[10vh] shrink-0 items-center gap-2 px-4">
       <div className="flex flex-row items-center px-2 rounded-md border border-gray w-full">
         <Search01Icon color="#e5e5e5" />
         <input
