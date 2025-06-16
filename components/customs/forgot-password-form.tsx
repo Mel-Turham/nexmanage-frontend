@@ -74,7 +74,11 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <AuthLayout>
+    <AuthLayout
+      url='/auth/login'
+      text='Vous avez deja un compte ?'
+      textLink='Se connecter'
+    >
       <NextManageIcon />
       <div className='px-2'>
         <Button
@@ -105,27 +109,35 @@ const ForgotPasswordForm = () => {
               control={form.control}
               name='telephone'
               render={({ field }) => (
-                <div className='group relative'>
-                  <FormItem className=''>
-                    <FormLabel className='origin-start text-muted-foreground/70 group-focus-within:text-foreground has-[+input:not(:placeholder-shown)]:text-foreground absolute top-1/2 block -translate-y-1/2 cursor-text px-1 py-1.5 text-sm transition-all group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs group-focus-within:font-medium has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs has-[+input:not(:placeholder-shown)]:font-medium '>
-                      <span className='bg-background inline-flex px-2'>
-                        {'Numéro de téléphone'}
-                      </span>
-                    </FormLabel>
-                    <FormControl>
+                <FormItem className='relative'>
+                  <FormControl>
+                    <div className='relative'>
                       <Input
                         {...field}
+                        placeholder=' '
                         data-slot='phone-input'
-                        aria-label=''
-                        className=''
+                        className='peer pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
                         disabled={forgotPasswordMutation.isPending}
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                </div>
+                      <FormLabel
+                        className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground bg-background px-1 text-sm transition-all duration-200 pointer-events-none 
+                       peer-placeholder-shown:top-1/2 
+                       peer-placeholder-shown:text-base 
+                       peer-placeholder-shown:text-muted-foreground 
+                       peer-focus:top-0 
+                       peer-focus:text-xs 
+                       peer-focus:text-[#344EA2] 
+                       peer-focus:-translate-y-1/2'
+                      >
+                        Numéro de téléphone
+                      </FormLabel>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
             />
+
             <button
               disabled={forgotPasswordMutation.isPending || !watchFieldPhone}
               className='custom-button-gradient py-2 w-full disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none'
@@ -141,19 +153,6 @@ const ForgotPasswordForm = () => {
             </div>
           </form>
         </Form>
-      </div>
-      <div className='px-2 lg:px-6 w-full flex justify-between  flex-wrap  z-20 relative'>
-        <p className='text-muted-foreground text-xs mt-2 font-medium'>
-          Vous avez déjà un compte ?{' '}
-          <Link href='/auth/login' className='text-[#142938] underline'>
-            Se connecter
-          </Link>
-        </p>
-        <p className='text-muted-foreground text-xs mt-2 font-medium'>
-          <Link href={'/terms'} className='underline'>
-            Conditions générales
-          </Link>
-        </p>
       </div>
     </AuthLayout>
   );
