@@ -3,6 +3,8 @@ import { Manrope } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
 import { ProviderQueryClient } from '@/providers/QueryClient';
+import { Suspense } from 'react';
+import Loading from './laoding';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -22,7 +24,9 @@ export default function RootLayout({
     <html lang='fr'>
       <body className={`${manrope.className} antialiased`}>
         <Toaster position='top-right' closeButton richColors />
-        <ProviderQueryClient>{children}</ProviderQueryClient>
+        <ProviderQueryClient>
+          <Suspense fallback={<Loading />}>{children}</Suspense>
+        </ProviderQueryClient>
       </body>
     </html>
   );

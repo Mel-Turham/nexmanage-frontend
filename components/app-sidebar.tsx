@@ -1,6 +1,6 @@
-"use client";
-import * as React from "react";
-import { usePathname } from "next/navigation";
+'use client';
+import * as React from 'react';
+import { usePathname } from 'next/navigation';
 
 import {
   Sidebar,
@@ -13,8 +13,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import { TeamSwitcher } from "./team-switcher";
+} from '@/components/ui/sidebar';
+import { TeamSwitcher } from './team-switcher';
 import {
   Analytics02Icon,
   Calendar02Icon,
@@ -28,11 +28,11 @@ import {
 import Link from "next/link";
 
 const data = {
-  teams: [{ name: "Acme Inc" }, { name: "Acme Corp." }, { name: "Evil Corp." }],
+  teams: [{ name: 'Acme Inc' }, { name: 'Acme Corp.' }, { name: 'Evil Corp.' }],
   navMain: [
     {
-      title: "Menu principal",
-      url: "#",
+      title: 'Menu principal',
+      url: '#',
       items: [
         { title: "Accueil", icon: Home01Icon, url: "/admin" },
         { title: "Planning", icon: Calendar02Icon, url: "/admin/planning" },
@@ -40,28 +40,28 @@ const data = {
       ],
     },
     {
-      title: "Menu Secondaire",
-      url: "#",
+      title: 'Menu Secondaire',
+      url: '#',
       items: [
         {
-          title: "Pointages",
+          title: 'Pointages',
           icon: CursorPointer02Icon,
-          url: "/admin/pointages",
+          url: '/admin/pointages',
         },
         {
-          title: "Ressources Humaines",
+          title: 'Ressources Humaines',
           icon: UserListIcon,
-          url: "/admin/employer",
+          url: '/admin/employer',
         },
-        { title: "Messages", icon: Message01Icon, url: "/admin/message" },
+        { title: 'Messages', icon: Message01Icon, url: '/admin/message' },
       ],
     },
     {
-      title: "Aide et Analyse",
-      url: "#",
+      title: 'Aide et Analyse',
+      url: '#',
       items: [
-        { title: "Rapports", icon: Analytics02Icon, url: "/admin/rapports" },
-        { title: "Paramètres", icon: Settings02Icon, url: "/admin/parametres" },
+        { title: 'Rapports', icon: Analytics02Icon, url: '/admin/rapports' },
+        { title: 'Paramètres', icon: Settings02Icon, url: '/admin/parametres' },
       ],
     },
   ],
@@ -85,8 +85,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  // Détermine si l'item est actif en comparant avec la route courante
-                  // On peut utiliser startsWith si tu veux activer aussi les sous-routes
                   const isActive = pathname === item.url;
 
                   return (
@@ -96,14 +94,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                           href={item.url}
                           className={`flex items-center space-x-2 rounded-none px-2 py-3 h-fit transition-colors ${
                             isActive
-                              ? "border-l-4 border-Primaire text-Primaire font-semibold bg-bleu-ciel"
-                              : "text-gray-700 hover:bg-gray-100"
+                              ? 'border-l-4 border-Primaire text-Primaire font-semibold bg-bleu-ciel'
+                              : 'text-gray-700 hover:bg-gray-100'
                           }`}
                         >
                           {Icon && (
                             <Icon
                               size={24}
-                              color={isActive ? "#344EA2" : "#142938"}
+                              color={isActive ? '#344EA2' : '#142938'}
                             />
                           )}
                           <span>{item.title}</span>
