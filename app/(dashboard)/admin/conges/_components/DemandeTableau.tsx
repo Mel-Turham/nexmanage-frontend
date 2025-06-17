@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table";
 
 import { DemandeConge } from "@/types/demande";
-import { MoreMenu } from "@/app/(dashboard)/demandes/_components/MoreMenu";
+// import { MoreMenu } from "@/app/(dashboard)/demandes/_components/MoreMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -130,7 +130,7 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
       {
         id: "actions",
         header: "",
-        cell: ({ row }) => <MoreMenu demande={row.original} />,
+        // cell: ({ row }) => <MoreMenu demande={row.original} />,
         size: 60,
       },
     ],

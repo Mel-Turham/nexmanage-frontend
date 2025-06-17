@@ -12,7 +12,7 @@ import {
 } from "@tanstack/react-table";
 
 import { DemandeConge } from "@/types/demande";
-import { MoreMenu } from "@/app/(dashboard)/demandes/_components/MoreMenu";
+// import { MoreMenu } from "@/app/(dashboard)/demandes/_components/MoreMenu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -130,7 +130,7 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
       {
         id: "actions",
         header: "",
-        cell: ({ row }) => <MoreMenu demande={row.original} />,
+        // cell: ({ row }) => <MoreMenu demande={row.original} />,
         size: 60,
       },
     ],
@@ -157,11 +157,11 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
   });
 
   // Date dynamique pour l'en-tête
-  const currentDate = new Date().toLocaleDateString("fr-FR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  });
+  // const currentDate = new Date().toLocaleDateString("fr-FR", {
+  //   day: "2-digit",
+  //   month: "2-digit",
+  //   year: "numeric",
+  // });
 
   return (
     <div className="flex flex-col gap-6">

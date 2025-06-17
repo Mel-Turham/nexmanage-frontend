@@ -12,14 +12,20 @@ import Input from "@/components/Input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Employer } from "@/types/employer";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function EditEmployer({ employer }: { employer: Employer }) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     telephone: "",
-    poste: ""
+    poste: "",
   });
 
   useEffect(() => {
@@ -28,14 +34,14 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
         name: employer.name || "",
         email: employer.email || "",
         telephone: employer.telephone || "",
-        poste: employer.Poste || ""
+        poste: employer.Poste || "",
       });
     }
   }, [employer]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,18 +59,20 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
     "Finance",
     "Retail",
     "Fabrication",
-    "Autre"
+    "Autre",
   ];
 
   return (
     <DialogContent className="max-w-md rounded-2xl">
       <DialogHeader>
-        <DialogTitle className="text-xl font-semibold">Modifier le profil</DialogTitle>
+        <DialogTitle className="text-xl font-semibold">
+          Modifier le profil
+        </DialogTitle>
         <DialogDescription className="text-gray-500">
-          Modifiez les informations de l'employé
+          {"Modifiez les informations de l'employé"}
         </DialogDescription>
       </DialogHeader>
-      
+
       <form onSubmit={handleSubmit}>
         <div className="grid gap-5 py-4">
           <div className="space-y-2">
@@ -75,7 +83,9 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
               value={formData.name}
               onChange={handleChange}
               type="text"
-              placeholder="Nom de l'employé" label={""}            />
+              placeholder="Nom de l'employé"
+              label={""}
+            />
           </div>
 
           <div className="space-y-2">
@@ -86,7 +96,9 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
               value={formData.email}
               onChange={handleChange}
               type="email"
-              placeholder="email@exemple.com" label={""}            />
+              placeholder="email@exemple.com"
+              label={""}
+            />
           </div>
 
           <div className="space-y-2">
@@ -97,14 +109,18 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
               value={formData.telephone}
               onChange={handleChange}
               type="tel"
-              placeholder="+33 6 12 34 56 78" label={""}            />
+              placeholder="+33 6 12 34 56 78"
+              label={""}
+            />
           </div>
 
           <div className="space-y-2">
             <Label>Poste</Label>
-            <Select 
-              value={formData.poste} 
-              onValueChange={value => setFormData({...formData, poste: value})}
+            <Select
+              value={formData.poste}
+              onValueChange={(value) =>
+                setFormData({ ...formData, poste: value })
+              }
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Sélectionner un poste" />
@@ -119,7 +135,7 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
             </Select>
           </div>
         </div>
-        
+
         <DialogFooter className="mt-4">
           <Button type="submit" className="px-6">
             Enregistrer
