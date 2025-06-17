@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ViewType } from "./types";
+import PlanningForm from "../customs/plannings-form";
 
 interface PlanningHeaderProps {
   viewType: ViewType;
@@ -33,6 +34,7 @@ const PlanningHeader: React.FC<PlanningHeaderProps> = ({
   return (
     <div className="flex flex-row justify-between items-center">
       <div className="flex flex-row gap-2 items-center">
+        <PlanningForm />
         <button
           type="submit"
           className="flex flex-row w-fit custom-button-gradient py-2 px-4 rounded-lg gap-2"
