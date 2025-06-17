@@ -18,12 +18,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import {
   AddTeamIcon,
   CheckListIcon,
-  Clock01Icon,
   HelpCircleIcon,
   Loading01Icon,
   Location01Icon,
   PauseIcon,
-  WorkAlertIcon,
 } from 'hugeicons-react';
 import { Input } from '../ui/input';
 import {
@@ -39,7 +37,7 @@ import { Badge } from '../ui/badge';
 import { toast } from 'sonner';
 import { useApiMutation } from '@/hooks/apis/use-api';
 import type { Contrat } from '@/types';
-import { FileTextIcon, SaveIcon } from 'lucide-react';
+import { SaveIcon } from 'lucide-react';
 import { ScrollArea } from '../ui/scroll-area';
 
 const ContratForm = () => {
@@ -69,7 +67,6 @@ const ContratForm = () => {
       lieu: '',
       heureDebut: undefined,
       heureFin: undefined,
-      poste: '',
       taches: [],
       description: '',
       pause: undefined,
@@ -132,29 +129,39 @@ const ContratForm = () => {
               src={'/map.png'}
               className='object-cover w-full h-full'
             />
-            <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent' />
-            <div className='absolute bottom-4 left-4'>
-              <h2 className='text-white text-2xl font-bold drop-shadow-lg'>
-                Nouveau Contrat
-              </h2>
-              <p className='text-white/90 text-sm drop-shadow'>
-                Créez un nouveau contrat de travail
-              </p>
-            </div>
           </div>
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className='space-y-4 w-full'
+          >
             {/* Informations générales */}
-            <Card className='shadow-sm border-0 bg-gradient-to-br from-slate-50 to-white'>
-              <CardHeader className='pb-4'>
-                <CardTitle className='flex items-center gap-2 text-lg'>
-                  <Location01Icon size={20} className='text-blue-600' />
-                  Informations générales
-                </CardTitle>
-              </CardHeader>
+            <Card>
               <CardContent className='space-y-4'>
+                <FormField
+                  control={form.control}
+                  name='description'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
+                        Description du contrat
+                        <Badge variant='secondary' className='text-xs'>
+                          Optionnel
+                        </Badge>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='Ajoutez une description détaillée...'
+                          className='h-11 border-gray-200 focus:border-amber-500 focus:ring-amber-500/20'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 {/* Lieu */}
                 <FormField
                   control={form.control}
@@ -176,39 +183,11 @@ const ContratForm = () => {
                     </FormItem>
                   )}
                 />
-
-                {/* Poste */}
-                <FormField
-                  control={form.control}
-                  name='poste'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
-                        <WorkAlertIcon size={16} className='text-gray-600' />
-                        Poste
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='Intitulé du poste'
-                          className='h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </CardContent>
             </Card>
 
             {/* Horaires */}
-            <Card className='shadow-sm border-0 bg-gradient-to-br from-emerald-50 to-white'>
-              <CardHeader className='pb-4'>
-                <CardTitle className='flex items-center gap-2 text-lg'>
-                  <Clock01Icon size={20} className='text-emerald-600' />
-                  Horaires de travail
-                </CardTitle>
-              </CardHeader>
+            <Card>
               <CardContent className='space-y-4'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   {/* Heure début */}
@@ -322,13 +301,7 @@ const ContratForm = () => {
             </Card>
 
             {/* Tâches et équipe */}
-            <Card className='shadow-sm border-0 bg-gradient-to-br from-purple-50 to-white'>
-              <CardHeader className='pb-4'>
-                <CardTitle className='flex items-center gap-2 text-lg'>
-                  <CheckListIcon size={20} className='text-purple-600' />
-                  Tâches et équipe
-                </CardTitle>
-              </CardHeader>
+            <Card>
               <CardContent className='space-y-4'>
                 {/* Tâches */}
                 <FormField
@@ -420,40 +393,6 @@ const ContratForm = () => {
                               selectedOptions.map((opt) => opt.value)
                             );
                           }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Description */}
-            <Card className='shadow-sm border-0 bg-gradient-to-br from-amber-50 to-white'>
-              <CardHeader className='pb-4'>
-                <CardTitle className='flex items-center gap-2 text-lg'>
-                  <FileTextIcon size={20} className='text-amber-600' />
-                  Description
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <FormField
-                  control={form.control}
-                  name='description'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
-                        Description du contrat
-                        <Badge variant='secondary' className='text-xs'>
-                          Optionnel
-                        </Badge>
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder='Ajoutez une description détaillée...'
-                          className='h-11 border-gray-200 focus:border-amber-500 focus:ring-amber-500/20'
-                          {...field}
                         />
                       </FormControl>
                       <FormMessage />

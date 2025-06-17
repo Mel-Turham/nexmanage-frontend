@@ -7,9 +7,6 @@ export const contractSchema = z
       .min(1, { message: 'Le lieu est obligatoire' }),
     heureDebut: z.date({ required_error: "L'heure de debut est obligatoire" }),
     heureFin: z.date({ required_error: "L'heure de fin est obligatoire" }),
-    poste: z
-      .string({ required_error: 'Le poste est obligatoire' })
-      .min(1, { message: 'Le poste est obligatoire' }),
     taches: z
       .array(
         z

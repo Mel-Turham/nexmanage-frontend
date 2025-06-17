@@ -37,9 +37,6 @@ const data = {
         { title: 'Accueil', icon: Home01Icon, url: '/admin' },
         { title: 'Planning', icon: Calendar02Icon, url: '/admin/planning' },
         { title: 'Congés', icon: WorkHistoryIcon, url: '/admin/conges' },
-        { title: 'Accueil', icon: Home01Icon, url: '/admin' },
-        { title: 'Planning', icon: Calendar02Icon, url: '/admin/planning' },
-        { title: 'Congés', icon: WorkHistoryIcon, url: '/admin/conges' },
       ],
     },
     {
