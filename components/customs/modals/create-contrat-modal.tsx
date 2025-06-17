@@ -29,5 +29,4 @@ const CreateModal = ({ open, setOpen, children, className = '' }: Props) => {
     </Dialog>
   );
 };
-
 export default CreateModal;
