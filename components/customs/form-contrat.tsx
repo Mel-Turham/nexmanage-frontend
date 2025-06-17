@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import React from 'react';
 import {
   Form,
   FormControl,
@@ -13,7 +12,7 @@ import {
 import { useForm } from 'react-hook-form';
 import {
   contractSchema,
-  ContractSchema,
+  type ContractSchema,
 } from '@/schemas/planings-shemas/contract.shema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -35,9 +34,13 @@ import {
 } from '@/components/ui/tooltip';
 import MultipleSelector from '../ui/multiselect';
 import { Checkbox } from '../ui/checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Badge } from '../ui/badge';
 import { toast } from 'sonner';
 import { useApiMutation } from '@/hooks/apis/use-api';
-import { Contrat } from '@/types';
+import type { Contrat } from '@/types';
+import { FileTextIcon, SaveIcon } from 'lucide-react';
+import { ScrollArea } from '../ui/scroll-area';
 
 const ContratForm = () => {
   const randomTasks = [
@@ -69,10 +72,10 @@ const ContratForm = () => {
       poste: '',
       taches: [],
       description: '',
-      pause: undefined, // Changé de new Date() à undefined
+      pause: undefined,
       estGabarit: false,
       nomGabarit: '',
-      utilisateur: [], // Problème principal : doit avoir au moins 1 élément selon le schema
+      utilisateur: [],
     },
   });
 
@@ -82,7 +85,7 @@ const ContratForm = () => {
     {
       onSuccess: (data) => {
         console.log('Contrat créé:', data);
-        form.reset(); // Reset le formulaire après succès
+        form.reset();
       },
       onError: (error) => {
         console.error('Erreur création contrat:', error);
@@ -91,7 +94,7 @@ const ContratForm = () => {
   );
 
   const onSubmit = async (data: ContractSchema) => {
-    console.log('Données soumises:', data); // Debug
+    console.log('Données soumises:', data);
 
     const loading = toast.loading('Contrat en cours de création');
     try {
@@ -105,7 +108,6 @@ const ContratForm = () => {
     }
   };
 
-  // Helper function pour créer une date à partir d'une string time
   const createTimeDate = (timeString: string, baseDate?: Date): Date => {
     const [hours, minutes] = timeString.split(':').map(Number);
     const date = baseDate ? new Date(baseDate) : new Date();
@@ -113,318 +115,60 @@ const ContratForm = () => {
     return date;
   };
 
-  // Helper function pour extraire le time d'une date
   const getTimeString = (date: Date | undefined): string => {
     if (!date) return '';
     return date.toTimeString().substring(0, 5);
   };
 
   return (
-    <div className='flex flex-col gap-2'>
-      {/* Images */}
-      <div className='h-[180px] w-full relative overflow-hidden rounded-2xl'>
-        <Image
-          fill
-          alt='map-image'
-          src={'/map.png'}
-          className='object-cover w-full h-full'
-        />
-      </div>
-
-      <Form {...form}>
-        <form
-          className='flex flex-col gap-4 mt-3 w-full'
-          onSubmit={form.handleSubmit(onSubmit)}
-        >
-          {/* Lieu */}
-          <div className='flex items-center gap-2'>
-            <Location01Icon size={24} color='#142938' />
-            <FormField
-              control={form.control}
-              name='lieu'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormControl>
-                    <Input
-                      placeholder='Lieu'
-                      className='h-9 flex-1 w-full focus-visible:ring-0'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+    <ScrollArea className='h-[550px]'>
+      <div className='space-y-6'>
+        {/* Header avec image */}
+        <div className='relative'>
+          <div className='h-[200px] w-full relative overflow-hidden rounded-2xl shadow-lg'>
+            <Image
+              fill
+              alt='map-image'
+              src={'/map.png'}
+              className='object-cover w-full h-full'
             />
-          </div>
-
-          {/* Heures début et fin */}
-          <div className='flex items-center gap-2'>
-            <Clock01Icon size={24} color='#142938' />
-            <FormField
-              control={form.control}
-              name='heureDebut'
-              render={({ field }) => (
-                <FormItem className='w-1/2'>
-                  <FormControl>
-                    <Input
-                      type='time'
-                      placeholder='Heure de début'
-                      className='h-9 flex-1 w-full focus-visible:ring-0'
-                      value={getTimeString(field.value)}
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          field.onChange(createTimeDate(e.target.value));
-                        }
-                      }}
-                      onBlur={field.onBlur}
-                      name={field.name}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <span>-</span>
-            <FormField
-              control={form.control}
-              name='heureFin'
-              render={({ field }) => (
-                <FormItem className='w-1/2'>
-                  <FormControl>
-                    <Input
-                      type='time'
-                      placeholder='Heure de fin'
-                      className='h-9 flex-1 w-full focus-visible:ring-0'
-                      value={getTimeString(field.value)}
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          field.onChange(createTimeDate(e.target.value));
-                        }
-                      }}
-                      onBlur={field.onBlur}
-                      name={field.name}
-                      ref={field.ref}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Poste et Pause */}
-          <div className='flex items-center w-full gap-2'>
-            <div className='flex items-center gap-1 flex-1'>
-              <WorkAlertIcon size={24} color='#142938' />
-              <FormField
-                control={form.control}
-                name='poste'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormControl>
-                      <Input
-                        placeholder='Poste'
-                        className='h-9 flex-1 w-full focus-visible:ring-0'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className='flex items-center w-1/2 relative'>
-              <PauseIcon className='mx-2' size={22} color='#142938' />
-              <FormField
-                control={form.control}
-                name='pause'
-                render={({ field }) => (
-                  <FormItem className='w-full'>
-                    <FormControl>
-                      <Input
-                        type='time'
-                        placeholder='Pause'
-                        className='h-9 flex-1 w-full focus-visible:ring-0'
-                        value={getTimeString(field.value)}
-                        onChange={(e) => {
-                          if (e.target.value) {
-                            field.onChange(createTimeDate(e.target.value));
-                          } else {
-                            field.onChange(undefined);
-                          }
-                        }}
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        ref={field.ref}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <TooltipProvider delayDuration={0}>
-                <Tooltip>
-                  <TooltipTrigger className='absolute right-1' asChild>
-                    <HelpCircleIcon size={18} color='#142938' />
-                  </TooltipTrigger>
-                  <TooltipContent className='px-2 py-3 text-xs bg-white text-gray-600'>
-                    Laisser vide pour ne pas ajouter de pause
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+            <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent' />
+            <div className='absolute bottom-4 left-4'>
+              <h2 className='text-white text-2xl font-bold drop-shadow-lg'>
+                Nouveau Contrat
+              </h2>
+              <p className='text-white/90 text-sm drop-shadow'>
+                Créez un nouveau contrat de travail
+              </p>
             </div>
           </div>
+        </div>
 
-          {/* Tâches */}
-          <div className='flex items-center gap-1 flex-1'>
-            <CheckListIcon size={24} color='#142938' />
-            <FormField
-              control={form.control}
-              name='taches'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormControl>
-                    <MultipleSelector
-                      className='w-full flex-1'
-                      commandProps={{
-                        label: 'Tâches',
-                      }}
-                      defaultOptions={randomTasks}
-                      placeholder='Sélectionner des tâches'
-                      emptyIndicator={
-                        <p className='text-center text-sm'>
-                          Pas de résultat trouvé
-                        </p>
-                      }
-                      value={randomTasks.filter((option) =>
-                        (field.value ?? []).includes(option.value)
-                      )}
-                      onChange={(selectedOptions) => {
-                        field.onChange(selectedOptions.map((opt) => opt.value));
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Employés */}
-          <div className='flex items-center gap-1 relative flex-1'>
-            <AddTeamIcon size={24} color='#142938' />
-            <FormField
-              control={form.control}
-              name='utilisateur'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormControl>
-                    <MultipleSelector
-                      className='w-full flex-1'
-                      commandProps={{
-                        label: 'Employés',
-                      }}
-                      defaultOptions={randomUsers}
-                      placeholder='Sélectionner des employés'
-                      emptyIndicator={
-                        <p className='text-center text-sm'>
-                          Pas de résultat trouvé
-                        </p>
-                      }
-                      value={randomUsers.filter((option) =>
-                        (field.value ?? []).includes(option.value)
-                      )}
-                      onChange={(selectedOptions) => {
-                        field.onChange(selectedOptions.map((opt) => opt.value));
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger className='absolute right-1' asChild>
-                  <HelpCircleIcon size={18} color='#142938' />
-                </TooltipTrigger>
-                <TooltipContent className='px-2 py-3 text-xs bg-white text-gray-600'>
-                  Au moins un employé doit être sélectionné
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-          {/* Description (champ manquant dans le formulaire original) */}
-          <div className='flex items-center gap-2'>
-            <FormField
-              control={form.control}
-              name='description'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormLabel>Description (optionnelle)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder='Description du contrat'
-                      className='h-9 w-full focus-visible:ring-0'
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          {/* Gabarit et nom du gabarit */}
-          <div className='flex items-center justify-between'>
-            <div className='flex items-center gap-4'>
-              <FormField
-                control={form.control}
-                name='estGabarit'
-                render={({ field }) => (
-                  <FormItem className='flex items-center space-y-0'>
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel className='font-normal ml-2'>
-                      Sauvegarder comme gabarit
-                      <TooltipProvider delayDuration={0}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircleIcon
-                              size={18}
-                              color='#142938'
-                              className='ml-1'
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent className='px-2 py-3 text-xs shadow bg-white text-gray-600 max-w-xl w-80'>
-                            Cette option vous permet de réutiliser rapidement ce
-                            contrat comme modèle pour vos prochains horaires.
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </FormLabel>
-                  </FormItem>
-                )}
-              />
-
-              {/* Nom du gabarit - affiché seulement si estGabarit est true */}
-              {form.watch('estGabarit') && (
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            {/* Informations générales */}
+            <Card className='shadow-sm border-0 bg-gradient-to-br from-slate-50 to-white'>
+              <CardHeader className='pb-4'>
+                <CardTitle className='flex items-center gap-2 text-lg'>
+                  <Location01Icon size={20} className='text-blue-600' />
+                  Informations générales
+                </CardTitle>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                {/* Lieu */}
                 <FormField
                   control={form.control}
-                  name='nomGabarit'
+                  name='lieu'
                   render={({ field }) => (
                     <FormItem>
+                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
+                        <Location01Icon size={16} className='text-gray-600' />
+                        Lieu de travail
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder='Nom du gabarit'
-                          className='h-9 w-48 focus-visible:ring-0'
+                          placeholder='Entrez le lieu de travail'
+                          className='h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
                           {...field}
                         />
                       </FormControl>
@@ -432,57 +176,432 @@ const ContratForm = () => {
                     </FormItem>
                   )}
                 />
-              )}
-            </div>
+
+                {/* Poste */}
+                <FormField
+                  control={form.control}
+                  name='poste'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
+                        <WorkAlertIcon size={16} className='text-gray-600' />
+                        Poste
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='Intitulé du poste'
+                          className='h-11 border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Horaires */}
+            <Card className='shadow-sm border-0 bg-gradient-to-br from-emerald-50 to-white'>
+              <CardHeader className='pb-4'>
+                <CardTitle className='flex items-center gap-2 text-lg'>
+                  <Clock01Icon size={20} className='text-emerald-600' />
+                  Horaires de travail
+                </CardTitle>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                  {/* Heure début */}
+                  <FormField
+                    control={form.control}
+                    name='heureDebut'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='text-sm font-medium'>
+                          Heure de début
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type='time'
+                            className='h-11 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20'
+                            value={getTimeString(field.value)}
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                field.onChange(createTimeDate(e.target.value));
+                              }
+                            }}
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Heure fin */}
+                  <FormField
+                    control={form.control}
+                    name='heureFin'
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className='text-sm font-medium'>
+                          Heure de fin
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            type='time'
+                            className='h-11 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20'
+                            value={getTimeString(field.value)}
+                            onChange={(e) => {
+                              if (e.target.value) {
+                                field.onChange(createTimeDate(e.target.value));
+                              }
+                            }}
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            ref={field.ref}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Pause */}
+                <FormField
+                  control={form.control}
+                  name='pause'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
+                        <PauseIcon size={16} className='text-gray-600' />
+                        Pause (optionnelle)
+                        <TooltipProvider delayDuration={0}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <HelpCircleIcon
+                                size={16}
+                                className='text-gray-400 hover:text-gray-600'
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent className='max-w-xs'>
+                              <p className='text-xs'>
+                                Laisser vide pour ne pas ajouter de pause
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type='time'
+                          step={1}
+                          placeholder='Heure de pause'
+                          className='h-11 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 appearance-none pl-8 [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
+                          value={getTimeString(field.value)}
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              field.onChange(createTimeDate(e.target.value));
+                            } else {
+                              field.onChange(undefined);
+                            }
+                          }}
+                          onBlur={field.onBlur}
+                          name={field.name}
+                          ref={field.ref}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Tâches et équipe */}
+            <Card className='shadow-sm border-0 bg-gradient-to-br from-purple-50 to-white'>
+              <CardHeader className='pb-4'>
+                <CardTitle className='flex items-center gap-2 text-lg'>
+                  <CheckListIcon size={20} className='text-purple-600' />
+                  Tâches et équipe
+                </CardTitle>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                {/* Tâches */}
+                <FormField
+                  control={form.control}
+                  name='taches'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
+                        <CheckListIcon size={16} className='text-gray-600' />
+                        Tâches à effectuer
+                        <Badge variant='secondary' className='text-xs'>
+                          Optionnel
+                        </Badge>
+                      </FormLabel>
+                      <FormControl>
+                        <MultipleSelector
+                          className='border-gray-200 focus:border-purple-500'
+                          commandProps={{
+                            label: 'Tâches',
+                          }}
+                          defaultOptions={randomTasks}
+                          placeholder='Sélectionner des tâches'
+                          emptyIndicator={
+                            <p className='text-center text-sm text-gray-500'>
+                              Aucune tâche trouvée
+                            </p>
+                          }
+                          value={randomTasks.filter((option) =>
+                            (field.value ?? []).includes(option.value)
+                          )}
+                          onChange={(selectedOptions) => {
+                            field.onChange(
+                              selectedOptions.map((opt) => opt.value)
+                            );
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Employés */}
+                <FormField
+                  control={form.control}
+                  name='utilisateur'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
+                        <AddTeamIcon size={16} className='text-gray-600' />
+                        Employés assignés
+                        <Badge variant='destructive' className='text-xs'>
+                          Requis
+                        </Badge>
+                        <TooltipProvider delayDuration={0}>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <HelpCircleIcon
+                                size={16}
+                                className='text-gray-400 hover:text-gray-600'
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent className='max-w-xs'>
+                              <p className='text-xs'>
+                                Au moins un employé doit être sélectionné
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </FormLabel>
+                      <FormControl>
+                        <MultipleSelector
+                          className='border-gray-200 focus:border-purple-500'
+                          commandProps={{
+                            label: 'Employés',
+                          }}
+                          defaultOptions={randomUsers}
+                          placeholder='Sélectionner des employés'
+                          emptyIndicator={
+                            <p className='text-center text-sm text-gray-500'>
+                              Aucun employé trouvé
+                            </p>
+                          }
+                          value={randomUsers.filter((option) =>
+                            (field.value ?? []).includes(option.value)
+                          )}
+                          onChange={(selectedOptions) => {
+                            field.onChange(
+                              selectedOptions.map((opt) => opt.value)
+                            );
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Description */}
+            <Card className='shadow-sm border-0 bg-gradient-to-br from-amber-50 to-white'>
+              <CardHeader className='pb-4'>
+                <CardTitle className='flex items-center gap-2 text-lg'>
+                  <FileTextIcon size={20} className='text-amber-600' />
+                  Description
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <FormField
+                  control={form.control}
+                  name='description'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className='flex items-center gap-2 text-sm font-medium'>
+                        Description du contrat
+                        <Badge variant='secondary' className='text-xs'>
+                          Optionnel
+                        </Badge>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder='Ajoutez une description détaillée...'
+                          className='h-11 border-gray-200 focus:border-amber-500 focus:ring-amber-500/20'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Options avancées */}
+            <Card className='shadow-sm border-0 bg-gradient-to-br from-indigo-50 to-white'>
+              <CardHeader className='pb-4'>
+                <CardTitle className='flex items-center gap-2 text-lg'>
+                  <SaveIcon size={20} className='text-indigo-600' />
+                  Options avancées
+                </CardTitle>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                <div className='flex items-center justify-between p-4 bg-white rounded-lg border border-gray-100'>
+                  <div className='flex items-center space-x-3'>
+                    <FormField
+                      control={form.control}
+                      name='estGabarit'
+                      render={({ field }) => (
+                        <FormItem className='flex items-center space-y-0'>
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                              className='data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-600'
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    <div>
+                      <FormLabel className='text-sm font-medium cursor-pointer'>
+                        Sauvegarder comme gabarit
+                      </FormLabel>
+                      <p className='text-xs text-gray-500'>
+                        Réutilisez ce contrat comme modèle
+                      </p>
+                    </div>
+                  </div>
+                  <TooltipProvider delayDuration={0}>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircleIcon
+                          size={18}
+                          className='text-gray-400 hover:text-gray-600'
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent className='max-w-sm'>
+                        <p className='text-xs'>
+                          Cette option vous permet de réutiliser rapidement ce
+                          contrat comme modèle pour vos prochains horaires.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+
+                {form.watch('estGabarit') && (
+                  <div className='animate-in slide-in-from-top-2 duration-200'>
+                    <FormField
+                      control={form.control}
+                      name='nomGabarit'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className='text-sm font-medium'>
+                            Nom du gabarit
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder='Donnez un nom à votre gabarit'
+                              className='h-11 border-gray-200 focus:border-indigo-500 focus:ring-indigo-500/20'
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
+              </CardContent>
+            </Card>
 
             {/* Actions */}
-            <div className='flex items-center gap-2'>
+            <div className='flex items-center justify-between pt-6 border-t border-gray-100'>
               <button
                 type='button'
-                className='px-4 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50'
+                className='px-6 py-3 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:border-gray-400 transition-colors duration-200'
                 onClick={() => form.reset()}
               >
                 Annuler
               </button>
               <button
-                className='custom-button-gradient text-sm font-normal w-[120px] px-4 py-2 rounded-md'
+                className='px-8 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:ring-4 focus:ring-blue-500/20 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2'
                 type='submit'
                 disabled={form.formState.isSubmitting}
               >
                 {form.formState.isSubmitting ? (
                   <>
-                    <Loading01Icon
-                      className='animate-spin mr-1'
-                      size={16}
-                      color='#fff'
-                    />
-                    Enregistrer...
+                    <Loading01Icon className='animate-spin' size={16} />
+                    Enregistrement...
                   </>
                 ) : (
-                  'Enregistrer'
+                  <>
+                    <SaveIcon size={16} />
+                    Enregistrer le contrat
+                  </>
                 )}
               </button>
             </div>
-          </div>
 
-          {/* Debug: Afficher les erreurs de validation */}
-          {Object.keys(form.formState.errors).length > 0 && (
-            <div className='p-3 bg-red-50 border border-red-200 rounded-md'>
-              <p className='text-sm font-medium text-red-800 mb-2'>
-                Erreurs de validation :
-              </p>
-              <ul className='text-sm text-red-600 space-y-1'>
-                {Object.entries(form.formState.errors).map(([field, error]) => (
-                  <li key={field}>
-                    <strong>{field}:</strong> {error?.message}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </form>
-      </Form>
-    </div>
+            {/* Debug errors */}
+            {Object.keys(form.formState.errors).length > 0 && (
+              <Card className='border-red-200 bg-red-50'>
+                <CardContent className='pt-6'>
+                  <div className='flex items-start gap-3'>
+                    <div className='w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5'>
+                      <div className='w-2 h-2 rounded-full bg-red-500' />
+                    </div>
+                    <div>
+                      <h4 className='text-sm font-medium text-red-800 mb-2'>
+                        Erreurs de validation
+                      </h4>
+                      <ul className='text-sm text-red-600 space-y-1'>
+                        {Object.entries(form.formState.errors).map(
+                          ([field, error]) => (
+                            <li key={field} className='flex items-center gap-2'>
+                              <div className='w-1 h-1 rounded-full bg-red-400' />
+                              <span className='font-medium'>{field}:</span>
+                              <span>{error?.message}</span>
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </form>
+        </Form>
+      </div>
+    </ScrollArea>
   );
 };
 
