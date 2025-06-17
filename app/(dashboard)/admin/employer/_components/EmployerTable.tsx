@@ -1,3 +1,5 @@
+// app/(dashboard)/admin/employer/_components/EmployerTable.tsx
+
 "use client";
 
 import React from "react";
@@ -10,6 +12,7 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
 } from "@tanstack/react-table";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 import { Employer } from "@/types/employer";
 import { MoreMenu } from "@/app/(dashboard)/admin/employer/_components/MoreMenu";
@@ -27,6 +30,7 @@ export default function EmployerTable({ employers }: EmployerProps) {
     import("@tanstack/react-table").SortingState
   >([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
+  const router = useRouter(); // Initialize useRouter
 
   // Définition des colonnes
   const columns = React.useMemo<ColumnDef<Employer>[]>(
@@ -69,14 +73,14 @@ export default function EmployerTable({ employers }: EmployerProps) {
         cell: ({ row }) => (
           <MoreMenu
             employer={row.original}
-            onView={() => alert(`Afficher id: ${row.original.id}`)}
-            onEdit={() => alert(`Modifier id: ${row.original.id}`)}
-            onDelete={() => alert(`Supprimer id: ${row.original.id}`)}
+            // onView={() => router.push(`/employes/${row.original.id}`)} // Use employer.id for navigation
+            // onEdit={() => alert(`Modifier id: ${row.original.id}`)}
+            // onDelete={() => alert(`Supprimer id: ${row.original.id}`)}
           />
         ),
       },
     ],
-    []
+    [router] // Add router to the dependency array
   );
 
   // Création du tableau

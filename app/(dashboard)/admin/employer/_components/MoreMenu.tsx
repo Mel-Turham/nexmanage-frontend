@@ -24,13 +24,13 @@ import Supprimer from "./supprimer";
 // envisagez d'utiliser une bibliothèque comme 'slugify' et de la placer dans un fichier utils partagé.
 // import slugify from 'slugify';
 // const generateSlug = (name: string) => slugify(name, { lower: true, strict: true, locale: 'fr' });
-const generateSlug = (name: string): string => {
-  if (!name) return "default-slug";
-  return name
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "");
-};
+// const generateSlug = (name: string): string => {
+//   if (!name) return "default-slug";
+//   return name
+//     .toLowerCase()
+//     .replace(/\s+/g, "-")
+//     .replace(/[^\w-]+/g, "");
+// };
 
 interface MoreMenuProps {
   employer: Employer;
@@ -43,7 +43,7 @@ export function MoreMenu({ employer }: MoreMenuProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   // Pas besoin d'états séparés pour les Dialog si DialogTrigger est bien utilisé avec DropdownMenuItem
 
-  const employerSlug = generateSlug(employer.name);
+  // const employerSlug = generateSlug(employer.name);
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -59,7 +59,8 @@ export function MoreMenu({ employer }: MoreMenuProps) {
         <DropdownMenuGroup>
           {/* L'option "Afficher" devient un lien */}
           <Link
-            href={`/admin/employer/${employerSlug}`}
+            href={`/admin/employer/${employer.id}`}
+            // href={`/admin/employer/${employerSlug}`}
             passHref
             legacyBehavior
           >
