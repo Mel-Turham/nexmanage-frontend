@@ -8,8 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"; // Ajout du composant modal
 import { X } from "lucide-react";
-import MarkdownEditor from '@/components/ui/markdown';
-
+import MarkdownEditor from "@/components/ui/markdown";
 
 const employees = Array(8).fill({ name: "Jason Kitio", position: "Poste" });
 
@@ -34,30 +33,45 @@ export default function CreerDemandeCongePage() {
         <section className="flex flex-col max-w-xl w-full space-y-6">
           <button
             className="flex items-center text-gray-900 text-sm font-normal gap-2"
-            onClick={() => router.push("/demandes")}
+            onClick={() => router.push("../conges")}
           >
-            <svg className="h-5 w-5" fill="none" stroke="#111827" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="#111827"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <polyline points="15 18 9 12 15 6" />
             </svg>
             Retour
           </button>
 
-          <h1 className="text-2xl font-normal text-gray-900">Créer une demande de congé</h1>
+          <h1 className="text-3xl font-semibold text-Primaire">
+            Créer une demande de congé
+          </h1>
 
           {selectedEmployee ? (
             <div className="flex items-center gap-4">
               <div className="rounded-full w-12 h-12 flex items-center justify-center bg-[#B9D3E8] text-[#1E293B] font-semibold text-sm">
-                {selectedEmployee.split(" ").map((n) => n[0]).join("")}
+                {selectedEmployee
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
               </div>
               <p className="italic text-gray-900">{selectedEmployee}</p>
             </div>
           ) : (
-            <p className="italic text-base text-gray-700">Aucun employé sélectionné</p>
+            <p className="italic text-base text-gray-700">
+              Aucun employé sélectionné
+            </p>
           )}
 
           <Button
             onClick={() => setShowModal(true)}
-            className={`w-max ${selectedEmployee ? "bg-[#B9D3E8] hover:bg-blue-700 text-[#1E293B]" : "bg-blue-300 text-blue-900"} text-sm font-normal rounded-full px-6 py-2`}
+            className="text-muted-foreground/80 hover:text-foreground flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none cursor-pointer"
           >
             Sélectionner un employé
           </Button>
@@ -76,7 +90,9 @@ export default function CreerDemandeCongePage() {
                 <div className="w-11 h-6 bg-gray-300 rounded-full peer-checked:bg-blue-800 transition-colors" />
                 <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-md peer-checked:translate-x-5 transition-transform" />
               </div>
-              <span className="text-sm text-gray-900">Toute la journée (heure ouvrable)</span>
+              <span className="text-sm text-gray-900">
+                Toute la journée (heure ouvrable)
+              </span>
             </label>
           </div>
 
@@ -132,14 +148,15 @@ export default function CreerDemandeCongePage() {
 
           {/* Note */}
           <div className="flex flex-col gap-1">
-            <Label htmlFor="textarea" className="text-xs text-gray-700">Note</Label>
+            <Label htmlFor="textarea" className="text-xs text-gray-700">
+              Note
+            </Label>
             <div>
-               <MarkdownEditor />
+              <MarkdownEditor />
             </div>
           </div>
 
-          <Button
-          className="w-max bg-blue-800 hover:bg-blue-700 text-white text-sm font-normal rounded-full px-6 py-3 mt-4">
+          <Button className="w-max bg-blue-800 hover:bg-blue-700 text-white text-sm font-normal rounded-full px-6 py-3 mt-4">
             Sauvegarder
           </Button>
         </section>
@@ -160,7 +177,9 @@ export default function CreerDemandeCongePage() {
       <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent className="max-w-lg w-full rounded-2xl p-6 bg-gradient-to-b from-[#F1F9FF] to-[#DCEFFB] shadow-xl">
           <DialogHeader className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Sélectionner un employé</h2>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Sélectionner un employé
+            </h2>
             <button onClick={() => setShowModal(false)}>
               <X className="w-5 h-5 text-gray-600" />
             </button>
@@ -185,7 +204,10 @@ export default function CreerDemandeCongePage() {
                 className="w-full flex items-center gap-4 px-4 py-2 rounded-lg hover:bg-blue-100 transition text-left"
               >
                 <div className="rounded-full w-10 h-10 flex items-center justify-center bg-[#B9D3E8] text-[#1E293B] text-sm font-semibold">
-                  {emp.name.split(" ").map((n) => n[0]).join("")}
+                  {emp.name
+                    .split(" ")
+                    .map((n: unknown[]) => n[0])
+                    .join("")}
                 </div>
                 <div>
                   <p className="text-sm text-gray-900">{emp.name}</p>

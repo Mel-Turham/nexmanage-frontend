@@ -13,7 +13,7 @@ export interface Employer {
   name: string;
   email: string;
   telephone?: string; // Optionnel, car non visible directement dans la section "Renseignements personnels" du design
-  Poste: string | string[]; // "Bar", "Cuisine" suggère string[]
+  Poste: string; // "Bar", "Cuisine" suggère string[]
   Entreprise?: string;
   profileImage?: string; // URL vers une image de profil si disponible
 
@@ -22,11 +22,4 @@ export interface Employer {
   role?: string; // Ex: "Admin"
   hourlyRate?: string; // Ex: "10 $/h" (stocker comme nombre, formater pour affichage)
   // ... autres champs que vous pourriez avoir
-}
-
-export interface Post {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
 }
