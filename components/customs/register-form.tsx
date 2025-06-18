@@ -30,7 +30,7 @@ import { Button } from "../ui/button";
 const RegisterForm = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const [focusedField, setFocusedField] = useState<string>('');
+  const [focusedField, setFocusedField] = useState<string>("");
 
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
@@ -63,10 +63,10 @@ const RegisterForm = () => {
   });
 
   // Surveiller les changements du mot de passe
-  const watchedPassword = form.watch('password');
-  const watchedTerms = form.watch('terms');
-  const watchedUsername = form.watch('username');
-  const watchedConfirmPassword = form.watch('confirmPassword');
+  const watchedPassword = form.watch("password");
+  const watchedTerms = form.watch("terms");
+  const watchedUsername = form.watch("username");
+  const watchedConfirmPassword = form.watch("confirmPassword");
 
   const strength = useMemo(
     () => checkStrength(watchedPassword || ""),
@@ -118,10 +118,10 @@ const RegisterForm = () => {
 
   return (
     <AuthLayout
-      text='Vous avez déjà un compte ?'
-      textLink='Connectez-vous'
-      url='/auth/login'
-      className='justify-between'
+      text="Vous avez déjà un compte ?"
+      textLink="Connectez-vous"
+      url="/auth/login"
+      className="justify-between"
     >
       <NextManageIcon />
       <div className="flex flex-col items-center gap-4 w-full lg:justify-center">
@@ -143,23 +143,23 @@ const RegisterForm = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative'>
+                  <div className="relative">
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder=''
-                        type='text'
+                        placeholder=""
+                        type="text"
                         aria-label="Nom d'utilisateur"
-                        className='pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
-                        onFocus={() => setFocusedField('username')}
-                        onBlur={() => setFocusedField('')}
+                        className="pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200"
+                        onFocus={() => setFocusedField("username")}
+                        onBlur={() => setFocusedField("")}
                       />
                     </FormControl>
                     <FormLabel
                       className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
-                        shouldAnimateLabel('username', watchedUsername)
-                          ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
-                          : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                        shouldAnimateLabel("username", watchedUsername)
+                          ? "top-0 text-xs text-[#344EA2] -translate-y-1/2"
+                          : "top-1/2 -translate-y-1/2 text-muted-foreground"
                       }`}
                     >
                       Nom d&apos;utilisateur
@@ -205,23 +205,23 @@ const RegisterForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative'>
+                  <div className="relative">
                     <FormControl>
-                      <div className='relative'>
+                      <div className="relative">
                         <Input
                           {...field}
-                          placeholder=''
-                          type={isVisible ? 'text' : 'password'}
-                          aria-label='Votre mot de passe'
-                          className='pt-6 pb-2 px-3 pr-10 border focus:border-[#344EA2] transition-all duration-200'
-                          onFocus={() => setFocusedField('password')}
-                          onBlur={() => setFocusedField('')}
+                          placeholder=""
+                          type={isVisible ? "text" : "password"}
+                          aria-label="Votre mot de passe"
+                          className="pt-6 pb-2 px-3 pr-10 border focus:border-[#344EA2] transition-all duration-200"
+                          onFocus={() => setFocusedField("password")}
+                          onBlur={() => setFocusedField("")}
                         />
                         <FormLabel
                           className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
-                            shouldAnimateLabel('password', watchedPassword)
-                              ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
-                              : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                            shouldAnimateLabel("password", watchedPassword)
+                              ? "top-0 text-xs text-[#344EA2] -translate-y-1/2"
+                              : "top-1/2 -translate-y-1/2 text-muted-foreground"
                           }`}
                         >
                           Votre mot de passe
@@ -281,46 +281,46 @@ const RegisterForm = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative'>
+                  <div className="relative">
                     <FormControl>
-                      <div className='relative'>
+                      <div className="relative">
                         <Input
                           {...field}
-                          placeholder=''
-                          type={isPasswordVisible ? 'text' : 'password'}
-                          aria-label='Confirmer le mot de passe'
-                          className='pt-6 pb-2 px-3 pr-10 border focus:border-[#344EA2] transition-all duration-200'
-                          onFocus={() => setFocusedField('confirmPassword')}
-                          onBlur={() => setFocusedField('')}
+                          placeholder=""
+                          type={isPasswordVisible ? "text" : "password"}
+                          aria-label="Confirmer le mot de passe"
+                          className="pt-6 pb-2 px-3 pr-10 border focus:border-[#344EA2] transition-all duration-200"
+                          onFocus={() => setFocusedField("confirmPassword")}
+                          onBlur={() => setFocusedField("")}
                         />
                         <FormLabel
                           className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
                             shouldAnimateLabel(
-                              'confirmPassword',
+                              "confirmPassword",
                               watchedConfirmPassword
                             )
-                              ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
-                              : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                              ? "top-0 text-xs text-[#344EA2] -translate-y-1/2"
+                              : "top-1/2 -translate-y-1/2 text-muted-foreground"
                           }`}
                         >
                           Confirmer le mot de passe
                         </FormLabel>
                         <button
-                          className='text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer'
-                          type='button'
+                          className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+                          type="button"
                           onClick={togglePasswordVisibility}
                           aria-label={
                             isPasswordVisible
-                              ? 'Hide confirmPassword'
-                              : 'Show confirmPassword'
+                              ? "Hide confirmPassword"
+                              : "Show confirmPassword"
                           }
                           aria-pressed={isPasswordVisible}
-                          aria-controls='confirmPassword'
+                          aria-controls="confirmPassword"
                         >
                           {isPasswordVisible ? (
-                            <EyeOffIcon size={16} aria-hidden='true' />
+                            <EyeOffIcon size={16} aria-hidden="true" />
                           ) : (
-                            <EyeIcon size={16} aria-hidden='true' />
+                            <EyeIcon size={16} aria-hidden="true" />
                           )}
                         </button>
                       </div>
@@ -344,10 +344,10 @@ const RegisterForm = () => {
                         onCheckedChange={field.onChange}
                         className="mt-0.5 cursor-pointer"
                       />
-                      <small className='text-muted-foreground text-xs'>
-                        J&apos;ai lu et j&apos;accepte les{' '}
-                        <Link href={'/terms'}>
-                          <strong className='text-[#142938] cursor-pointer'>
+                      <small className="text-muted-foreground text-xs">
+                        J&apos;ai lu et j&apos;accepte les{" "}
+                        <Link href={"/terms"}>
+                          <strong className="text-[#142938] cursor-pointer">
                             Termes et conditions
                           </strong>
                         </Link>{" "}
@@ -374,14 +374,14 @@ const RegisterForm = () => {
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" aria-hidden="true" />
               </div>
-              <div className='relative flex justify-center text-xs uppercase'>
-                <span className='bg-background px-2 text-muted-foreground'>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
                   ou s&apos;inscrire avec
                 </span>
               </div>
             </div>
-            <Button type='button' variant='outline' className='w-full'>
-              <Google className='mr-2 size-5' />
+            <Button type="button" variant="outline" className="w-full">
+              <Google className="mr-2 size-5" />
               S&apos;inscrire avec Google
             </Button>
           </form>

@@ -14,23 +14,24 @@ import {
 import { DemandeConge } from "@/types/demande";
 // import { MoreMenu } from "@/app/(dashboard)/demandes/_components/MoreMenu";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { CirclePlus, Search } from "lucide-react";
+// import { CirclePlus, Search } from "lucide-react";
+import { Search01Icon } from "hugeicons-react";
+import MoreMenu from "./MoreMenu";
 
 interface DemandeCongeTableProps {
   demandes: DemandeConge[] | null; // Permet null
 }
 
-export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) {
-
-  
-
+export default function DemandeCongeTable({
+  demandes,
+}: DemandeCongeTableProps) {
   const [sorting, setSorting] = React.useState<
     import("@tanstack/react-table").SortingState
   >([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
-  const [pageSize, setPageSize] = React.useState(10);
+  // const [pageSize, setPageSize] = React.useState(10);
 
   // Colonnes du tableau
   const columns = React.useMemo<ColumnDef<DemandeConge>[]>(
@@ -44,7 +45,9 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
       },
       {
         accessorFn: (row) =>
-          `${row.employe.name}${row.employe.role ? ` (${row.employe.role})` : ""}`,
+          `${row.employe.name}${
+            row.employe.role ? ` (${row.employe.role})` : ""
+          }`,
         id: "employe",
         header: "Employé nom",
         cell: (info) => info.getValue(),
@@ -56,8 +59,8 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
         header: "Début",
         cell: (info) => {
           const value = info.getValue();
-          return value 
-            ? new Date(value as string).toLocaleDateString("fr-FR") 
+          return value
+            ? new Date(value as string).toLocaleDateString("fr-FR")
             : "N/A";
         },
         enableSorting: true,
@@ -68,8 +71,8 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
         header: "Fin",
         cell: (info) => {
           const value = info.getValue();
-          return value 
-            ? new Date(value as string).toLocaleDateString("fr-FR") 
+          return value
+            ? new Date(value as string).toLocaleDateString("fr-FR")
             : "N/A";
         },
         enableSorting: true,
@@ -130,7 +133,7 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
       {
         id: "actions",
         header: "",
-        // cell: ({ row }) => <MoreMenu demande={row.original} />,
+        cell: ({ row }) => <MoreMenu demande={row.original} />,
         size: 60,
       },
     ],
@@ -164,16 +167,17 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
   });
 
   return (
-    <div className="bg-white text-[#1E2A38] min-h-screen flex flex-col p-6  w-full mx-auto">
+    <div className="bg-white text-[#1E2A38] flex flex-col p-6 h-full w-full">
       {/* Header */}
-      <header className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-        <div className="flex items-center space-x-4">
-          <div className="bg-[#E6F0F5] rounded-full p-4 flex items-center justify-center">
+      {/* <header className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4"> */}
+      <header className="flex items-center justify-between mb-4">
+        <div className="flex flex-row w-fit gap-2 items-center ">
+          <div className="flex items-center justify-center bg-bleu-ciel rounded-full p-3">
             <Image
               src="/illustration/work-history.svg"
               alt="Icone congé"
-              width={32}
-              height={32}
+              width={100}
+              height={100}
               draggable={false}
               className="w-8 h-8"
             />
@@ -183,23 +187,22 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
             <p className="text-xs text-[#6B7A8F] mt-0.5">{currentDate}</p>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row md:items-center gap-4">
-          
+        {/* <div className="flex flex-col md:flex-row md:items-center gap-4">
           <Button
-            className="bg-[#3759B8] text-white rounded-full px-8 py-2 flex items-center space-x-2 text-sm font-medium select-none"
+            className="bg-[#3759B8] text-white rounded-md px-8 py-2 flex items-center space-x-2 text-sm font-medium select-none"
             onClick={() => alert("Créer une nouvelle demande")}
           >
             <span>Créer</span>
             <CirclePlus className="w-4 h-4" />
           </Button>
-        </div>
+        </div> */}
       </header>
 
       {/* Filtres */}
       <section className="flex  flex-col sm:flex-row  sm:items-center sm:space-x-6 mb-6 space-y-3 sm:space-y-0 w-full ">
         <select
           aria-label="Filtrer par type"
-              className={`appearance-none border rounded-full w-full pl-5 pr-10 py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white cursor-pointer`}
+          className={`appearance-none border rounded-md w-full pl-5 pr-10 py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white cursor-pointer`}
           // TODO: gérer filtre type
           onChange={() => {}}
         >
@@ -207,175 +210,133 @@ export default function DemandeCongeTable({ demandes }: DemandeCongeTableProps) 
         </select>
         <select
           aria-label="Filtrer par ordre"
-          className={`appearance-none border rounded-full w-full pl-5 pr-10 py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white cursor-pointer`}
+          className={`appearance-none border rounded-md w-full pl-5 pr-10 py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white cursor-pointer`}
           // TODO: gérer filtre ordre
           onChange={() => {}}
         >
           <option value="">Ordre</option>
         </select>
-      
 
         <div className="w-full md:w-40%  ml-auto">
-            <label htmlFor="search" className="sr-only">
-              Rechercher
-            </label>
-            <div className="flex w-20% items-center border border-[#9CA3AF] rounded-full px-4 py-2 text-[#6B7A8F] text-sm focus-within:ring-2 focus-within:ring-[#3759B8] focus-within:border-transparent">
-              <Search className="w-4 h-3 mr-2 text-[#9CA3AF]" />
-              <Input
-                id="search"
-                type="search"
-                placeholder="Rechercher"
-                value={globalFilter ?? ""}
-                onChange={(e) => setGlobalFilter(e.target.value)}
-                className="pl-10 py-2 xl:w-sm 2xl:w-xl 2xl:border-0 focus-visible:border-0 focus-visible:ring-0 focus-visible:outline-none"
-              />
-            </div>
+          <label htmlFor="search" className="sr-only">
+            Rechercher
+          </label>
+          <div className="flex flex-row items-center px-2 rounded-md border border-gray w-full focus-within:shadow-md focus-within:border-blue-500 transition-all duration-200">
+            <Search01Icon color="#e5e5e5" size={24} />
+            <input
+              type="search"
+              name="search"
+              placeholder="Rechercher"
+              className="py-2 px-4 w-full outline-none"
+            />
           </div>
-
+        </div>
       </section>
 
-      {/* Tableau */}
-      <section className="overflow-x-auto w-full pb-6">
-        <table className="w-full border-collapse">
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr
-                key={headerGroup.id}
-                className="bg-[#E9F2F7] text-[#1E2A38] text-sm font-semibold leading-5"
-              >
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="text-left py-3 px-4 select-none first:rounded-tl-[20px] last:rounded-tr-[20px]"
-                    onClick={header.column.getToggleSortingHandler()}
-                    style={{ minWidth: header.column.columnDef.size }}
-                  >
-                    <div className="flex items-center">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted() as string] ?? null}
+      <div className="flex flex-col justify-between h-full">
+        <div className="flex flex-col p-2 border border-bleu-ciel rounded-4xl">
+          <table className="w-full text-left border-collapse">
+            <thead className="bg-bleu-ciel">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    // Ajout des classes arrondies selon la colonne
+                    let thClass = "py-2 px-4 cursor-pointer select-none";
+
+                    if (header.column.id === "idDemande") {
+                      thClass += " rounded-l-full";
+                    } else if (header.column.id === "actions") {
+                      thClass += " rounded-r-full";
+                    }
+
+                    return (
+                      <th
+                        key={header.id}
+                        className={thClass}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.length === 0 && (
+                <tr>
+                  <td colSpan={columns.length} className="p-4 text-center">
+                    <div className="flex justify-center items-center w-full">
+                      <Image
+                        src={"/illustration/rafiki.svg"}
+                        alt="Logo"
+                        width={100}
+                        height={100}
+                        className="h-[50vh] w-full"
+                      />
                     </div>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={columns.length}
-                  className="p-4 text-center border border-[#E6F0F5]"
-                >
-                  <div className="flex flex-col items-center justify-center w-full py-12">
-                    <Image
-                      src="/illustration/rafiki.svg"
-                      alt="Aucun résultat"
-                      width={200}
-                      height={200}
-                      className="h-64 w-auto"
-                    />
-                    <p className="mt-4">Aucune demande trouvée</p>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              table.getRowModel().rows.map((row) => (
+                    Aucun résultat.
+                  </td>
+                </tr>
+              )}
+              {table.getRowModel().rows.map((row) => (
                 <tr
                   key={row.id}
-                  className="bg-white border border-[#E6F0F5] hover:bg-gray-50 font-medium"
+                  className="border-b last:border-b-0 hover:bg-gray-50 border-bleu-ciel font-medium"
                 >
-                  {row.getVisibleCells().map((cell, index) => (
-                    <td
-                      key={cell.id}
-                      className={`py-4 px-4 ${
-                        index !== 0 ? "border-l border-[#E6F0F5]" : ""
-                      }`}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
+                  {row.getVisibleCells().map((cell, index) => {
+                    let tdClass = "py-2 px-4";
+
+                    if (index !== 0) {
+                      tdClass += " border-l border-bleu-ciel";
+                    }
+
+                    return (
+                      <td key={cell.id} className={tdClass}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    );
+                  })}
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </section>
-
-      {/* Pagination */}
-      {table.getPageCount() > 1 && (
-        <footer className="flex flex-col sm:flex-row sm:items-center justify-between mt-8 text-[#6B7A8F] text-sm select-none gap-4">
-          <div className="flex items-center space-x-2">
-            <span>Résultats par page:</span>
-            <select
-              value={pageSize}
-              onChange={(e) => {
-                const size = Number(e.target.value);
-                setPageSize(size);
-                table.setPageSize(size);
-              }}
-              className="border rounded-full py-1 px-3 focus:outline-none focus:ring-2 focus:ring-[#3759B8]"
-            >
-              {[10, 20, 30, 40, 50].map((size) => (
-                <option key={size} value={size}>
-                  {size}
-                </option>
               ))}
-            </select>
-          </div>
+            </tbody>
+          </table>
+        </div>
 
-          <div className="flex items-center space-x-3">
-            <span>
-              Page {table.getState().pagination.pageIndex + 1} sur{" "}
-              {table.getPageCount()}
-            </span>
-            <Button
-              variant="outline"
-              className="rounded-full w-10 h-10 flex items-center justify-center text-lg"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-              aria-label="Première page"
-            >
-              «
-            </Button>
-            <Button
-              variant="outline"
-              className="rounded-full w-10 h-10 flex items-center justify-center text-lg"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-              aria-label="Page précédente"
-            >
-              ‹
-            </Button>
-            <Button
-              variant="outline"
-              className="rounded-full w-10 h-10 flex items-center justify-center text-lg"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-              aria-label="Page suivante"
-            >
-              ›
-            </Button>
-            <Button
-              variant="outline"
-              className="rounded-full w-10 h-10 flex items-center justify-center text-lg"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-              aria-label="Dernière page"
-            >
-              »
-            </Button>
-          </div>
-        </footer>
-      )}
+        {/* Pagination */}
+        <div className="flex items-center justify-between space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Précédent
+          </Button>
+          <span className="text-sm text-gray-600">
+            Page {table.getState().pagination.pageIndex + 1} sur{" "}
+            {table.getPageCount()}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Suivant
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

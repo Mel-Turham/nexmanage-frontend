@@ -1,0 +1,57 @@
+[
+  {
+    "justification": "Voyage familial à l'étranger",
+    "duration": 5,
+    "heuresParJour": 8,
+    "soldeRestant": 10,
+    "idDemande": 101,
+    "employe": {
+      "id": 1,
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@entreprise.com",
+      "poste": "Développeur"
+    },
+    "dateDebut": "2025-07-01",
+    "dateFin": "2025-07-05",
+    "motif": "Vacances annuelles",
+    "statut": "En attente"
+  },
+  {
+    "justification": "Problème de santé",
+    "duration": 2,
+    "heuresParJour": 8,
+    "soldeRestant": 8,
+    "idDemande": 102,
+    "employe": {
+      "id": 2,
+      "nom": "Martin",
+      "prenom": "Sophie",
+      "email": "sophie.martin@entreprise.com",
+      "poste": "RH"
+    },
+    "dateDebut": "2025-06-20",
+    "dateFin": "2025-06-21",
+    "motif": "Arrêt maladie",
+    "statut": "Acceptée"
+  },
+  {
+    "justification": "Participation à une formation",
+    "duration": 3,
+    "heuresParJour": 7,
+    "soldeRestant": 5,
+    "idDemande": 103,
+    "employe": {
+      "id": 1,
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@entreprise.com",
+      "poste": "Développeur"
+    },
+    "dateDebut": "2025-08-10",
+    "dateFin": "2025-08-12",
+    "motif": "Formation professionnelle",
+    "statut": "Refusée",
+    "justificationRefus": "Période de forte activité, congé non accordé"
+  }
+]

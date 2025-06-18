@@ -12,7 +12,8 @@ import {
   UserAdd01Icon,
   WorkHistoryIcon,
 } from "hugeicons-react";
-import New from "./taches/new";
+// import New from "./taches/new";
+import TaskManagementPage from "./taches/TaskManagementPage";
 
 const RightBar = ({
   onToggleKanban,
@@ -23,16 +24,15 @@ const RightBar = ({
 }) => {
   const [showListe, setShowListe] = useState(false);
 
-
   // Toggle Liste via TaskAdd02Icon
   const toggleListe = () => setShowListe((v) => !v);
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div className="contents">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <div
-          className={`flex flex-col gap-5 items-center rounded-full p-3 m-2 cursor-pointer bg-bleu-ciel`}
+          className={`flex flex-col gap-2 items-center rounded-full p-2 m-3 cursor-pointer bg-bleu-ciel`}
           onClick={onToggleKanban}
           title="Toggle Kanban / Planning"
         >
@@ -41,32 +41,32 @@ const RightBar = ({
               isKanbanActive ? "bg-white" : "bg-transparent"
             }`}
           >
-            <Kanban />
+            <Kanban size={20} />
           </div>
           <div
             className={`rounded-full p-2 ${
               !isKanbanActive ? "bg-white" : "bg-transparent"
             }`}
           >
-            <Calendar02Icon />
+            <Calendar02Icon size={20} />
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 items-center bg-bleu-ciel rounded-full p-3 m-2 ">
+        <div className="flex flex-col gap-5 items-center bg-bleu-ciel rounded-full p-2 m-3 ">
           <div className="bg-white rounded-full p-2 cursor-pointer">
-            <FilterMailCircleIcon />
+            <FilterMailCircleIcon size={20} />
           </div>
         </div>
 
-        <div className="flex flex-col gap-5 items-center bg-bleu-ciel rounded-full p-3 m-2">
+        <div className="flex flex-col gap-2 items-center bg-bleu-ciel rounded-full p-2 m-3">
           {!isExpanded ? (
             // Affiche AddCircleIcon quand pas étendu
             <div
-              className="flex flex-col gap-4 bg-white rounded-full p-2 cursor-pointer transition-transform duration-300 hover:scale-110"
+              className="flex flex-col gap-2 bg-white rounded-full p-2 cursor-pointer transition-transform duration-300 hover:scale-110"
               onClick={() => setIsExpanded(true)}
               title="Afficher options"
             >
-              <AddCircleIcon />
+              <AddCircleIcon size={20} />
             </div>
           ) : (
             // Affiche le groupe d’icônes quand étendu
@@ -75,15 +75,25 @@ const RightBar = ({
               title="Options"
             >
               <CancelCircleHalfDotIcon
-                className="cursor-pointer hover:text-red-600"
+                className="cursor-pointer hover:text-gray"
                 onClick={() => setIsExpanded(false)}
               />
-              <UserAdd01Icon className="cursor-pointer hover:text-blue-600" />
-              <WorkHistoryIcon className="cursor-pointer hover:text-green-600" />
-              <Megaphone02Icon className="cursor-pointer hover:text-yellow-600" />
+              <UserAdd01Icon
+                className="cursor-pointer hover:text-gray"
+                size={20}
+              />
+              <WorkHistoryIcon
+                className="cursor-pointer hover:text-gray"
+                size={20}
+              />
+              <Megaphone02Icon
+                className="cursor-pointer hover:text-gray"
+                size={20}
+              />
               <TaskAdd02Icon
-                className="cursor-pointer hover:text-purple-600"
+                className="cursor-pointer hover:text-gray"
                 onClick={toggleListe}
+                size={20}
               />
             </div>
           )}
@@ -92,12 +102,13 @@ const RightBar = ({
 
       {/* Contenu Liste affiché / masqué */}
       {showListe && (
-        <div className="bg-bleu-ciel p-5 pb-0 pr-0 h-full w-full rounded-tl-4xl transition-opacity duration-300 ease-in-out opacity-100">
-          <div className="bg-white h-full pr-0 rounded-tl-2xl">
-            {/* <Liste /> */}
-            <New />
-          </div>
-        </div>
+        // <div className="bg-bleu-ciel p-5 pb-0 pr-0 h-full w-full rounded-tl-4xl transition-opacity duration-300 ease-in-out opacity-100">
+        //   <div className="bg-white h-full pr-0 rounded-tl-2xl">
+        //     {/* <Liste /> */}
+        //     <New />
+        //   </div>
+        // </div>
+        <TaskManagementPage />
       )}
     </div>
   );
