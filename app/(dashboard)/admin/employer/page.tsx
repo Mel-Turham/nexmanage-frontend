@@ -4,8 +4,8 @@ import employers from "@/data/employers.json";
 
 const Page = () => {
   return (
-    <div>
-      <main className="p-6 flex flex-col gap-6">
+    <div className="h-full">
+      <main className="p-6 h-full">
         <EmployerTable employers={employers} />
       </main>
     </div>

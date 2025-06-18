@@ -6,8 +6,8 @@ import employersPresentData from "@/data/employersPresent.json";
 
 const Presences = () => {
   return (
-    <div>
-      <main className="p-6 flex flex-col gap-6">
+    <div className="h-full">
+      <main className="p-6 h-full">
         <EmployerTable employers={employersPresentData} />
       </main>
     </div>

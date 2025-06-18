@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog"; // Ajout du composant modal
 import { X } from "lucide-react";
 import MarkdownEditor from "@/components/ui/markdown";
+import { CalendarForm } from "@/components/CalendarForm";
 
 const employees = Array(8).fill({ name: "Jason Kitio", position: "Poste" });
 
@@ -18,8 +19,8 @@ export default function CreerDemandeCongePage() {
   const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
   const [multiDays, setMultiDays] = useState(false);
   const [allDay, setAllDay] = useState(true);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -71,7 +72,7 @@ export default function CreerDemandeCongePage() {
 
           <Button
             onClick={() => setShowModal(true)}
-            className="text-muted-foreground/80 hover:text-foreground flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none cursor-pointer"
+            className="flex h-full items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none cursor-pointer w-fit text-white px-4"
           >
             Sélectionner un employé
           </Button>
@@ -113,35 +114,38 @@ export default function CreerDemandeCongePage() {
               <div className="flex gap-6">
                 <div className="flex flex-col gap-1 w-1/2">
                   <Label htmlFor="date-debut">Du</Label>
-                  <Input
+                  <CalendarForm />
+                  {/* <Input
                     type="date"
                     id="date-debut"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     className="rounded-full"
-                  />
+                  /> */}
                 </div>
                 <div className="flex flex-col gap-1 w-1/2">
                   <Label htmlFor="date-fin">Au</Label>
-                  <Input
+                  <CalendarForm />
+                  {/* <Input
                     type="date"
                     id="date-fin"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     className="rounded-full"
-                  />
+                  /> */}
                 </div>
               </div>
             ) : (
               <div className="flex flex-col gap-1">
                 <Label htmlFor="date-input">Date</Label>
-                <Input
+                {/* <Input
                   type="date"
                   id="date-input"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="rounded-full"
-                />
+                  className="py-4 px-3 pr-10 border focus:border-[#344EA2] transition-all duration-200"
+                /> */}
+                <CalendarForm />
               </div>
             )}
           </div>
@@ -156,7 +160,7 @@ export default function CreerDemandeCongePage() {
             </div>
           </div>
 
-          <Button className="w-max bg-blue-800 hover:bg-blue-700 text-white text-sm font-normal rounded-full px-6 py-3 mt-4">
+          <Button className="w-max bg-blue-800 hover:bg-blue-700 text-white text-sm font-normal rounded-md px-6 py-3 mt-4">
             Sauvegarder
           </Button>
         </section>

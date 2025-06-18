@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import {
-  AddCircleIcon,
+  // AddCircleIcon,
   ArrowLeft01Icon,
   ArrowRight01Icon,
 } from "hugeicons-react";
@@ -35,13 +35,13 @@ const PlanningHeader: React.FC<PlanningHeaderProps> = ({
     <div className="flex flex-row justify-between items-center">
       <div className="flex flex-row gap-2 items-center">
         <PlanningForm />
-        <button
+        {/* <button
           type="submit"
           className="flex flex-row w-fit custom-button-gradient py-2 px-4 rounded-lg gap-2"
         >
           <AddCircleIcon />
           {"Créer"}
-        </button>
+        </button> */}
         <button
           onClick={goToToday}
           className="flex flex-row w-fit border-2 border-Primaire py-2 px-4 rounded-lg gap-2 text-Primaire text-sm"

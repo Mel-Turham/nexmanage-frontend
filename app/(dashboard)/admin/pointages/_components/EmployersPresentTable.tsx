@@ -96,7 +96,7 @@ export default function EmployersPresentTable({
   });
 
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between mb-4">
         <div className="flex flex-row w-fit gap-2">
           <div className="flex items-center justify-center bg-bleu-ciel rounded-full p-3">
@@ -125,115 +125,116 @@ export default function EmployersPresentTable({
               placeholder="Rechercher par nom"
               value={globalFilter ?? ""}
               onChange={(e) => setGlobalFilter(e.target.value)}
-              className="pl-10 xl:w-sm 2xl:w-lg rounded-full border-gray-200"
+              className="pl-10 xl:w-sm 2xl:w-lg rounded-md border-gray-200"
             />
           </div>
         </div>
       </div>
+      <div className="flex flex-col h-[90%] justify-between">
+        <div className="flex flex-col p-2 border border-bleu-ciel rounded-4xl">
+          {/* Tableau */}
+          <table className="w-full text-left border-collapse">
+            <thead className="bg-bleu-ciel">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    // Ajout des classes arrondies selon la colonne
+                    let thClass = "py-2 px-4 cursor-pointer select-none";
 
-      <div className="flex flex-col p-2 border border-bleu-ciel rounded-4xl">
-        {/* Tableau */}
-        <table className="w-full text-left border-collapse">
-          <thead className="bg-bleu-ciel">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  // Ajout des classes arrondies selon la colonne
-                  let thClass = "py-2 px-4 cursor-pointer select-none";
+                    if (header.column.id === "id") {
+                      thClass += " rounded-l-full";
+                    } else if (header.column.id === "leaveBalance") {
+                      thClass += " rounded-r-full";
+                    }
 
-                  if (header.column.id === "id") {
-                    thClass += " rounded-l-full";
-                  } else if (header.column.id === "leaveBalance") {
-                    thClass += " rounded-r-full";
-                  }
+                    return (
+                      <th
+                        key={header.id}
+                        className={thClass}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.length === 0 && (
+                <tr>
+                  <td colSpan={columns.length} className="p-4 text-center">
+                    <div className="flex justify-center items-center w-full">
+                      <Image
+                        src={"/illustration/rafiki.svg"}
+                        alt="Logo"
+                        width={100}
+                        height={100}
+                        className="h-[50vh] w-full"
+                      />
+                    </div>
+                    Aucun résultat.
+                  </td>
+                </tr>
+              )}
+              {table.getRowModel().rows.map((row) => (
+                <tr
+                  key={row.id}
+                  className="border-b last:border-b-0 hover:bg-gray-50 border-bleu-ciel"
+                >
+                  {row.getVisibleCells().map((cell, index) => {
+                    let tdClass = "py-2 px-4";
 
-                  return (
-                    <th
-                      key={header.id}
-                      className={thClass}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </th>
-                  );
-                })}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.length === 0 && (
-              <tr>
-                <td colSpan={columns.length} className="p-4 text-center">
-                  <div className="flex justify-center items-center w-full">
-                    <Image
-                      src={"/illustration/rafiki.svg"}
-                      alt="Logo"
-                      width={100}
-                      height={100}
-                      className="h-[50vh] w-full"
-                    />
-                  </div>
-                  Aucun résultat.
-                </td>
-              </tr>
-            )}
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="border-b last:border-b-0 hover:bg-gray-50 border-bleu-ciel"
-              >
-                {row.getVisibleCells().map((cell, index) => {
-                  let tdClass = "py-2 px-4";
+                    if (index !== 0) {
+                      tdClass += " border-l border-bleu-ciel";
+                    }
 
-                  if (index !== 0) {
-                    tdClass += " border-l border-bleu-ciel";
-                  }
+                    return (
+                      <td key={cell.id} className={tdClass}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-                  return (
-                    <td key={cell.id} className={tdClass}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {/* Pagination */}
+        <div className="flex items-center justify-between space-x-2 py-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Précédent
+          </Button>
+          <span className="text-sm text-gray-600">
+            Page {table.getState().pagination.pageIndex + 1} sur{" "}
+            {table.getPageCount()}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Suivant
+          </Button>
+        </div>
       </div>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-between space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Précédent
-        </Button>
-        <span className="text-sm text-gray-600">
-          Page {table.getState().pagination.pageIndex + 1} sur{" "}
-          {table.getPageCount()}
-        </span>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Suivant
-        </Button>
-      </div>
-    </div>
+    </>
   );
 }

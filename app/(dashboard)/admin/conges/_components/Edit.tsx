@@ -12,15 +12,25 @@ import Input from "@/components/Input";
 import { Button } from "@/components/ui/button";
 import { DemandeConge } from "@/types/demande";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export default function EditDemandeConge({ demande }: { demande: DemandeConge }) {
+export default function EditDemandeConge({
+  demande,
+}: {
+  demande: DemandeConge;
+}) {
   const [formData, setFormData] = useState({
     dateDebut: "",
     dateFin: "",
     motif: "",
     statut: "",
-    justificationRefus: ""
+    justificationRefus: "",
   });
 
   useEffect(() => {
@@ -30,14 +40,14 @@ export default function EditDemandeConge({ demande }: { demande: DemandeConge })
         dateFin: demande.dateFin || "",
         motif: demande.motif || "",
         statut: demande.statut || "",
-        justificationRefus: demande.justificationRefus || ""
+        justificationRefus: demande.justificationRefus || "",
       });
     }
   }, [demande]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,14 +59,16 @@ export default function EditDemandeConge({ demande }: { demande: DemandeConge })
   return (
     <DialogContent className="max-w-md rounded-2xl">
       <DialogHeader>
-        <DialogTitle className="text-xl font-semibold">Modifier la demande de congé</DialogTitle>
+        <DialogTitle className="text-xl font-semibold">
+          Modifier la demande de congé
+        </DialogTitle>
         <DialogDescription className="text-gray-500">
           Modifiez les informations ci-dessous
         </DialogDescription>
       </DialogHeader>
-      
+
       <form onSubmit={handleSubmit}>
-        <div className="grid gap-5 py-4">
+        <div className="grid gap-3 py-4">
           <div className="space-y-2">
             <Label htmlFor="dateDebut">Date de début</Label>
             <Input
@@ -64,7 +76,9 @@ export default function EditDemandeConge({ demande }: { demande: DemandeConge })
               name="dateDebut"
               value={formData.dateDebut}
               onChange={handleChange}
-              type="date" label={""}            />
+              type="date"
+              label={""}
+            />
           </div>
 
           <div className="space-y-2">
@@ -74,7 +88,9 @@ export default function EditDemandeConge({ demande }: { demande: DemandeConge })
               name="dateFin"
               value={formData.dateFin}
               onChange={handleChange}
-              type="date" label={""}            />
+              type="date"
+              label={""}
+            />
           </div>
 
           <div className="space-y-2">
@@ -85,14 +101,18 @@ export default function EditDemandeConge({ demande }: { demande: DemandeConge })
               value={formData.motif}
               onChange={handleChange}
               type="text"
-              placeholder="Raison du congé" label={""}            />
+              placeholder="Raison du congé"
+              label={""}
+            />
           </div>
 
           <div className="space-y-2">
             <Label>Statut</Label>
-            <Select 
-              value={formData.statut} 
-              onValueChange={value => setFormData({...formData, statut: value})}
+            <Select
+              value={formData.statut}
+              onValueChange={(value) =>
+                setFormData({ ...formData, statut: value })
+              }
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Sélectionner le statut" />
@@ -114,11 +134,13 @@ export default function EditDemandeConge({ demande }: { demande: DemandeConge })
                 value={formData.justificationRefus}
                 onChange={handleChange}
                 type="text"
-                placeholder="Raison du refus" label={""}              />
+                placeholder="Raison du refus"
+                label={""}
+              />
             </div>
           )}
         </div>
-        
+
         <DialogFooter className="mt-6">
           <Button type="submit" className="bg-bleu px-6">
             Enregistrer
