@@ -24,8 +24,8 @@ import {
   Settings02Icon,
   UserListIcon,
   WorkHistoryIcon,
-} from "hugeicons-react";
-import Link from "next/link";
+} from 'hugeicons-react';
+import Link from 'next/link';
 
 const data = {
   teams: [{ name: 'Acme Inc' }, { name: 'Acme Corp.' }, { name: 'Evil Corp.' }],
@@ -34,9 +34,9 @@ const data = {
       title: 'Menu principal',
       url: '#',
       items: [
-        { title: "Accueil", icon: Home01Icon, url: "/admin" },
-        { title: "Planning", icon: Calendar02Icon, url: "/admin/planning" },
-        { title: "Congés", icon: WorkHistoryIcon, url: "/admin/conges" },
+        { title: 'Accueil', icon: Home01Icon, url: '/admin' },
+        { title: 'Planning', icon: Calendar02Icon, url: '/admin/planning' },
+        { title: 'Congés', icon: WorkHistoryIcon, url: '/admin/conges' },
       ],
     },
     {
