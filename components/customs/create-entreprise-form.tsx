@@ -16,6 +16,7 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { toast } from 'sonner';
+import { useApiMutation } from '@/hooks/apis/use-api';
 
 const CreateEntrepriseForm = () => {
   const router = useRouter();
@@ -32,24 +33,39 @@ const CreateEntrepriseForm = () => {
   const form = useForm<createEntrepriseSchema>({
     resolver: zodResolver(createEntrepriseSchema),
     defaultValues: {
-      name: '',
+      nom: '',
       domaine: '',
       email: '',
-      address: '',
-      nombreEmployes: 0,
+      adresse: '',
+      nbre_employers: 0,
     },
   });
 
+  const createEntrepriseMutation = useApiMutation<any, createEntrepriseSchema>(
+    'POST',
+    '/entreprises',
+    {
+      onSuccess: (data) => {
+        toast.success('Organisation créée avec succès');
+        console.log("Données de l'organisation:", data);
+        router.push('/admin');
+      },
+      onError: (error) => {
+        toast.error(
+          error.message || "Erreur lors de la création de l'organisation"
+        );
+        console.error("Erreur de création d'organisation:", error);
+      },
+    }
+  );
   const onSubmit = async (data: createEntrepriseSchema) => {
-    // simulation avec la promesse
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    toast.success(
-      `Organisation créee avec success\n${JSON.stringify(data, null, 2)}`,
-      { duration: 3000 }
-    );
-    form.reset();
-
-    router.push('/dashboard');
+    try {
+      console.log('Données du formulaire:', data);
+      await createEntrepriseMutation.mutateAsync(data);
+      form.reset(); // Réinitialiser le formulaire après la soumission
+    } catch (error) {
+      console.error('Erreur lors de la soumission du formulaire:', error);
+    }
   };
 
   return (
@@ -80,7 +96,7 @@ const CreateEntrepriseForm = () => {
           >
             <FormField
               control={form.control}
-              name='name'
+              name='nom'
               render={({ field }) => (
                 <FormItem>
                   <div className='relative'>
@@ -150,7 +166,7 @@ const CreateEntrepriseForm = () => {
 
             <FormField
               control={form.control}
-              name='address'
+              name='adresse'
               render={({ field }) => (
                 <FormItem>
                   <div className='relative'>
@@ -173,7 +189,7 @@ const CreateEntrepriseForm = () => {
 
             <FormField
               control={form.control}
-              name='nombreEmployes'
+              name='nbre_employers'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-sm font-medium text-foreground mb-3 block'>

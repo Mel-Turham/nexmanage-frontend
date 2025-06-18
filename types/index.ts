@@ -41,6 +41,33 @@ export interface Utilisateur {
   dateDelete: Date;
 }
 
+export interface AuthTokens {
+  access_token: string;
+  refresh_token: string;
+}
+export interface RefreshTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface ResponseLogin {
+  user: User;
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface User {
+  idUtilisateur: string;
+  nom: string;
+  email: string;
+  telephone: string;
+  role: Role;
+  isActif: boolean;
+  dateCreation: Date;
+  update_at: Date;
+  delete_at: null;
+}
+
 export interface Contrat {
   id: string;
   utilisateur: Utilisateur[];

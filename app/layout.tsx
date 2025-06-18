@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 import { ProviderQueryClient } from '@/providers/QueryClient';
 import { Suspense } from 'react';
 import Loading from './laoding';
+import { AuthProvider } from '@/providers/auth-provider';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -25,7 +26,9 @@ export default function RootLayout({
       <body className={`${manrope.className} antialiased`}>
         <Toaster position='top-right' closeButton richColors />
         <ProviderQueryClient>
-          <Suspense fallback={<Loading />}>{children}</Suspense>
+          <Suspense fallback={<Loading />}>
+            <AuthProvider>{children}</AuthProvider>
+          </Suspense>
         </ProviderQueryClient>
       </body>
     </html>
