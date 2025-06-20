@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import EmployerTable from "./_components/EmployersPresentTable";
+import EmployerTable from "@/components/presence/EmployersPresentTable";
 import employersPresentData from "@/data/employersPresent.json";
 
 const Presences = () => {

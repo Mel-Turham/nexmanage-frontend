@@ -197,7 +197,7 @@ export default function CreerDemandeCongePage() {
             className="rounded-full mb-4"
           />
 
-          <div className="space-y-2 max-h-80 overflow-y-auto">
+          <div className="space-y-2 max-h-80 overflow-y-auto no-scrollbar">
             {filteredEmployees.map((emp, idx) => (
               <button
                 key={idx}

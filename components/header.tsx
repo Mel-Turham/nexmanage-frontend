@@ -1,9 +1,25 @@
-import { Search01Icon, Notification02Icon } from "hugeicons-react";
-import React from "react";
+import { Search01Icon } from "hugeicons-react";
 import { NavUser } from "./nav-user";
-import { Button } from "./ui/button";
+// import { useState } from "react";
+// import notifications from "@/data/notifications.json";
+import Notifications from "./notifications";
 
 const Header = () => {
+  // const [notificationOpen, setNotificationOpen] = useState(false);
+  // const [searchQuery, setSearchQuery] = useState("");
+
+  // const unreadCount = notifications.filter((n) => !n.read).length;
+
+  // const markAsRead = (id: number) => {
+  //   // Ici vous pourriez mettre à jour l&apos;état des notifications
+  //   console.log("Marquer comme lu:", id);
+  // };
+
+  // const markAllAsRead = () => {
+  //   // Ici vous pourriez marquer toutes les notifications comme lues
+  //   console.log("Marquer tout comme lu");
+  // };
+
   const data = {
     user: {
       name: "shadcn",
@@ -19,13 +35,11 @@ const Header = () => {
           type="search"
           name="search"
           placeholder="Recherche un employer, un contrat,..."
-          className="py-2 px-4 w-full outline-none"
+          className="py-3 px-4 w-full outline-none text-sm"
         />
       </div>
       <div className="flex flex-row items-center gap-2">
-        <Button size={"icon"} variant={"outline"}>
-          <Notification02Icon />
-        </Button>
+        <Notifications />
         <NavUser user={data.user} />
       </div>
     </header>

@@ -1,4 +1,3 @@
-// Assuming this is in a file like TaskManagementPage.tsx or similar
 "use client"; // If this is a client component
 
 import React, { useState } from "react";
@@ -30,40 +29,13 @@ const TaskManagementPage = () => {
 
   return (
     <div className="flex flex-col h-screen">
-      {" "}
-      {/* Adjust overall container height/width as needed */}
-      {/* This button could be elsewhere, perhaps in a main dashboard layout */}
-      {/* {!showNewTaskForm &&
-        showTaskList && ( // Show this button only if we are on the list view
-          <div className="p-3">
-            <button
-              name="Creer une tache"
-              className="custom-button-gradient py-2 w-full flex flex-row items-center gap-2 px-3 rounded-lg justify-center"
-              onClick={openNewTaskForm} // Clicking this button opens the New component
-            >
-              <Add01Icon size={20} />
-              Créer une tâche
-            </button>
-          </div>
-        )} */}
-      {/* Render the New component if showNewTaskForm is true */}
       {showNewTaskForm && (
-        <div className="bg-bleu-ciel p-5 pb-0 pr-0 h-full w-full rounded-tl-4xl transition-opacity duration-300 ease-in-out opacity-100">
-          <div className="bg-white h-full pr-0 rounded-tl-2xl">
-            {/* Pass the closeNewTaskForm function as a prop to New */}
-            <New onClose={closeNewTaskForm} onTaskCreated={openTaskList} />
-          </div>
-        </div>
+        <New onClose={closeNewTaskForm} onTaskCreated={openTaskList} />
       )}
       {/* Render the Liste component if showTaskList is true */}
       {showTaskList &&
         !showNewTaskForm && ( // Ensure Liste only shows when form is not active
-          <div className="bg-bleu-ciel p-5 pb-0 pr-0 h-full w-full rounded-tl-4xl transition-opacity duration-300 ease-in-out opacity-100">
-            <div className="bg-white h-full pr-0 rounded-tl-2xl">
-              <Liste onCreateNew={openNewTaskForm} onClose={closeNewTaskForm} />{" "}
-              {/* Pass functions if Liste needs them */}
-            </div>
-          </div>
+          <Liste onCreateNew={openNewTaskForm} onClose={closeNewTaskForm} />
         )}
     </div>
   );
