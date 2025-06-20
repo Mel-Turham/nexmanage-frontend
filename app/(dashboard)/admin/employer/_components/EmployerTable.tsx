@@ -22,6 +22,7 @@ import Image from "next/image";
 // import { CirclePlus, Search } from "lucide-react";
 import { Search01Icon } from "hugeicons-react";
 import { CirclePlus } from "lucide-react";
+import Link from "next/link";
 
 interface EmployerProps {
   employers: Employer[];
@@ -123,11 +124,12 @@ export default function EmployerTable({ employers }: EmployerProps) {
             </span>
           </div>
         </div>
-
-        <Button className="bg-bleu hover:bg-blue-700 text-white px-6 py-2 rounded-md w-fit">
-          Créer une employer
-          <CirclePlus />
-        </Button>
+        <Link href={"/admin/employer/create"} passHref legacyBehavior>
+          <Button className="bg-bleu hover:bg-blue-700 text-white px-6 py-2 rounded-md w-fit">
+            Créer une employer
+            <CirclePlus />
+          </Button>
+        </Link>
       </div>
 
       <div className="flex flex-row w-full gap-4">
@@ -188,34 +190,6 @@ export default function EmployerTable({ employers }: EmployerProps) {
               </svg>
             </div>
           </div>
-          {/* 
-          <div className="relative">
-            <select
-              id="domain"
-              aria-label="Filtrer par entreprise"
-              title="Filtrer par entreprise"
-              className={`appearance-none border rounded-md w-full pl-5 pr-10 py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white cursor-pointer`}
-              defaultValue="" // Assurez-vous que cette valeur correspond à l'option désactivée
-            >
-              <option value="Toutes">Toutes les entreprise</option>
-              <option value="Entreprise1">Entreprise 1</option>
-              <option value="Entreprise2">Enterprise 2</option>
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-700">
-               Icône de flèche pour le select
-              <svg
-                className="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 12a1 1 0 0 1-.707-.293l-4-4a1 1 0 1 1 1.414-1.414L10 9.586l3.293-3.293a1 1 0 1 1 1.414 1.414l-4 4A1 1 0 0 1 10 12z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          </div> */}
 
           <div className="relative">
             <select

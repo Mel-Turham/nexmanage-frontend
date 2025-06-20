@@ -23,7 +23,7 @@ export default function RootLayout({
             children
           ) : (
             <div className="bg-bleu-ciel p-[3vh] pb-0 h-full w-full rounded-t-4xl">
-              <div className="bg-white rounded-t-2xl h-[87vh] overflow-y-auto">
+              <div className="bg-white rounded-t-2xl h-[87vh] overflow-y-auto no-scrollbar">
                 {children}
               </div>
             </div>

@@ -1,105 +1,136 @@
+// associations importantes dans l'application.
+
+// Utilisateur --> entreprise (plusieurs utilisateurs dans une entreprise)
+// Utilisateur --> Contract (un employé a plusieurs contrats)
+// Utilisateur → Presence (journalière)
+// Contract -->  Tache (association n:n via contract_taches)
+// Contract → Ressource (via contract_equipements)
+// Utilisateur → Conge, , Commentaire
+
+// ================================
+//        ENTITES TYPESCRIPT
+// ================================
+
 export enum Role {
-  EMPLOYE = 'EMPLOYE',
-  MANAGER = 'MANAGER',
-  ADMIN = 'ADMIN',
+  EMPLOYE = "EMPLOYE",
+  MANAGER = "MANAGER",
+  ADMIN = "ADMIN",
 }
 
 export enum StatutTache {
-  EN_ATTENTE = 'EN_ATTENTE',
-  EN_COURS = 'EN_COURS',
-  TERMINEE = 'TERMINEE',
+  EN_ATTENTE = "EN_ATTENTE",
+  EN_COURS = "EN_COURS",
+  TERMINEE = "TERMINEE",
 }
 
 export enum StatutConge {
-  EN_ATTENTE = 'EN_ATTENTE',
-  ACCEPTE = 'ACCEPTE',
-  REFUSE = 'REFUSE',
+  EN_ATTENTE = "EN_ATTENTE",
+  ACCEPTE = "ACCEPTE",
+  REFUSE = "REFUSE",
 }
+
+export type Point = {
+  coordinates: [number, number];
+};
+
+export enum Priorite {
+  BASSE = "BASSE",
+  MOYENNE = "MOYENNE",
+  HAUTE = "HAUTE",
+}
+
 export interface Entreprise {
-  id: string;
+  idEntreprise: string;
   nom: string;
   domaine: string;
+  email: string;
   adresse: string;
+  nbre_employers: number;
   dateCreation: Date;
-  updateAt: Date;
-  deleteAt: Date;
+  update_at: Date;
+  delete_at: Date;
   utilisateurs: Utilisateur[];
 }
 
 export interface Utilisateur {
-  id: string;
+  idUtilisateur: string;
   nom: string;
-  email: string;
+  email?: string;
   motDePasse: string;
-  téléphone: string;
-  rôle: Role;
-  poste: string;
-  entreprise: Entreprise;
+  telephone: string;
+  role: Role;
   isActif: boolean;
-  dateCreation: Date;
-  dateUpdate: Date;
-  dateDelete: Date;
+  dateCreation?: Date;
+  entreprise: Entreprise[];
 }
 
 export interface Contrat {
   id: string;
+  lieu: Point;
+  dateDebut: Date;
+  dateFin: Date;
+  description?: string;
+  pause: number; //durree de la pause en minutes
   utilisateur: Utilisateur[];
-  DateDebut: Date;
-  DateFin: Date;
-  description: string;
-  poste: string;
-  pause: Date;
-  lieu: string;
-  estGabarit: boolean;
-  nomGabarit: string;
-  estRepetif: boolean;
   taches: Tache[];
-  dateCreation: Date;
-  dateUpdate: Date;
-  dateDelete: Date;
+  estGabarit: boolean;
+  nomGabarit?: string;
+  //   equipements: Equipement[];
 }
 
 export interface Tache {
   id: string;
-  description: string;
-  duréePrévue: number;
-  priorite: string;
+  titre: string;
+  description?: string;
+  TimeEstimated: number;
+  priorite: Priorite;
   statut: StatutTache;
   dateCreation: Date;
-  dateUpdate: Date;
-  dateDelete: Date;
-  contrat: Contrat;
+  contrat?: Contrat[];
 }
+
+// export class Equipement {
+//   id: string;
+//   nom: string;
+//   type: string;
+//   contrat: Contrat;
+// }
 
 export interface Présence {
   id: string;
   utilisateur: Utilisateur;
   contrat: Contrat;
-  heureArrivée: Date;
-  heureDépart: Date;
-  localisationArrivée: string;
-  localisationDépart: string;
+  heureArrivee: Date;
+  heureDepart: Date;
+  localisationArrivee: Point;
+  localisationDepart: Point;
+  notes?: string;
 }
 
 export interface Conge {
   id: string;
-  utilisateur: Utilisateur;
-  dateDébut: Date;
-  dateFin: Date;
+  motif: string;
+  motifRefus?: string;
   statut: StatutConge;
+  utilisateur: Utilisateur;
+  dateDebut: Date;
+  dateFin: Date;
+  dureeJours: number;
+  dateCreation: Date;
+  update_at: Date;
+  delete_at: Date;
 }
 
 export interface Commentaire {
-  id: string;
+  idComment: string;
   message: string;
-  auteur: Utilisateur;
   contrat: Contrat;
-  date: Date;
+  utilisateur: Utilisateur;
+  dateCreation: Date;
 }
-
 export interface Conversation {
   id: string;
-  utilisateurs: Utilisateur[];
+  participants: Utilisateur[];
   messages: Message[];
 }
 

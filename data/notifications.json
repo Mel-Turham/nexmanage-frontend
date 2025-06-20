@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "type": "contract",
+    "title": "Nouveau contrat créé",
+    "message": "Marie Dubois a créé le contrat \"Projet Alpha\"",
+    "time": "2 min",
+    "read": false,
+    "icon": "FileText",
+    "color": "text-blue-600",
+    "bgColor": "bg-blue-50"
+  },
+  {
+    "id": 2,
+    "type": "leave",
+    "title": "Demande de congé",
+    "message": "Jean Martin a demandé un congé du 15 au 20 juillet",
+    "time": "1h",
+    "read": false,
+    "icon": "Calendar",
+    "color": "text-orange-600",
+    "bgColor": "bg-orange-50"
+  },
+  {
+    "id": 3,
+    "type": "message",
+    "title": "Nouveau message",
+    "message": "Sophie Laurent vous a envoyé un message",
+    "time": "2h",
+    "read": true,
+    "icon": "MessageSquare",
+    "color": "text-green-600",
+    "bgColor": "bg-green-50"
+  },
+  {
+    "id": 4,
+    "type": "task",
+    "title": "Tâche terminée",
+    "message": "Pierre Durand a terminé la tâche \"Maintenance Site B\"",
+    "time": "4h",
+    "read": true,
+    "icon": "CheckCircle",
+    "color": "text-purple-600",
+    "bgColor": "bg-purple-50"
+  },
+  {
+    "id": 5,
+    "type": "alert",
+    "title": "Alerte système",
+    "message": "Sauvegarde automatique effectuée avec succès",
+    "time": "6h",
+    "read": true,
+    "icon": "AlertCircle",
+    "color": "text-red-600",
+    "bgColor": "bg-red-50"
+  }
+]

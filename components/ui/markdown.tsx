@@ -1,18 +1,27 @@
-'use client';
+"use client";
 
-import React, { useState, useRef } from 'react';
-import { Bold, Italic, Underline, Link as LinkIcon, List, ListOrdered } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils'; // Assurez-vous que ce chemin est correct pour votre utilitaire de classes
+import React, { useState, useRef } from "react";
+import {
+  Bold,
+  Italic,
+  Underline,
+  Link as LinkIcon,
+  List,
+  ListOrdered,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils"; // Assurez-vous que ce chemin est correct pour votre utilitaire de classes
 
 // Importations nécessaires pour la visualisation Markdown
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm'; // Pour la prise en charge des extensions Markdown (tables, etc.)
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm"; // Pour la prise en charge des extensions Markdown (tables, etc.)
 
 export default function MarkdownToolbarEditor() {
-  const [markdown, setMarkdown] = useState<string>('');
+  const [markdown, setMarkdown] = useState<string>("");
   const textareaRef = useRef<HTMLTextAreaElement>(null); // Référence pour manipuler le textarea directement
-  const [activeFormats, setActiveFormats] = useState<{ [key: string]: boolean }>({
+  const [activeFormats, setActiveFormats] = useState<{
+    [key: string]: boolean;
+  }>({
     bold: false,
     italic: false,
     underline: false,
@@ -71,9 +80,12 @@ export default function MarkdownToolbarEditor() {
     }, 0);
 
     // Met à jour l'état visuel du bouton pour le format concerné
-    if (prefix === '**') setActiveFormats(prev => ({ ...prev, bold: !prev.bold }));
-    if (prefix === '*') setActiveFormats(prev => ({ ...prev, italic: !prev.italic }));
-    if (prefix === '__') setActiveFormats(prev => ({ ...prev, underline: !prev.underline }));
+    if (prefix === "**")
+      setActiveFormats((prev) => ({ ...prev, bold: !prev.bold }));
+    if (prefix === "*")
+      setActiveFormats((prev) => ({ ...prev, italic: !prev.italic }));
+    if (prefix === "__")
+      setActiveFormats((prev) => ({ ...prev, underline: !prev.underline }));
   };
 
   /**
@@ -88,9 +100,7 @@ export default function MarkdownToolbarEditor() {
     const end = textarea.selectionEnd;
 
     const newMarkdown =
-      markdown.substring(0, start) +
-      textToInsert +
-      markdown.substring(end);
+      markdown.substring(0, start) + textToInsert + markdown.substring(end);
 
     setMarkdown(newMarkdown);
 
@@ -114,8 +124,8 @@ export default function MarkdownToolbarEditor() {
     const end = textarea.selectionEnd;
     const selectedText = markdown.substring(start, end);
 
-    const linkText = selectedText || 'texte'; // Utilise le texte sélectionné ou 'texte' par défaut
-    
+    const linkText = selectedText || "texte"; // Utilise le texte sélectionné ou 'texte' par défaut
+
     // Insère le format de lien avec le texte sélectionné ou par défaut
     const newMarkdown =
       markdown.substring(0, start) +
@@ -144,8 +154,12 @@ export default function MarkdownToolbarEditor() {
         <Button
           variant="ghost"
           size="sm"
-          className={`font-semibold px-2 py-1 ${Object.values(activeFormats).every(f => !f) ? 'bg-sky-100' : ''}`}
-          onClick={() => setActiveFormats({ bold: false, italic: false, underline: false })}
+          className={`font-semibold px-2 py-1 ${
+            Object.values(activeFormats).every((f) => !f) ? "bg-sky-100" : ""
+          }`}
+          onClick={() =>
+            setActiveFormats({ bold: false, italic: false, underline: false })
+          }
           title="Texte normal"
         >
           T
@@ -154,8 +168,11 @@ export default function MarkdownToolbarEditor() {
         <Button
           variant="ghost"
           size="sm"
-          className={cn(`font-bold px-2 py-1`, activeFormats.bold ? 'bg-sky-200' : '')}
-          onClick={() => handleApplyFormat('**', '**')}
+          className={cn(
+            `font-bold px-2 py-1`,
+            activeFormats.bold ? "bg-sky-200" : ""
+          )}
+          onClick={() => handleApplyFormat("**", "**")}
           title="Gras (Ctrl+B)"
         >
           <Bold className="h-3 w-3" />
@@ -164,8 +181,11 @@ export default function MarkdownToolbarEditor() {
         <Button
           variant="ghost"
           size="sm"
-          className={cn(`italic px-2 py-1`, activeFormats.italic ? 'bg-sky-200' : '')}
-          onClick={() => handleApplyFormat('*', '*')}
+          className={cn(
+            `italic px-2 py-1`,
+            activeFormats.italic ? "bg-sky-200" : ""
+          )}
+          onClick={() => handleApplyFormat("*", "*")}
           title="Italique (Ctrl+I)"
         >
           <Italic className="h-3 w-3" />
@@ -174,8 +194,11 @@ export default function MarkdownToolbarEditor() {
         <Button
           variant="ghost"
           size="sm"
-          className={cn(`underline px-2 py-1`, activeFormats.underline ? 'bg-sky-200' : '')}
-          onClick={() => handleApplyFormat('__', '__')}
+          className={cn(
+            `underline px-2 py-1`,
+            activeFormats.underline ? "bg-sky-200" : ""
+          )}
+          onClick={() => handleApplyFormat("__", "__")}
           title="Souligné"
         >
           <Underline className="h-3 w-3" />
@@ -195,7 +218,7 @@ export default function MarkdownToolbarEditor() {
           variant="ghost"
           size="sm"
           className="px-2 py-1"
-          onClick={() => handleInsertStatic('- ')}
+          onClick={() => handleInsertStatic("- ")}
           title="Liste à puces"
         >
           <List className="h-3 w-3" />
@@ -205,7 +228,7 @@ export default function MarkdownToolbarEditor() {
           variant="ghost"
           size="sm"
           className="px-2 py-1"
-          onClick={() => handleInsertStatic('1. ')}
+          onClick={() => handleInsertStatic("1. ")}
           title="Liste numérotée"
         >
           <ListOrdered className="h-3 w-3" />
@@ -230,11 +253,9 @@ export default function MarkdownToolbarEditor() {
         />
 
         {/* Zone de prévisualisation Markdown */}
-        <div className="markdown-preview p-4 border border-slate-300 rounded-xl bg-white overflow-y-auto h-full min-h-[160px]">
+        <div className="markdown-preview p-4 border border-slate-300 rounded-xl bg-white overflow-y-auto no-scrollbar h-full min-h-[160px]">
           {/* Le composant ReactMarkdown rend le texte Markdown en HTML */}
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-            {markdown}
-          </ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
         </div>
       </div>
     </div>

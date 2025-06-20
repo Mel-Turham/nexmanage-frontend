@@ -171,3 +171,17 @@
     transform: rotate(45deg) rotateX(-385deg) rotateY(385deg);
   }
 }
+
+/* Définissez vos utilitaires personnalisés avec @utility */
+@utility no-scrollbar {
+  /* Masque la barre de défilement pour WebKit (Chrome, Edge, Safari) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Masque la barre de défilement pour Firefox */
+  scrollbar-width: none;
+
+  /* Masque la barre de défilement pour IE et Edge */
+  -ms-overflow-style: none;
+}

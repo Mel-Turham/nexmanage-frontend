@@ -57,7 +57,7 @@ export default function CreerDemandeCongePage() {
               placeholder="Recherche par nom"
               className="rounded-full mb-4"
             />
-            <div className="space-y-2 max-h-72 overflow-y-auto">
+            <div className="space-y-2 max-h-72 overflow-y-auto no-scrollbar">
               {employees.map((emp, i) => (
                 <button
                   key={i}
