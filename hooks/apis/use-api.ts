@@ -31,7 +31,7 @@ export function useApiQuery<T>(
 // Hook générique pour les mutations
 
 export function useApiMutation<TData, TVariables>(
-  methode: 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  methode: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
   url: string | ((variables: TVariables) => string),
   options?: UseMutationOptions<TData, ApiError, TVariables>
 ) {
@@ -44,6 +44,9 @@ export function useApiMutation<TData, TVariables>(
       let response: AxiosResponse<TData>;
 
       switch (methode) {
+        case 'GET':
+          response = await api.get(endpoint, { params: variables });
+          break;
         case 'POST':
           response = await api.post(endpoint, variables);
           break;

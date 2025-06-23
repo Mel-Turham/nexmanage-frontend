@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronLeft } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
 import NextManageIcon from '@/icons/logo';
 import AuthLayout from '@/layouts/auth-layout';
@@ -36,6 +36,8 @@ interface ForgotPasswordResponse {
 const ForgotPasswordForm = () => {
   const router = useRouter();
 
+  const [focusedField, setFocusedField] = useState<string>('');
+
   const form = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
@@ -63,6 +65,9 @@ const ForgotPasswordForm = () => {
 
   const watchFieldPhone = form.watch('telephone');
 
+  const shouldAnimateLabel = (fieldName: string, fieldValue: string) => {
+    return focusedField === fieldName || fieldValue.length > 0;
+  };
   const onSubmit = async (data: ForgotPasswordSchema) => {
     try {
       await forgotPasswordMutation.mutateAsync(data);
@@ -108,31 +113,29 @@ const ForgotPasswordForm = () => {
               control={form.control}
               name='telephone'
               render={({ field }) => (
-                <FormItem className='relative'>
-                  <FormControl>
-                    <div className='relative'>
+                <FormItem>
+                  <div className='relative'>
+                    <FormControl>
                       <Input
                         {...field}
-                        placeholder=' '
-                        data-slot='phone-input'
-                        className='peer pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
-                        disabled={forgotPasswordMutation.isPending}
+                        placeholder=''
+                        aria-label='Numéro de téléphone'
+                        className='pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
+                        onFocus={() => setFocusedField('telephone')}
+                        onBlur={() => setFocusedField('')}
                       />
-                      <FormLabel
-                        className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground bg-background px-1 text-sm transition-all duration-200 pointer-events-none 
-                       peer-placeholder-shown:top-1/2 
-                       peer-placeholder-shown:text-base 
-                       peer-placeholder-shown:text-muted-foreground 
-                       peer-focus:top-0 
-                       peer-focus:text-xs 
-                       peer-focus:text-[#344EA2] 
-                       peer-focus:-translate-y-1/2'
-                      >
-                        Numéro de téléphone
-                      </FormLabel>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
+                    </FormControl>
+                    <FormLabel
+                      className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                        shouldAnimateLabel('telephone', watchFieldPhone)
+                          ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
+                          : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                      }`}
+                    >
+                      Numéro de téléphone
+                    </FormLabel>
+                  </div>
+                  <FormMessage className='sr-only' />
                 </FormItem>
               )}
             />

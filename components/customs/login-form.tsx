@@ -21,22 +21,18 @@ import { Input } from '../ui/input';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useApiMutation } from '@/hooks/apis/use-api';
+import { ResponseLogin } from '@/types';
+import { useAuthStore } from '@/stores/auth-store';
+import { useRefreshToken } from '@/hooks/use-refresh-token';
 
-// Types pour la réponse de connexion
-interface LoginResponse {
-  token: string;
-  success: boolean;
-  user: {
-    id: string;
-    telephone: string;
-    // Ajoutez d'autres propriétés selon votre API
-  };
-}
+import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [focusedField, setFocusedField] = useState<string>('');
-
+  const { login, setLoading } = useAuthStore();
+  useRefreshToken();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -45,17 +41,17 @@ const LoginForm = () => {
     },
   });
 
-  const loginMutation = useApiMutation<LoginResponse, LoginSchema>(
+  const loginMutation = useApiMutation<ResponseLogin, LoginSchema>(
     'POST',
     '/auth/login',
     {
       onSuccess: (data) => {
+        login(data);
         toast.success('Connexion réussie');
-        // Ici vous pouvez gérer la réponse, par exemple :
-        // - Stocker le token
-        // - Rediriger l'utilisateur
-        // - Mettre à jour le contexte d'authentification
         console.log('Données de connexion:', data);
+
+        // Rediriger vers la page d'accueil ou une autre page après la connexion
+        router.push('/admin/planning');
       },
       onError: (error) => {
         toast.error(error.message || 'Erreur lors de la connexion');
@@ -79,6 +75,7 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginSchema) => {
     try {
+      setLoading(true);
       await loginMutation.mutateAsync(data);
     } catch (error) {
       console.log('Erreur de connexion:', error);
