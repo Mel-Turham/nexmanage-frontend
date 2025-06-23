@@ -17,8 +17,6 @@ export default function middleware(req: NextRequest) {
   // Récupérer le token dans les cookies du navigateur
   const token = req.cookies.get('accesstoken')?.value;
   const { pathname } = req.nextUrl;
-
-  console.log('Token:', token);
   console.log('Pathname:', pathname);
 
   // Vérifier si la route actuelle est une route d'authentification

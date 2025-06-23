@@ -2,7 +2,10 @@
 
 import NextManageIcon from '@/icons/logo';
 import AuthLayout from '@/layouts/auth-layout';
-import { createEntrepriseSchema } from '@/schemas/create-entreprise-schemas/create-entreprise.schemas';
+import {
+  createEntrepriseSchema,
+  CreateEntrepriseSchema,
+} from '@/schemas/create-entreprise-schemas/create-entreprise.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -30,7 +33,7 @@ const CreateEntrepriseForm = () => {
     { value: 300, label: '250+' },
   ];
 
-  const form = useForm<createEntrepriseSchema>({
+  const form = useForm<CreateEntrepriseSchema>({
     resolver: zodResolver(createEntrepriseSchema),
     defaultValues: {
       nom: '',
@@ -41,24 +44,23 @@ const CreateEntrepriseForm = () => {
     },
   });
 
-  const createEntrepriseMutation = useApiMutation<unknown, createEntrepriseSchema>(
-    'POST',
-    '/entreprises',
-    {
-      onSuccess: (data) => {
-        toast.success('Organisation créée avec succès');
-        console.log("Données de l'organisation:", data);
-        router.push('/admin');
-      },
-      onError: (error) => {
-        toast.error(
-          error.message || "Erreur lors de la création de l'organisation"
-        );
-        console.error("Erreur de création d'organisation:", error);
-      },
-    }
-  );
-  const onSubmit = async (data: createEntrepriseSchema) => {
+  const createEntrepriseMutation = useApiMutation<
+    unknown,
+    CreateEntrepriseSchema
+  >('POST', '/entreprises', {
+    onSuccess: (data) => {
+      toast.success('Organisation créée avec succès');
+      console.log("Données de l'organisation:", data);
+      router.push('/admin');
+    },
+    onError: (error) => {
+      toast.error(
+        error.message || "Erreur lors de la création de l'organisation"
+      );
+      console.error("Erreur de création d'organisation:", error);
+    },
+  });
+  const onSubmit = async (data: CreateEntrepriseSchema) => {
     try {
       console.log('Données du formulaire:', data);
       await createEntrepriseMutation.mutateAsync(data);

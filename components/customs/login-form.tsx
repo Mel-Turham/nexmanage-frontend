@@ -21,18 +21,17 @@ import { Input } from '../ui/input';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useApiMutation } from '@/hooks/apis/use-api';
-import { ResponseLogin } from '@/types';
 import { useAuthStore } from '@/stores/auth-store';
-import { useRefreshToken } from '@/hooks/use-refresh-token';
+// import { useRefreshToken } from '@/hooks/use-refresh-token';
 
 import { useRouter } from 'next/navigation';
+import { LoginResponse } from '@/types';
 
 const LoginForm = () => {
   const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
   const [focusedField, setFocusedField] = useState<string>('');
-  const { login, setLoading } = useAuthStore();
-  useRefreshToken();
+  const { login } = useAuthStore();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -41,7 +40,7 @@ const LoginForm = () => {
     },
   });
 
-  const loginMutation = useApiMutation<ResponseLogin, LoginSchema>(
+  const loginMutation = useApiMutation<LoginResponse, LoginSchema>(
     'POST',
     '/auth/login',
     {
@@ -49,9 +48,7 @@ const LoginForm = () => {
         login(data);
         toast.success('Connexion réussie');
         console.log('Données de connexion:', data);
-
-        // Rediriger vers la page d'accueil ou une autre page après la connexion
-        router.push('/admin/planning');
+        router.push('/admin');
       },
       onError: (error) => {
         toast.error(error.message || 'Erreur lors de la connexion');
@@ -75,7 +72,6 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginSchema) => {
     try {
-      setLoading(true);
       await loginMutation.mutateAsync(data);
     } catch (error) {
       console.log('Erreur de connexion:', error);
@@ -115,6 +111,8 @@ const LoginForm = () => {
                   <div className='relative'>
                     <FormControl>
                       <Input
+                        type='tel'
+                        autoComplete='off'
                         {...field}
                         placeholder=''
                         aria-label='Numéro de téléphone'

@@ -12,21 +12,21 @@
 // ================================
 
 export enum Role {
-  EMPLOYE = "EMPLOYE",
-  MANAGER = "MANAGER",
-  ADMIN = "ADMIN",
+  EMPLOYE = 'EMPLOYE',
+  MANAGER = 'MANAGER',
+  ADMIN = 'ADMIN',
 }
 
 export enum StatutTache {
-  EN_ATTENTE = "EN_ATTENTE",
-  EN_COURS = "EN_COURS",
-  TERMINEE = "TERMINEE",
+  EN_ATTENTE = 'EN_ATTENTE',
+  EN_COURS = 'EN_COURS',
+  TERMINEE = 'TERMINEE',
 }
 
 export enum StatutConge {
-  EN_ATTENTE = "EN_ATTENTE",
-  ACCEPTE = "ACCEPTE",
-  REFUSE = "REFUSE",
+  EN_ATTENTE = 'EN_ATTENTE',
+  ACCEPTE = 'ACCEPTE',
+  REFUSE = 'REFUSE',
 }
 
 export type Point = {
@@ -34,9 +34,9 @@ export type Point = {
 };
 
 export enum Priorite {
-  BASSE = "BASSE",
-  MOYENNE = "MOYENNE",
-  HAUTE = "HAUTE",
+  BASSE = 'BASSE',
+  MOYENNE = 'MOYENNE',
+  HAUTE = 'HAUTE',
 }
 
 export interface Entreprise {
@@ -73,22 +73,22 @@ export interface RefreshTokenResponse {
   refresh_token: string;
 }
 
-export interface ResponseLogin {
-  user: User;
-  message: string;
-  accesstoken: string;
-}
-
 export interface User {
   idUtilisateur: string;
   nom: string;
   email: string;
   telephone: string;
-  role: Role;
+  role: string;
   isActif: boolean;
-  dateCreation: Date;
-  update_at: Date;
-  delete_at: null;
+  dateCreation: string;
+  update_at: string;
+  delete_at: string | null;
+}
+
+export interface LoginResponse {
+  user: User;
+  message: string;
+  accesstoken: string;
 }
 
 export interface Contrat {

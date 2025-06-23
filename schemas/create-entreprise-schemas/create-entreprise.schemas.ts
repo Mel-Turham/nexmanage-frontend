@@ -24,4 +24,4 @@ export const createEntrepriseSchema = z.object({
     ),
 });
 
-export type createEntrepriseSchema = z.infer<typeof createEntrepriseSchema>;
+export type CreateEntrepriseSchema = z.infer<typeof createEntrepriseSchema>;

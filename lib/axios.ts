@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/stores/auth-store';
 import { ApiError } from '@/types/api.types';
 import axios, {
   AxiosError,
@@ -6,26 +7,24 @@ import axios, {
 } from 'axios';
 
 axios.defaults.withCredentials = true;
-import { getAccessToken } from '@/helpers/get-access-token';
 
-const { accessToken, logout } = getAccessToken();
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL!,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${accessToken}`,
   },
 });
 
 api.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = typeof window !== 'undefined' ? accessToken : null;
-    console.log(token);
+  async (config: InternalAxiosRequestConfig) => {
+    // Récupérer le token à chaque requête depuis le store
+    const token = useAuthStore.getState().accessToken;
 
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     if (process.env.NODE_ENV === 'development') {
       console.log(
         `🚀 ${config.method?.toUpperCase()} ${config.url}`,
@@ -40,13 +39,11 @@ api.interceptors.request.use(
   }
 );
 
-// intercepteur pour les reponses
-
 api.interceptors.response.use(
   (response: AxiosResponse) => {
     if (process.env.NODE_ENV === 'development') {
       console.log(
-        `🚀 ${response.config.method?.toUpperCase()} ${response.config.url}`,
+        `✅ ${response.config.method?.toUpperCase()} ${response.config.url}`,
         response.data
       );
     }
@@ -73,11 +70,14 @@ api.interceptors.response.use(
 
     // Gestion des erreurs d'authentification
     if (error.response?.status === 401) {
+      // Nettoyer le store en cas d'erreur 401
+      useAuthStore.getState().logout?.();
+
       if (typeof window !== 'undefined') {
-        logout();
         window.location.href = '/auth/login';
       }
     }
+
     if (process.env.NODE_ENV === 'development') {
       console.error(
         `❌ ${error.response?.status} ${error.config?.url}`,
