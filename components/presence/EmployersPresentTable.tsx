@@ -9,37 +9,65 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  ExpandedState,
 } from "@tanstack/react-table";
 
-import { EmployersPresent } from "@/types/employer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Search } from "lucide-react";
+import moment from "moment";
+import { Contrat, Utilisateur } from "@/types";
 
 interface EmployersPresentTableProps {
-  employers: EmployersPresent[];
+  contracts: Contrat[];
 }
 
 export default function EmployersPresentTable({
-  employers,
+  contracts,
 }: EmployersPresentTableProps) {
   const [sorting, setSorting] = React.useState<
     import("@tanstack/react-table").SortingState
   >([]);
   const [globalFilter, setGlobalFilter] = React.useState("");
+  const [expanded, setExpanded] = React.useState<ExpandedState>({});
 
-  // Définition des colonnes
-  const columns = React.useMemo<ColumnDef<EmployersPresent>[]>(
+  // Flatten contracts to rows
+  const flattenedData = React.useMemo(() => {
+    return contracts.flatMap((contract) =>
+      contract.utilisateur.map((user) => ({
+        ...user,
+        contractId: contract.id,
+        contractDescription: contract.description,
+        contractDateDebut: contract.dateDebut,
+        contractDateFin: contract.dateFin,
+        utilisateur: contract.utilisateur, // Pour accès lors de l'expansion
+      }))
+    );
+  }, [contracts]);
+
+  const columns = React.useMemo<ColumnDef<(typeof flattenedData)[number]>[]>(
     () => [
       {
-        accessorKey: "id",
-        header: "",
-        cell: (info) => info.getValue(),
+        accessorKey: "contractDescription",
+        header: "Groupe de Contrat",
+        cell: ({ cell, row }) => {
+          if (row.getCanExpand()) {
+            return (
+              <button
+                onClick={row.getToggleExpandedHandler()}
+                style={{ cursor: "pointer" }}
+              >
+                {cell.getValue()} {row.getIsExpanded() ? "👇" : "👉"}
+              </button>
+            );
+          }
+          return cell.getValue();
+        },
         enableSorting: true,
       },
       {
-        accessorKey: "name",
+        accessorKey: "nom",
         header: "Nom",
         cell: (info) => info.getValue(),
         enableSorting: true,
@@ -50,42 +78,34 @@ export default function EmployersPresentTable({
         cell: (info) => info.getValue(),
       },
       {
-        accessorKey: "phone",
+        accessorKey: "telephone",
         header: "Téléphone",
         cell: (info) => info.getValue(),
       },
       {
-        accessorKey: "duration",
-        header: "Durée du contrat",
-        cell: (info) => info.getValue(),
+        accessorKey: "contractDateDebut",
+        header: "Heures de début",
+        cell: (info) => moment(info.getValue() as string).format("HH:mm:ss"),
       },
       {
-        accessorKey: "leaveBalance",
-        header: "Solde congés",
-        cell: (info) => info.getValue(),
+        accessorKey: "contractDateFin",
+        header: "Heures de fin",
+        cell: (info) => {
+          const value = info.getValue();
+          return value ? moment(value as string).format("HH:mm:ss") : "-";
+        },
       },
-      // {
-      //   id: "actions",
-      //   header: " ",
-      //   cell: ({ row }) => (
-      //     <MoreMenu
-      //       onView={() => alert(`Afficher id: ${row.original.id}`)}
-      //       onEdit={() => alert(`Modifier id: ${row.original.id}`)}
-      //       onDelete={() => alert(`Supprimer id: ${row.original.id}`)}
-      //     />
-      //   ),
-      // },
     ],
     []
   );
 
-  // Création du tableau
   const table = useReactTable({
-    data: employers,
+    data: flattenedData,
     columns,
     state: {
       sorting,
       globalFilter,
+      expanded,
     },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
@@ -93,6 +113,8 @@ export default function EmployersPresentTable({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onExpandedChange: setExpanded,
+    getSubRows: (row) => undefined, // Pas de sous-lignes natives ici
   });
 
   return (
@@ -110,10 +132,10 @@ export default function EmployersPresentTable({
           </div>
           <div className="flex flex-col gap-1">
             <h1 className="text-black2 font-urbanist font-semibold 2xl:text-2xl xl:text-xl">
-              Employer présent
+              Employeurs présents
             </h1>
             <span className="text-gray-400 font-urbanist font-medium xl:text-sm 2xl:text-base">
-              01 / 04 / 2025
+              {moment().format("DD / MM / YYYY")}
             </span>
           </div>
         </div>
@@ -122,7 +144,7 @@ export default function EmployersPresentTable({
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
-              placeholder="Rechercher par nom"
+              placeholder="Rechercher par nom d'employé ou contrat"
               value={globalFilter ?? ""}
               onChange={(e) => setGlobalFilter(e.target.value)}
               className="pl-10 xl:w-sm 2xl:w-lg rounded-md border-gray-200"
@@ -138,15 +160,12 @@ export default function EmployersPresentTable({
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
-                    // Ajout des classes arrondies selon la colonne
                     let thClass = "py-2 px-4 cursor-pointer select-none";
-
-                    if (header.column.id === "id") {
+                    if (header.column.id === "contractDescription") {
                       thClass += " rounded-l-full";
-                    } else if (header.column.id === "leaveBalance") {
+                    } else if (header.column.id === "contractDateFin") {
                       thClass += " rounded-r-full";
                     }
-
                     return (
                       <th
                         key={header.id}
@@ -174,7 +193,7 @@ export default function EmployersPresentTable({
                     <div className="flex justify-center items-center w-full">
                       <Image
                         src={"/illustration/rafiki.svg"}
-                        alt="Logo"
+                        alt="No results illustration"
                         width={100}
                         height={100}
                         className="h-[50vh] w-full"
@@ -185,27 +204,62 @@ export default function EmployersPresentTable({
                 </tr>
               )}
               {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b last:border-b-0 hover:bg-gray-50 border-bleu-ciel"
-                >
-                  {row.getVisibleCells().map((cell, index) => {
-                    let tdClass = "py-2 px-4";
-
-                    if (index !== 0) {
-                      tdClass += " border-l border-bleu-ciel";
-                    }
-
-                    return (
-                      <td key={cell.id} className={tdClass}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
+                <React.Fragment key={row.id}>
+                  <tr className="border-b last:border-b-0 hover:bg-gray-50 border-bleu-ciel">
+                    {row.getVisibleCells().map((cell, index) => {
+                      let tdClass = "py-2 px-4";
+                      if (index !== 0) {
+                        tdClass += " border-l border-bleu-ciel";
+                      }
+                      return (
+                        <td key={cell.id} className={tdClass}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                  {/* Affichage des sous-lignes si besoin */}
+                  {row.original.utilisateur &&
+                    Array.isArray(row.original.utilisateur) &&
+                    row.original.utilisateur.length > 1 &&
+                    row.original.utilisateur.map((user: Utilisateur) => {
+                      // On évite de dupliquer la ligne principale
+                      if (user.idUtilisateur === row.original.idUtilisateur)
+                        return null;
+                      return (
+                        <tr
+                          key={user.idUtilisateur}
+                          className="bg-gray-100 border-b border-bleu-ciel"
+                        >
+                          <td className="py-2 px-4 pl-8"></td>
+                          <td className="py-2 px-4 border-l border-bleu-ciel">
+                            {user.nom}
+                          </td>
+                          <td className="py-2 px-4 border-l border-bleu-ciel">
+                            {user.email}
+                          </td>
+                          <td className="py-2 px-4 border-l border-bleu-ciel">
+                            {user.telephone}
+                          </td>
+                          <td className="py-2 px-4 border-l border-bleu-ciel">
+                            {moment(row.original.contractDateDebut).format(
+                              "HH:mm:ss"
+                            )}
+                          </td>
+                          <td className="py-2 px-4 border-l border-bleu-ciel">
+                            {row.original.contractDateFin
+                              ? moment(row.original.contractDateFin).format(
+                                  "HH:mm:ss"
+                                )
+                              : "-"}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </React.Fragment>
               ))}
             </tbody>
           </table>

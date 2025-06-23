@@ -67,14 +67,15 @@ export interface Utilisateur {
 export interface Contrat {
   id: string;
   lieu: Point;
-  dateDebut: Date;
-  dateFin: Date;
+  dateDebut?: Date;
+  dateFin?: Date;
   description?: string;
   pause: number; //durree de la pause en minutes
   utilisateur: Utilisateur[];
   taches: Tache[];
   estGabarit: boolean;
   nomGabarit?: string;
+  dateCreation: Date;
   //   equipements: Equipement[];
 }
 
@@ -141,4 +142,8 @@ export interface Message {
   dateEnvoi: Date;
   conversation: Conversation;
   luPar: Utilisateur[];
+}
+export interface Demande {
+  id: string;
+  // Ajoute ici les autres propriétés nécessaires
 }

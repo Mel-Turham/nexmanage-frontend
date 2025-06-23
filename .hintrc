@@ -4,12 +4,7 @@
   ],
   "hints": {
     "button-type": "off",
-    "axe/forms": [
-      "default",
-      {
-        "select-name": "off"
-      }
-    ],
+    "axe/forms": "off",
     "axe/name-role-value": [
       "default",
       {
