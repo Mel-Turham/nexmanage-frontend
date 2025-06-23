@@ -58,7 +58,7 @@ export default function EmployersPresentTable({
                 onClick={row.getToggleExpandedHandler()}
                 style={{ cursor: "pointer" }}
               >
-                {cell.getValue()} {row.getIsExpanded() ? "👇" : "👉"}
+                {String(cell.getValue())} {row.getIsExpanded() ? "👇" : "👉"}
               </button>
             );
           }
@@ -114,7 +114,7 @@ export default function EmployersPresentTable({
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onExpandedChange: setExpanded,
-    getSubRows: (row) => undefined, // Pas de sous-lignes natives ici
+    // getSubRows: (row) => undefined, // Pas de sous-lignes natives ici
   });
 
   return (

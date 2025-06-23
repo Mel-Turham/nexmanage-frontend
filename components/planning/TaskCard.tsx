@@ -80,8 +80,18 @@ const ContratCard: React.FC<ContratCardProps> = ({ contrat }) => {
         </div>
 
         <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600">
-          <p>Début: {contrat.dateDebut.toLocaleDateString("fr-FR")}</p>
-          <p>Fin: {contrat.dateFin.toLocaleDateString("fr-FR")}</p>
+          <p>
+            Début:{" "}
+            {contrat.dateDebut === undefined
+              ? ""
+              : contrat.dateDebut.toLocaleDateString("fr-FR")}
+          </p>
+          <p>
+            Fin:{" "}
+            {contrat.dateFin === undefined
+              ? ""
+              : contrat.dateFin.toLocaleDateString("fr-FR")}
+          </p>
           {contrat.description && <p>Description: {contrat.description}</p>}
           <p>Pause: {formatDuration(contrat.pause)}</p>
           {contrat.estGabarit && contrat.nomGabarit && (

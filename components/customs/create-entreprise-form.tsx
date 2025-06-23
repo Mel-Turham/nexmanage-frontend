@@ -41,7 +41,7 @@ const CreateEntrepriseForm = () => {
     },
   });
 
-  const createEntrepriseMutation = useApiMutation<any, createEntrepriseSchema>(
+  const createEntrepriseMutation = useApiMutation<unknown, createEntrepriseSchema>(
     'POST',
     '/entreprises',
     {

@@ -2,7 +2,6 @@
 import React from "react";
 
 import EmployerTable from "@/components/presence/EmployersPresentTable";
-import employersPresentData from "@/data/employersPresent.json";
 import { Contrat, Role } from "@/types";
 
 const Presences = () => {
