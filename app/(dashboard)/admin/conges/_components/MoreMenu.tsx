@@ -19,24 +19,12 @@ import EditDemandeConge from "./Edit";
 import SupprimerDemandeConge from "./supprimer";
 import { DemandeConge } from "@/types/demande";
 
-// Générateur de slug basé sur le nom de l'employé et l'id de la demande
-const generateSlug = (demande: DemandeConge): string => {
-  const employeName = demande.employe?.name || "demande";
-  const base = `${employeName}-${demande.idDemande}`;
-  return base
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^\w-]+/g, '');
-};
-
 interface MoreMenuProps {
   demande: DemandeConge;
 }
 
 export function MoreMenu({ demande }: MoreMenuProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const demandeSlug = generateSlug(demande);
 
   return (
     <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
@@ -49,7 +37,7 @@ export function MoreMenu({ demande }: MoreMenuProps) {
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuGroup>
           {/* Afficher les détails */}
-          <Link href={`/demandes/${demandeSlug}`} passHref legacyBehavior>
+          <Link href={`./conges/${demande.idDemande}`} passHref legacyBehavior>
             <DropdownMenuItem asChild className="cursor-pointer">
               <div className="flex items-center w-full px-2 py-1.5 text-sm">
                 <Eye className="mr-2 h-4 w-4 text-gray-600" />

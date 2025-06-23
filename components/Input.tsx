@@ -57,7 +57,7 @@ const Input = <TFieldValues extends FieldValues>({
           id={name as string}
           placeholder={placeholder}
           // {...register(name)}
-          className={`block w-full px-5 py-3 border rounded-3xl bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm
+          className={`block w-full px-5 py-3 border rounded-md bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm
           ${error ? "border-red-500" : "border-black2"}
           ${className || ""}
         `}

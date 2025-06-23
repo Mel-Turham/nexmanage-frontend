@@ -1,45 +1,53 @@
+"use client"
+
 // src/components/planning/CalendarWeekView.tsx
-import React from "react";
-import { daysOfWeekShort } from "./types";
+import type React from "react"
+import { daysOfWeekShort } from "./types"
+import { useRouter } from "next/navigation"
 
 interface CalendarWeekViewProps {
-  currentDate: Date;
+  currentDate: Date
 }
 
 const CalendarWeekView: React.FC<CalendarWeekViewProps> = ({ currentDate }) => {
+  const router = useRouter()
+
   const generateWeekDays = () => {
-    const startOfWeek = new Date(currentDate);
-    const dayOfWeek = (currentDate.getDay() + 6) % 7;
-    startOfWeek.setDate(currentDate.getDate() - dayOfWeek);
+    const startOfWeek = new Date(currentDate)
+    const dayOfWeek = (currentDate.getDay() + 6) % 7
+    startOfWeek.setDate(currentDate.getDate() - dayOfWeek)
 
-    const days = [];
+    const days = []
     for (let i = 0; i < 7; i++) {
-      const day = new Date(startOfWeek);
-      day.setDate(startOfWeek.getDate() + i);
-      days.push(day);
+      const day = new Date(startOfWeek)
+      day.setDate(startOfWeek.getDate() + i)
+      days.push(day)
     }
-    return days;
-  };
+    return days
+  }
 
-  const weekDays = generateWeekDays();
+  const weekDays = generateWeekDays()
+
+  const handleCellClick = (day: Date, hour: number) => {
+    // Create a new date with the specific day and hour
+    const selectedDate = new Date(day)
+    selectedDate.setHours(hour, 0, 0, 0)
+
+    // Format the date as ISO string for the URL
+    const dateParam = selectedDate.toISOString().split("T")[0]
+    router.push(`/admin/planning/create?date=${dateParam}`)
+  }
 
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
       <div className="grid grid-cols-8 bg-gray-50 border-b border-gray-200">
         <div className="p-4"></div>
         {weekDays.map((day, index) => (
-          <div
-            key={index}
-            className="p-4 text-center border-r border-gray-200 last:border-r-0"
-          >
-            <div className="text-sm font-medium text-gray-700">
-              {daysOfWeekShort[index]}
-            </div>
+          <div key={index} className="p-4 text-center border-r border-gray-200 last:border-r-0">
+            <div className="text-sm font-medium text-gray-700">{daysOfWeekShort[index]}</div>
             <div
               className={`text-lg font-semibold mt-1 ${
-                day.toDateString() === new Date().toDateString()
-                  ? "text-blue-600"
-                  : ""
+                day.toDateString() === new Date().toDateString() ? "text-blue-600" : ""
               }`}
             >
               {day.getDate()}
@@ -50,30 +58,25 @@ const CalendarWeekView: React.FC<CalendarWeekViewProps> = ({ currentDate }) => {
       <div className="grid grid-cols-8">
         <div className="border-r border-gray-200">
           {Array.from({ length: 24 }, (_, hour) => (
-            <div
-              key={hour}
-              className="h-16 border-b border-gray-200 p-2 text-xs text-gray-500"
-            >
+            <div key={hour} className="h-16 border-b border-gray-200 p-2 text-xs text-gray-500">
               {hour.toString().padStart(2, "0")}:00
             </div>
           ))}
         </div>
         {weekDays.map((day, dayIndex) => (
-          <div
-            key={dayIndex}
-            className="border-r border-gray-200 last:border-r-0"
-          >
+          <div key={dayIndex} className="border-r border-gray-200 last:border-r-0">
             {Array.from({ length: 24 }, (_, hour) => (
               <div
                 key={hour}
-                className="h-16 border-b border-gray-200 hover:bg-gray-50 cursor-pointer"
+                className="h-16 border-b border-gray-200 hover:bg-gray-50 cursor-pointer transition-colors duration-200"
+                onClick={() => handleCellClick(day, hour)}
               ></div>
             ))}
           </div>
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CalendarWeekView;
+export default CalendarWeekView

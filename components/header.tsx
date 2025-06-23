@@ -9,17 +9,15 @@ const Header = () => {
       <div className='flex flex-row items-center px-2 rounded-md border border-gray w-[40%] focus-within:shadow-md focus-within:border-blue-500 transition-all duration-200'>
         <Search01Icon color='#e5e5e5' size={24} />
         <input
-          type='search'
-          name='search'
-          placeholder='Recherche un employer, un contrat,...'
-          className='py-2 px-4 w-full outline-none'
+          type="search"
+          name="search"
+          placeholder="Recherche un employer, un contrat,..."
+          className="py-3 px-4 w-full outline-none text-sm"
         />
       </div>
-      <div className='flex flex-row items-center gap-2'>
-        <Button size={'icon'} variant={'outline'}>
-          <Notification02Icon />
-        </Button>
-        <NavUser />
+      <div className="flex flex-row items-center gap-2">
+        <Notifications />
+        <NavUser user={data.user} />
       </div>
     </header>
   );

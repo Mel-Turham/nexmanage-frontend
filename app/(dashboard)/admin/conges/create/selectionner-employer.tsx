@@ -7,7 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
@@ -21,7 +27,6 @@ export default function CreerDemandeCongePage() {
 
   return (
     <div className=" flex items-center justify-between px-10 py-6">
-     
       <div className="w-full max-w-lg ">
         <button
           onClick={() => router.push("/demandes")}
@@ -48,8 +53,11 @@ export default function CreerDemandeCongePage() {
               <DialogTitle>Sélectionner un employé</DialogTitle>
             </DialogHeader>
 
-            <Input placeholder="Recherche par nom" className="rounded-full mb-4" />
-            <div className="space-y-2 max-h-72 overflow-y-auto">
+            <Input
+              placeholder="Recherche par nom"
+              className="rounded-full mb-4"
+            />
+            <div className="space-y-2 max-h-72 overflow-y-auto no-scrollbar">
               {employees.map((emp, i) => (
                 <button
                   key={i}
@@ -57,7 +65,10 @@ export default function CreerDemandeCongePage() {
                   className="w-full flex items-center gap-4 px-4 py-3 bg-white rounded-md shadow-sm hover:bg-blue-50"
                 >
                   <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center font-bold text-blue-900">
-                    {emp.name.split(" ").map((n: string) => n[0]).join("")}
+                    {emp.name
+                      .split(" ")
+                      .map((n: string) => n[0])
+                      .join("")}
                   </div>
                   <div className="text-left">
                     <p className="font-medium text-gray-800">{emp.name}</p>
@@ -73,8 +84,13 @@ export default function CreerDemandeCongePage() {
         <div className="mb-6">
           <Label className="text-base font-medium">Durer</Label>
           <div className="flex items-center gap-3 mt-2 text-bleu">
-            <Switch checked={!multiDays} onCheckedChange={() => setMultiDays(!multiDays)} />
-            <span className="text-sm text-gray-700">Toute la journée (heure ouvrable)</span>
+            <Switch
+              checked={!multiDays}
+              onCheckedChange={() => setMultiDays(!multiDays)}
+            />
+            <span className="text-sm text-gray-700">
+              Toute la journée (heure ouvrable)
+            </span>
           </div>
         </div>
 
@@ -89,11 +105,17 @@ export default function CreerDemandeCongePage() {
               id="multiDaysCheckbox"
               title="Activer la sélection sur plusieurs jours"
             />
-            <Label htmlFor="multiDaysCheckbox" className="text-sm">Plusieurs jours</Label>
+            <Label htmlFor="multiDaysCheckbox" className="text-sm">
+              Plusieurs jours
+            </Label>
           </div>
 
           <Label className="block text-sm mb-1">Date</Label>
-          <Input type="date" className="rounded-full mb-4" placeholder="Entrer la date" />
+          <Input
+            type="date"
+            className="rounded-full mb-4"
+            placeholder="Entrer la date"
+          />
 
           <Label className="block text-sm mb-1">Note</Label>
           <Textarea placeholder="Écrire ici..." className="min-h-[120px]" />

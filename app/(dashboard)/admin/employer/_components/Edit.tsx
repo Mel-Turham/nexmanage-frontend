@@ -74,7 +74,7 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
       </DialogHeader>
 
       <form onSubmit={handleSubmit}>
-        <div className="grid gap-5 py-4">
+        <div className="grid gap-2 py-4">
           <div className="space-y-2">
             <Label htmlFor="name">Nom complet</Label>
             <Input
