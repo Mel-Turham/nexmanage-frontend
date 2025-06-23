@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const createEntrepriseSchema = z.object({
-  name: z
+  nom: z
     .string()
     .min(3, "Le nom de l'entreprise doit contenir au moins 3 caractères")
     .max(100),
@@ -12,11 +12,11 @@ export const createEntrepriseSchema = z.object({
   email: z
     .string()
     .email("L'email de l'entreprise doit contenir au moins 3 caractères"),
-  address: z
+  adresse: z
     .string()
     .min(3, "L'adresse de l'entreprise doit contenir au moins 3 caractères")
     .max(100),
-  nombreEmployes: z
+  nbre_employers: z
     .number()
     .min(
       1,

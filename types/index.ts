@@ -64,6 +64,33 @@ export interface Utilisateur {
   entreprise: Entreprise[];
 }
 
+export interface AuthTokens {
+  access_token: string;
+  refresh_token: string;
+}
+export interface RefreshTokenResponse {
+  access_token: string;
+  refresh_token: string;
+}
+
+export interface ResponseLogin {
+  user: User;
+  message: string;
+  accesstoken: string;
+}
+
+export interface User {
+  idUtilisateur: string;
+  nom: string;
+  email: string;
+  telephone: string;
+  role: Role;
+  isActif: boolean;
+  dateCreation: Date;
+  update_at: Date;
+  delete_at: null;
+}
+
 export interface Contrat {
   id: string;
   lieu: Point;
