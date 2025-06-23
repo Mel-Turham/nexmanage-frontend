@@ -52,8 +52,8 @@ export interface RefreshTokenResponse {
 
 export interface ResponseLogin {
   user: User;
-  access_token: string;
-  refresh_token: string;
+  message: string;
+  accesstoken: string;
 }
 
 export interface User {

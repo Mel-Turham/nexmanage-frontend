@@ -34,28 +34,6 @@ const isTokenExpired = (token: string): boolean => {
   }
 };
 
-const syncWithCookies = (state: Partial<AuthState>) => {
-  if (typeof window !== 'undefined') {
-    if (state.isAuthenticated && state.accessToken) {
-      // Stocker les informations importantes dans les cookies
-      Cookies.set('auth-token', state.accessToken, {
-        expires: 7, // 7 jours
-        sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
-      });
-      Cookies.set('auth-status', 'authenticated', {
-        expires: 7,
-        sameSite: 'strict',
-        secure: process.env.NODE_ENV === 'production',
-      });
-    } else {
-      // Supprimer les cookies lors de la déconnexion
-      Cookies.remove('auth-token');
-      Cookies.remove('auth-status');
-    }
-  }
-};
-
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -69,8 +47,7 @@ export const useAuthStore = create<AuthState>()(
       login: (loginResponse: ResponseLogin) => {
         set({
           user: loginResponse.user,
-          accessToken: loginResponse.access_token,
-          refreshToken: loginResponse.refresh_token,
+          accessToken: loginResponse.accesstoken,
           isAuthenticated: true,
           isLoading: false,
         });
