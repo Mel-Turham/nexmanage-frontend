@@ -5,12 +5,13 @@ import Image from 'next/image';
 import { Button } from '../ui/button';
 import { MoreHorizontalCircle01Icon } from 'hugeicons-react';
 import { Input } from '../ui/input';
+import { ScrollArea } from '../ui/scroll-area';
 
 const Commantaires = () => {
   return (
     <div>
       {/* Content area */}
-      <div className='p-4 space-y-4 min-h-[300px]'>
+      <ScrollArea className='p-4 space-y-4 min-h-[300px]'>
         {/* First message with image */}
         <div className='flex items-start space-x-3'>
           <Avatar className='h-8 w-8'>
@@ -57,7 +58,7 @@ const Commantaires = () => {
             <MoreHorizontalCircle01Icon className='h-5 w-5' />
           </Button>
         </div>
-      </div>
+      </ScrollArea>
       {/* Input area */}
       <div className='border-t p-4'>
         <div className='flex items-center space-x-2'>

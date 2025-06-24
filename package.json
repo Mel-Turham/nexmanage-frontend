@@ -75,8 +75,9 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
-    "@types/moment": "^2.13.0",
     "@types/js-cookie": "^3.0.6",
+    "@types/leaflet": "^1.9.18",
+    "@types/moment": "^2.13.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
@@ -84,6 +85,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "js-cookie": "^3.0.5",
+    "leaflet": "^1.9.4",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"

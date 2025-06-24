@@ -7,7 +7,6 @@ import {
 } from 'hugeicons-react';
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { ScrollArea } from '../ui/scroll-area';
 import Image from 'next/image';
 
 const fackekList = [1];
@@ -41,52 +40,50 @@ const GabaritSList = () => {
         />
       </div>
       {/* list des gabarits */}
-      <ScrollArea className='h-[500px]'>
-        <div className='flex flex-col gap-3'>
-          {Array.from({ length: 10 }, (_, index) => (
-            <Card className='bg-bleu-ciel p-2' key={index}>
-              <CardContent className='p-3.5 bg-white rounded-sm'>
-                <CardHeader className='p-0'>
-                  <CardTitle className='text-blue-400 text-base font-medium'>
-                    Nouveau gabarit
-                  </CardTitle>
-                </CardHeader>
-                <div className='flex flex-col gap-2'>
-                  <div className='flex items-center gap-2'>
-                    {/* icon */}
-                    <Location01Icon size={20} className='text-gray-400' />
-                    {/* text */}
-                    <span className='text-gray-500 text-sm'>Paris, France</span>
-                  </div>
-                  <div className='flex items-center gap-2'>
-                    {/* icon */}
-                    <Clock01Icon size={20} className='text-gray-400' />
-                    {/* text */}
-                    <span className='text-gray-500 text-sm'>
-                      {' '}
-                      10h00 - 12h-00{' '}
-                    </span>
-                  </div>
-                  <div className='flex items-center gap-2'>
-                    {/* icon */}
-                    <WorkAlertIcon size={20} className='text-gray-400' />
-                    {/* text */}
-                    <span className='text-gray-500 text-sm'>
-                      Développeur TypeScript
-                    </span>
-                  </div>
-                  <div className='flex items-center gap-2'>
-                    {/* icon */}
-                    <PauseIcon size={20} className='text-gray-400' />
-                    {/* text */}
-                    <span className='text-gray-500 text-sm'>30 minutes</span>
-                  </div>
+      <div className='flex flex-col gap-3'>
+        {Array.from({ length: 10 }, (_, index) => (
+          <Card className='bg-bleu-ciel p-2' key={index}>
+            <CardContent className='p-3.5 bg-white rounded-sm'>
+              <CardHeader className='p-0'>
+                <CardTitle className='text-blue-400 text-base font-medium'>
+                  Nouveau gabarit
+                </CardTitle>
+              </CardHeader>
+              <div className='flex flex-col gap-2'>
+                <div className='flex items-center gap-2'>
+                  {/* icon */}
+                  <Location01Icon size={20} className='text-gray-400' />
+                  {/* text */}
+                  <span className='text-gray-500 text-sm'>Paris, France</span>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </ScrollArea>
+                <div className='flex items-center gap-2'>
+                  {/* icon */}
+                  <Clock01Icon size={20} className='text-gray-400' />
+                  {/* text */}
+                  <span className='text-gray-500 text-sm'>
+                    {' '}
+                    10h00 - 12h-00{' '}
+                  </span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  {/* icon */}
+                  <WorkAlertIcon size={20} className='text-gray-400' />
+                  {/* text */}
+                  <span className='text-gray-500 text-sm'>
+                    Développeur TypeScript
+                  </span>
+                </div>
+                <div className='flex items-center gap-2'>
+                  {/* icon */}
+                  <PauseIcon size={20} className='text-gray-400' />
+                  {/* text */}
+                  <span className='text-gray-500 text-sm'>30 minutes</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
