@@ -6,6 +6,7 @@ import { ProviderQueryClient } from '@/providers/QueryClient';
 import { Suspense } from 'react';
 import Loading from './laoding';
 import { AuthProvider } from '@/providers/auth-provider';
+import { CompanyProvider } from '@/hooks/use-company-context';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -25,11 +26,13 @@ export default function RootLayout({
     <html lang='fr'>
       <body className={`${manrope.className} antialiased`}>
         <Toaster position='top-right' closeButton richColors />
-        <ProviderQueryClient>
-          <Suspense fallback={<Loading />}>
-            <AuthProvider>{children}</AuthProvider>
-          </Suspense>
-        </ProviderQueryClient>
+        <CompanyProvider>
+          <ProviderQueryClient>
+            <Suspense fallback={<Loading />}>
+              <AuthProvider>{children}</AuthProvider>
+            </Suspense>
+          </ProviderQueryClient>
+        </CompanyProvider>
       </body>
     </html>
   );

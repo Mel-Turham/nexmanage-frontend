@@ -174,3 +174,38 @@ export interface Demande {
   id: string;
   // Ajoute ici les autres propriétés nécessaires
 }
+
+export interface MyCompaniesRespose {
+  message: string;
+  data: MyEntreprise[];
+  pagination: pagination;
+}
+
+export interface MyEntreprise {
+  id: string;
+  nom: string;
+  domaine: string;
+  adresse: string;
+  email: string;
+  nbre_employers: number;
+  dateCreation: Date;
+  totalUsers: number;
+  owner: Owner;
+  employees: Owner[];
+}
+
+export interface Owner {
+  id: string;
+  nom: string;
+  email: string;
+  telephone: string;
+  role: Role;
+  dateAjout: Date;
+}
+
+interface pagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
