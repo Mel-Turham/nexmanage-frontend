@@ -209,3 +209,11 @@ interface pagination {
   limit: number;
   totalPages: number;
 }
+
+// Invitation data
+
+export interface InvitationResponse {
+  nom: string;
+  email?: string;
+  phone?: string;
+}
