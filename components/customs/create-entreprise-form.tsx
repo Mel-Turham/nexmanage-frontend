@@ -37,10 +37,10 @@ const CreateEntrepriseForm = () => {
     resolver: zodResolver(createEntrepriseSchema),
     defaultValues: {
       nom: '',
-      domaine: '',
+      domain: '',
       email: '',
       adresse: '',
-      nbre_employers: 0,
+      nbreEmployes: 0,
     },
   });
 
@@ -121,7 +121,7 @@ const CreateEntrepriseForm = () => {
 
             <FormField
               control={form.control}
-              name='domaine'
+              name='domain'
               render={({ field }) => (
                 <FormItem>
                   <div className='relative'>
@@ -129,12 +129,12 @@ const CreateEntrepriseForm = () => {
                       <Input
                         {...field}
                         placeholder=' '
-                        aria-label="Domaine d'activité"
+                        aria-label="domain d'activité"
                         className='peer pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
                       />
                     </FormControl>
                     <FormLabel className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-all duration-200 pointer-events-none peer-focus:top-0  peer-focus:text-xs peer-focus:text-[#344EA2] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-xs peer-[:not(:placeholder-shown)]:text-[#344EA2] bg-background px-1'>
-                      Votre domaine d&apos;activité
+                      Votre domain d&apos;activité
                     </FormLabel>
                   </div>
                   <FormMessage />
@@ -191,7 +191,7 @@ const CreateEntrepriseForm = () => {
 
             <FormField
               control={form.control}
-              name='nbre_employers'
+              name='nbreEmployes'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='text-sm font-medium text-foreground mb-3 block'>

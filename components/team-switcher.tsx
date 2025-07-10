@@ -91,10 +91,10 @@ export function TeamSwitcher() {
     resolver: zodResolver(createEntrepriseSchema),
     defaultValues: {
       nom: '',
-      domaine: '',
+      domain: '',
       email: '',
       adresse: '',
-      nbre_employers: 0,
+      nbreEmployes: 0,
     },
   });
 
@@ -158,7 +158,7 @@ export function TeamSwitcher() {
     try {
       await createEntrepriseMutation.mutateAsync({
         ...data,
-        nbre_employers: Number(data.nbre_employers),
+        nbreEmployes: Number(data.nbreEmployes),
       });
       console.log('Entreprise created:', data);
     } catch (error) {
@@ -225,7 +225,7 @@ export function TeamSwitcher() {
                     {isSwitching ? 'Changement...' : activeCompany.nom}
                   </span>
                   <span className='text-xs text-muted-foreground'>
-                    {activeCompany.domaine}
+                    {activeCompany.domain}
                   </span>
                 </div>
                 <ChevronsUpDown
@@ -280,7 +280,7 @@ export function TeamSwitcher() {
                           <div className='flex flex-col'>
                             <span className='font-medium'>{team.nom}</span>
                             <span className='text-xs text-muted-foreground'>
-                              {team.domaine} • {team.totalUsers} utilisateur
+                              {team.domain} • {team.totalUsers} utilisateur
                               {team.totalUsers > 1 ? 's' : ''}
                             </span>
                           </div>
@@ -377,14 +377,14 @@ export function TeamSwitcher() {
               />
               <FormField
                 control={form.control}
-                name='domaine'
+                name='domain'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Domaine de l&apos;entreprise</FormLabel>
+                    <FormLabel>domain de l&apos;entreprise</FormLabel>
                     <FormControl>
                       <Input
                         type='text'
-                        placeholder="Domaine de l'entreprise"
+                        placeholder="domain de l'entreprise"
                         {...field}
                       />
                     </FormControl>
@@ -430,7 +430,7 @@ export function TeamSwitcher() {
               />
               <FormField
                 control={form.control}
-                name='nbre_employers'
+                name='nbreEmployes'
                 render={({ field }) => (
                   <FormItem className='col-span-1 md:col-span-2'>
                     <FormLabel>Nombre d&apos;employés</FormLabel>

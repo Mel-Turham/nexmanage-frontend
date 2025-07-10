@@ -16,18 +16,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useAuthStore } from "@/stores/auth-store";
+
 
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export function NavUser() {
-  const { logout, user } = useAuthStore();
+
   const router = useRouter();
-  const handleLogout = () => {
-    logout();
-    router.push("/auth/login");
-  };
+  
   return (
     <SidebarMenu className="contents">
       <SidebarMenuItem className="w-fit">
@@ -40,12 +37,12 @@ export function NavUser() {
               <Avatar className="h-8 w-8 rounded-lg ">
                 <AvatarImage />
                 <AvatarFallback className="rounded-lg">
-                  {user?.nom?.slice(0, 2).toUpperCase()}
+                  {/* {user?.nom?.slice(0, 2).toUpperCase()} */}
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col text-left text-sm leading-tight">
-                <span className="truncate font-medium">{user?.nom}</span>
-                <span className="truncate text-xs">{user?.email}</span>
+                <span className="truncate font-medium">mel</span>
+                <span className="truncate text-xs">turham</span>
               </div>
               <ChevronsUpDown className="size-4" />
             </SidebarMenuButton>
@@ -61,12 +58,13 @@ export function NavUser() {
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage />
                   <AvatarFallback className="rounded-lg">
-                    {user?.nom?.slice(0, 2).toUpperCase()}
+                    {/* {user?.nom?.slice(0, 2).toUpperCase()} */}
+                    MT
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user?.nom}</span>
-                  <span className="truncate text-xs">{user?.email}</span>
+                  <span className="truncate font-medium">{'Mel Turham'}</span>
+                  <span className="truncate text-xs">{'mel.turham.com'}</span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -84,7 +82,7 @@ export function NavUser() {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>
+            <DropdownMenuItem >
               <LogOut />
               Log out
             </DropdownMenuItem>

@@ -3,8 +3,8 @@ import React from 'react';
 
 function PreregisterPage() {
   return (
-    <div>
-      <PreRegisterForm />
+    <div className=''>
+      <PreRegisterForm /> 
     </div>
   );
 }

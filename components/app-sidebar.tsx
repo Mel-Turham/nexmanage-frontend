@@ -155,13 +155,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </div>
             <div className='space-y-1 text-xs'>
               <div className='flex justify-between'>
-                <span>Domaine:</span>
-                <span className='font-medium'>{activeCompany.domaine}</span>
+                <span>domain:</span>
+                <span className='font-medium'>{activeCompany.domain}</span>
               </div>
               <div className='flex justify-between'>
                 <span>Employés:</span>
                 <span className='font-medium'>
-                  {activeCompany.nbre_employers}
+                  {activeCompany.nbreEmployes}
                 </span>
               </div>
               <div className='flex justify-between'>

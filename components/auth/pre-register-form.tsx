@@ -24,8 +24,12 @@ import Link from 'next/link';
 import { Checkbox } from '../ui/checkbox';
 import { Button } from '../ui/button';
 import { Google } from '@/icons/google';
-import { useApiMutation } from '@/hooks/apis/use-api';
+import { useApiMutation, useApiQuery } from '@/hooks/apis/use-api';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/axios';
 import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
+
 function PreRegisterForm() {
   const [focusedField, setFocusedField] = useState<string>('');
   const form = useForm<PreRegisterSchema>({
@@ -37,25 +41,29 @@ function PreRegisterForm() {
     },
   });
 
-  const {
-    handleSubmit,
-    watch,
-    formState: { isSubmitting },
-  } = form;
+  const { handleSubmit, watch } = form;
   type preRegisterData = Pick<PreRegisterSchema, 'nom' | 'email' | 'phone'>;
   // mutation pre-register
 
-  const { mutateAsync, isPending, isError } = useApiMutation<
-    preRegisterData,
-    unknown
-  >('POST', '/auth/pre-register', {
-    onSuccess: (data) => {
-      console.log("Données d'inscription:", data);
-    },
-    onError: (error) => {
-      console.error("Erreur d'inscription:", error);
-    },
-  });
+  const { mutateAsync, isPending } = useApiMutation<preRegisterData, unknown>(
+    'POST',
+    '/auth/pre-register',
+    {
+      onSuccess: (data) => {
+        console.log("Données d'inscription:", data);
+      },
+      onError: (error) => {
+        console.error("Erreur d'inscription:", error);
+      },
+    }
+  );
+
+  const GOOGLE_CLIENT_ID =
+    '280334369549-f8lvhhomn4g83cbnpprm8r3k78iggq88.apps.googleusercontent.com';
+  const GOOGLE_REDIRECT_URI =
+    'https://nexback-production.up.railway.app/api/auth/oauth/google';
+
+  const GOOGLE_AUTH_URL_FRONTEND = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${GOOGLE_REDIRECT_URI}&response_type=code&scope=email%20profile`;
 
   const watchedUsername = watch('nom');
   const watchedEmail = watch('email');
@@ -64,6 +72,10 @@ function PreRegisterForm() {
 
   const shouldAnimateLabel = (fieldName: string, fieldValue: string) => {
     return focusedField === fieldName || fieldValue.length > 0;
+  };
+
+  const handlerGoogleAuth = () => {
+    window.open(GOOGLE_AUTH_URL_FRONTEND, '_blanck');
   };
   async function onsubmit(data: PreRegisterSchema) {
     try {
@@ -78,23 +90,23 @@ function PreRegisterForm() {
       className='justify-between'
       text='Vous avez déjà un compte ?'
       textLink='Connectez-vous'
-      url='/auth/login'
+      url='/login'
     >
       <NextManageIcon />
       <div className='flex flex-col items-center gap-4 w-full lg:justify-center'>
-        <div className='relative z-10'>
-          <h1 className='text-3xl font-semibold  text-[#344EA2]'>
-            Créer un compte
-          </h1>
-          <p className='text-base tracking-tighter font-medium text-center mt-2 text-muted-foreground'>
-            Créez facilement votre compte
-          </p>
-        </div>
         <Form {...form}>
           <form
             onSubmit={handleSubmit(onsubmit)}
-            className='space-y-4 relative z-20 max-w-[400px]'
+            className='space-y-4 relative z-20 max-w-[450px] border-red-600 py-5 px-8 rounded-sm w-full shadow-lg'
           >
+            <div className='relative flex flex-col items-center z-10'>
+              <h1 className='text-3xl font-semibold  text-[#344EA2]'>
+                Créer un compte
+              </h1>
+              <p className='text-base tracking-tighter font-medium text-center mt-2 text-muted-foreground'>
+                Créez facilement votre compte
+              </p>
+            </div>
             <FormField
               control={form.control}
               name='nom'
@@ -235,7 +247,12 @@ function PreRegisterForm() {
                 </span>
               </div>
             </div>
-            <Button type='button' variant='outline' className='w-full'>
+            <Button
+              type='button'
+              variant='outline'
+              className='w-full'
+              onClick={handlerGoogleAuth}
+            >
               <Google className='mr-2 size-5' />
               S&apos;inscrire avec Google
             </Button>

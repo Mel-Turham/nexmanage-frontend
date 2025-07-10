@@ -17,16 +17,17 @@ import { EyeIcon, EyeOffIcon, Frown, Meh, Smile } from 'lucide-react';
 import { use, useMemo, useState } from 'react';
 import { useInvitationResponseStore } from '@/stores/invitation-response-store';
 import { useApiMutation } from '@/hooks/apis/use-api';
-import { InvitationResponse } from '../../types/index';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth-store';
 
 export function CreatePasswordForm() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
   const [focusedField, setFocusedField] = useState<string>('');
-  const { user } = useInvitationResponseStore();
+  const { user, clearUser } = useInvitationResponseStore();
+  const { setAccessToken } = useAuthStore();
 
   const router = useRouter();
 
@@ -107,14 +108,17 @@ export function CreatePasswordForm() {
 
   type dataCreatePassword = {
     password: string;
-  } & InvitationResponse;
+    nom: string;
+    email?: string;
+    phone?: string;
+  };
 
-  const { mutateAsync, isPending, error } = useApiMutation<
-    { message: string },
+  const { mutateAsync, isPending } = useApiMutation<
+    { message: string; token: string },
     dataCreatePassword
   >('POST', '/auth/register', {
     onSuccess: (data) => {
-      console.log(data);
+      setAccessToken(data.token);
     },
     onError: (error) => {
       console.log(error);
@@ -129,18 +133,21 @@ export function CreatePasswordForm() {
         return;
       }
       const response = await mutateAsync({
-        nom: user.result.nom,
-        email: user.result.email,
-        phone: user.result.phone,
+        nom: user.user.result.nom,
+        email: user.user.result.email,
+        phone: user.user.result.phone,
         password: data.password,
       });
 
       toast.success(response.message, {
         duration: 3000,
-        // onAutoClose: () => {
-        //   router.push('/auth/login');
-        // },
+        onAutoClose: () => {
+          router.push('/create-company');
+        },
       });
+
+      // supprimer le user dans l'invitation response dans le localstorage
+      clearUser();
     } catch (error) {
       console.log(error);
     }

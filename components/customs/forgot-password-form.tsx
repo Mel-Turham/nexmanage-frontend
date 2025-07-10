@@ -23,6 +23,7 @@ import {
 import { Input } from '../ui/input';
 import { useApiMutation } from '@/hooks/apis/use-api';
 import { toast } from 'sonner';
+import { Badge } from '../ui/badge';
 
 interface ForgotPasswordResponse {
   success: boolean;
@@ -30,18 +31,19 @@ interface ForgotPasswordResponse {
   user: {
     id: string;
     telephone: string;
-    // Ajoutez d'autres propriétés selon votre API
   };
 }
+
 const ForgotPasswordForm = () => {
   const router = useRouter();
-
+  const [switchField, setSwitchField] = useState<boolean>(false);
   const [focusedField, setFocusedField] = useState<string>('');
 
   const form = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
-      telephone: '',
+      phone: '',
+      email: '',
     },
   });
 
@@ -54,33 +56,64 @@ const ForgotPasswordForm = () => {
     ForgotPasswordSchema
   >('POST', '/auth/forgot-password', {
     onSuccess: (data) => {
-      toast.success('OTP ENVOYÉ AVEC SUCCÈS');
-      console.log(data);
+      toast.success(data.message);
+      router.push('/otp');
     },
     onError: (error) => {
-      toast.error(error.message || 'Erreur lors de la connexion');
-      console.error('Erreur de connexion:', error);
+      toast.error(
+        error.message || "Erreur lors de l'envoi du code de vérification",
+        {
+          duration: 4000,
+        }
+      );
+      console.error('Erreur de connexion :', error);
     },
   });
 
-  const watchFieldPhone = form.watch('telephone');
+  const watchFieldPhone = form.watch('phone');
+  const watchFieldEmail = form.watch('email');
 
   const shouldAnimateLabel = (fieldName: string, fieldValue: string) => {
-    return focusedField === fieldName || fieldValue.length > 0;
+    return focusedField === fieldName || (fieldValue && fieldValue.length > 0);
   };
+
   const onSubmit = async (data: ForgotPasswordSchema) => {
     try {
-      await forgotPasswordMutation.mutateAsync(data);
-      router.push('/auth/login');
+      // Nettoyer les données avant l'envoi
+      const cleanData: ForgotPasswordSchema = {
+        phone: switchField ? data.phone : '',
+        email: !switchField ? data.email : '',
+      };
+
+      // Stocker l'information de contact appropriée
+      if (switchField && data.phone) {
+        localStorage.setItem('reset-phone', data.phone);
+        localStorage.removeItem('reset-email');
+      } else if (!switchField && data.email) {
+        localStorage.setItem('reset-email', data.email);
+        localStorage.removeItem('reset-phone');
+      }
+
+      await forgotPasswordMutation.mutateAsync(cleanData);
     } catch (error) {
-      console.log('Error:', error);
+      console.log('Erreur :', error);
     }
+  };
+
+  // Fonction pour gérer le changement de champ
+  const handleFieldSwitch = () => {
+    setSwitchField((prev) => !prev);
+    // Réinitialiser les erreurs et les valeurs
+    form.clearErrors();
+    form.setValue('phone', '');
+    form.setValue('email', '');
+    setFocusedField('');
   };
 
   return (
     <AuthLayout
-      url='/auth/login'
-      text='Vous avez deja un compte ?'
+      url='/login'
+      text='Vous avez déjà un compte ?'
       textLink='Se connecter'
     >
       <NextManageIcon />
@@ -94,63 +127,119 @@ const ForgotPasswordForm = () => {
           <ChevronLeft /> Retour
         </Button>
       </div>
-      <div className='flex flex-col items-center gap-4 w-full h-screen justify-between  mx-auto max-w-[500px]'>
+      <div className='flex flex-col items-center  gap-4 w-full h-screen justify-between mx-auto max-w-[450px] py-5 px-8 shadow-lg rounded-md'>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
             className='w-full space-y-4'
           >
-            <div className=' max-w-xl z-10'>
+            <div className='max-w-xl z-10'>
               <h1 className='text-xl mt-8 font-semibold text-[#344EA2] text-center'>
                 Mot de passe oublié ?
               </h1>
-              <p className='text-sm my-4 max-w-lg text-center '>
-                Entrez votre numero de téléphone pour recevoir un code de
-                vérification.
+              <p className='text-sm my-4 max-w-lg text-center'>
+                Entrez votre{' '}
+                {switchField ? 'numéro de téléphone' : 'adresse email'} pour
+                recevoir un code de vérification.
               </p>
             </div>
-            <FormField
-              control={form.control}
-              name='telephone'
-              render={({ field }) => (
-                <FormItem>
-                  <div className='relative'>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder=''
-                        aria-label='Numéro de téléphone'
-                        className='pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
-                        onFocus={() => setFocusedField('telephone')}
-                        onBlur={() => setFocusedField('')}
-                      />
-                    </FormControl>
-                    <FormLabel
-                      className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
-                        shouldAnimateLabel('telephone', watchFieldPhone)
-                          ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
-                          : 'top-1/2 -translate-y-1/2 text-muted-foreground'
-                      }`}
-                    >
-                      Numéro de téléphone
-                    </FormLabel>
-                  </div>
-                  <FormMessage className='sr-only' />
-                </FormItem>
-              )}
-            />
+
+            {switchField ? (
+              <FormField
+                control={form.control}
+                name='phone'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='relative'>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type='tel'
+                          placeholder=''
+                          aria-label='Numéro de téléphone'
+                          className='pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
+                          onFocus={() => setFocusedField('phone')}
+                          onBlur={() => setFocusedField('')}
+                        />
+                      </FormControl>
+                      <FormLabel
+                        className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                          shouldAnimateLabel(
+                            'phone',
+                            watchFieldPhone ? watchFieldPhone : ''
+                          )
+                            ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
+                            : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                        }`}
+                      >
+                        Numéro de téléphone
+                      </FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : (
+              <FormField
+                control={form.control}
+                name='email'
+                render={({ field }) => (
+                  <FormItem>
+                    <div className='relative'>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type='email'
+                          placeholder=''
+                          aria-label='Adresse email'
+                          className='pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200'
+                          onFocus={() => setFocusedField('email')}
+                          onBlur={() => setFocusedField('')}
+                        />
+                      </FormControl>
+                      <FormLabel
+                        className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                          shouldAnimateLabel(
+                            'email',
+                            watchFieldEmail ? watchFieldEmail : ''
+                          )
+                            ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
+                            : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                        }`}
+                      >
+                        Adresse email
+                      </FormLabel>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            <Button
+              variant={'link'}
+              type='button'
+              size={'sm'}
+              className='cursor-pointer mx-auto'
+              onClick={handleFieldSwitch}
+            >
+              {switchField ? 'Utiliser un email' : 'Utiliser un numéro'}
+            </Button>
 
             <button
-              disabled={forgotPasswordMutation.isPending || !watchFieldPhone}
+              type='submit'
+              disabled={forgotPasswordMutation.isPending}
               className='custom-button-gradient py-2 w-full disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none'
             >
-              Continuer
+              {forgotPasswordMutation.isPending ? 'Chargement...' : 'Continuer'}
             </button>
-            <div className='text-sm text-gray-600  mx-auto p-4 rounded-md bg-[#8FA3FF]/20 text-center mt-2'>
+
+            <div className='text-sm text-gray-600 mx-auto p-4 rounded-md bg-[#8FA3FF]/20 text-center mt-2'>
               <p className='text-xs mb-2'>
-                Veuillez entrer un nouveau mot de passe pour sécuriser votre
-                compte. Assurez-vous qu&apos;il soit suffisamment complexe (au
-                moins 8 caractères, avec majuscules, chiffres, et symboles).
+                Veuillez entrer un numéro de téléphone ou une adresse email
+                valide. Cela nous permettra de vous envoyer un code de
+                vérification afin de réinitialiser votre mot de passe en toute
+                sécurité.
               </p>
             </div>
           </form>

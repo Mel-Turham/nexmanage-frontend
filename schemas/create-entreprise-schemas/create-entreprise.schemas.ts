@@ -5,9 +5,9 @@ export const createEntrepriseSchema = z.object({
     .string()
     .min(3, "Le nom de l'entreprise doit contenir au moins 3 caractères")
     .max(100),
-  domaine: z
+  domain: z
     .string()
-    .min(3, "Le domaine de l'entreprise doit contenir au moins 3 caractères")
+    .min(3, "Le domain de l'entreprise doit contenir au moins 3 caractères")
     .max(100),
   email: z
     .string()
@@ -16,7 +16,7 @@ export const createEntrepriseSchema = z.object({
     .string()
     .min(3, "L'adresse de l'entreprise doit contenir au moins 3 caractères")
     .max(100),
-  nbre_employers: z
+  nbreEmployes: z
     .number()
     .min(
       1,

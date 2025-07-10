@@ -5,8 +5,9 @@ import { Toaster } from 'sonner';
 import { ProviderQueryClient } from '@/providers/QueryClient';
 import { Suspense } from 'react';
 import Loading from './laoding';
-import { AuthProvider } from '@/providers/auth-provider';
+
 import { CompanyProvider } from '@/hooks/use-company-context';
+import { AuthProvider } from '@/providers/auth-provider';
 
 const manrope = Manrope({
   subsets: ['latin'],

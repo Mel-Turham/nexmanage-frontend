@@ -1,57 +1,28 @@
-// stores/auth-store.ts
-import { LoginResponse, User } from '@/types';
+import { BaseUser, Organisation, User } from '@/types/index';
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
-interface AuthState {
-  user: User | null;
+interface AuthStore {
   accessToken: string | null;
-  isAuthenticated: boolean;
-
-  // Actions
-  login: (loginResponse: LoginResponse) => void;
-  logout: () => void;
-  setUser: (user: User) => void;
+  user: BaseUser | null;
+  organisations: Organisation[];
+  setAccessToken: (token: string | null) => void;
+  setOrganisations: (orgs: Organisation[]) => void;
+  setUser: (user: BaseUser | null) => void;
 }
 
-export const useAuthStore = create<AuthState>()(
+export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      user: null,
       accessToken: null,
-      isAuthenticated: false,
-
-      // Action de connexion
-      login: (loginResponse: LoginResponse) => {
-        set({
-          user: loginResponse.user,
-          accessToken: loginResponse.accesstoken,
-          isAuthenticated: true,
-        });
-      },
-
-      // Action de déconnexion
-      logout: () => {
-        set({
-          user: null,
-          accessToken: null,
-          isAuthenticated: false,
-        });
-      },
-
-      // Mettre à jour l'utilisateur
-      setUser: (user: User) => {
-        set({ user });
-      },
+      user: null,
+      organisations: [],
+      setAccessToken: (token) => set({ accessToken: token }),
+      setUser: (user) => set({ user }),
+      setOrganisations: (orgs) => set({ organisations: orgs }),
     }),
     {
       name: 'auth-storage',
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        user: state.user,
-        accessToken: state.accessToken,
-        isAuthenticated: state.isAuthenticated,
-      }),
     }
   )
 );

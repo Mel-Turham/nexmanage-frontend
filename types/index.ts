@@ -42,10 +42,10 @@ export enum Priorite {
 export interface Entreprise {
   idEntreprise: string;
   nom: string;
-  domaine: string;
+  domain: string;
   email: string;
   adresse: string;
-  nbre_employers: number;
+  nbreEmployes: number;
   dateCreation: Date;
   update_at: Date;
   delete_at: Date;
@@ -68,27 +68,35 @@ export interface AuthTokens {
   access_token: string;
   refresh_token: string;
 }
-export interface RefreshTokenResponse {
-  access_token: string;
-  refresh_token: string;
+
+export enum UserRole {
+  EMPLOYE = 'EMPLOYE',
+  ADMIN = 'ADMIN',
+}
+
+export interface BaseUser {
+  nom: string;
+  email: string;
+  phone: string;
+}
+
+export interface Organisation {
+  role: UserRole;
+  joinedAt: string;
+  nom: string;
+  email: string;
+  id: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  domain: string;
+  adresse: string | null;
+  nbreEmployes: number | null;
+  createAt: string;
 }
 
 export interface User {
-  idUtilisateur: string;
-  nom: string;
-  email: string;
-  telephone: string;
-  role: string;
-  isActif: boolean;
-  dateCreation: string;
-  update_at: string;
-  delete_at: string | null;
-}
-
-export interface LoginResponse {
-  user: User;
-  message: string;
-  accesstoken: string;
+  user: BaseUser;
+  organisation: Organisation[];
 }
 
 export interface Contrat {
@@ -184,10 +192,10 @@ export interface MyCompaniesRespose {
 export interface MyEntreprise {
   id: string;
   nom: string;
-  domaine: string;
+  domain: string;
   adresse: string;
   email: string;
-  nbre_employers: number;
+  nbreEmployes: number;
   dateCreation: Date;
   totalUsers: number;
   owner: Owner;
@@ -213,7 +221,15 @@ interface pagination {
 // Invitation data
 
 export interface InvitationResponse {
-  nom: string;
-  email?: string;
-  phone?: string;
+  user: {
+    result: {
+      nom: string;
+      email?: string;
+      phone?: string;
+    };
+  };
+}
+
+export interface Iregister {
+  token: string;
 }
