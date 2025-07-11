@@ -10,11 +10,9 @@ import {
 import { useApiMutation } from '@/hooks/apis/use-api';
 import { InvitationResponse } from '@/types';
 import { CheckCircle, XCircle, Clock, AlertCircle } from 'lucide-react';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvitationResponseStore } from '@/stores/invitation-response-store';
-import { toast } from 'sonner';
 
 interface Token {
   token: string;
@@ -188,12 +186,12 @@ function VerifyClientPage({ token }: { token: string }) {
                 Lien invalide
               </CardTitle>
               <CardDescription className='text-red-600'>
-                Ce lien de vérification n'est pas valide
+                Ce lien de vérification n&aposz;est pas valide
               </CardDescription>
             </CardHeader>
             <CardContent className='text-center space-y-4'>
               <p className='text-sm text-red-700'>
-                Le lien que vous avez utilisé n'est pas valide ou a déjà été
+                Le lien que vous avez utilisé n&apos;est pas valide ou a déjà été
                 utilisé.
               </p>
               <div className='space-y-2'>

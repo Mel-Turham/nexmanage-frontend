@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem } from '../ui/form';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '../ui/input-otp';
 import { toast } from 'sonner';
-import Link from 'next/link';
 
 import { OTPSchema, otpSchema } from '../../schemas/auth.schemas/otp.schemas';
 import AuthLayout from '@/layouts/auth-layout';

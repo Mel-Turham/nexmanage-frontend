@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontal, Edit, Trash, Eye } from "lucide-react";
+import { MoreHorizontal, Trash, Eye } from "lucide-react";
 import Link from "next/link"; // Importez Link de next/link
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +15,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import CustomMenu from "./Edit"; // C'est votre composant Edit.tsx
 import { Employer } from "@/types/employer";
 import Supprimer from "./supprimer";
 
@@ -77,7 +76,7 @@ export function MoreMenu({ employer }: MoreMenuProps) {
           </Link>
 
           {/* Modifier le profil - utilise Dialog */}
-          <Dialog>
+          {/* <Dialog>
             <DialogTrigger asChild>
               <DropdownMenuItem
                 onSelect={(e) => e.preventDefault()} // Empêche la fermeture du dropdown
@@ -87,9 +86,7 @@ export function MoreMenu({ employer }: MoreMenuProps) {
                 Modifier le profil
               </DropdownMenuItem>
             </DialogTrigger>
-            <CustomMenu employer={employer} />{" "}
-            {/* CustomMenu est votre Edit.tsx */}
-          </Dialog>
+          </Dialog> */}
 
           <DropdownMenuSeparator />
 

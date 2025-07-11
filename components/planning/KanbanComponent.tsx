@@ -1,157 +1,126 @@
 import React from "react";
-import ContratCard from "./TaskCard"; // Importez le composant renommé
-import {
-  Contrat,
-  Role,
-} from "@/types"; // Importez tous les types nécessaires
+import ContratCard from "./ContratCard"; // Votre composant carte
+import { Contrat, Role, StatutContrat } from "@/types";
+
+interface KanbanColumnProps {
+  title: string;
+  contrats: Contrat[];
+}
+
+const KanbanColumn: React.FC<KanbanColumnProps> = ({ title, contrats }) => {
+  return (
+    <div className="bg-bleu-ciel rounded-md p-4 flex flex-col w-72 max-h-[80vh] h-fit overflow-y-auto">
+      <h2 className="text-xl font-semibold mb-4">
+        {title} ({contrats.length})
+      </h2>
+      {contrats.length === 0 ? (
+        <p className="text-gray-500">Aucun contrat</p>
+      ) : (
+        contrats.map((contrat) => (
+          <ContratCard key={contrat.id} contrat={contrat} />
+        ))
+      )}
+    </div>
+  );
+};
 
 const KanbanComponent = () => {
-  // Données fictives pour les utilisateurs
-  // const utilisateur1: Utilisateur = {
-  //   idUtilisateur: "user1",
-  //   nom: "Dupont",
-  //   motDePasse: "azerg",
-  //   role: Role.ADMIN,
-  //   isActif: true,
-  //   telephone: "696 696 696",
-  //   entreprise: [],
-  // };
+  // Vos données fictives contratsFictifs ici (ou récupérées via API)
 
-  // const utilisateur2: Utilisateur = {
-  //   idUtilisateur: "user2",
-  //   nom: "Martin",
-  //   motDePasse: "azerg",
-  //   role: Role.EMPLOYE,
-  //   isActif: true,
-  //   telephone: "696 696 696",
-  //   entreprise: [],
-  // };
-  // // const utilisateur3: Utilisateur = {
-  // //   idUtilisateur: "user2",
-  // //   nom: "Martin",
-  // //   motDePasse: "azerg",
-  // //   role: Role.MANAGER,
-  // //   isActif: true,
-  // //   telephone: "696 696 696",
-  // //   entreprise: [],
-  // // };
-
-  // // Données fictives pour les tâches
-  // const tache1: Tache = {
-  //   id: "tache1",
-  //   titre: "Préparation du rapport mensuel",
-  //   TimeEstimated: 180, // 3 heures
-  //   priorite: Priorite.HAUTE,
-  //   statut: StatutTache.EN_ATTENTE,
-  //   dateCreation: new Date("2025-06-20T09:00:00Z"),
-  // };
-  // const tache2: Tache = {
-  //   id: "tache2",
-  //   titre: "Réunion de suivi client",
-  //   TimeEstimated: 90, // 1 heure 30 minutes
-  //   priorite: Priorite.MOYENNE,
-  //   statut: StatutTache.TERMINEE,
-  //   dateCreation: new Date("2025-06-20T09:00:00Z"),
-  // };
-  // const tache3: Tache = {
-  //   id: "tache3",
-  //   titre: "Développement nouvelle fonctionnalité",
-  //   priorite: Priorite.BASSE,
-  //   TimeEstimated: 360, // 6 heures
-  //   statut: StatutTache.EN_COURS,
-  //   dateCreation: new Date("2025-06-20T09:00:00Z"),
-  // };
-  // const tache4: Tache = {
-  //   id: "tache4",
-  //   titre: "Test de l'application mobile",
-  //   TimeEstimated: 120, // 2 heures
-  //   priorite: Priorite.HAUTE,
-  //   statut: StatutTache.EN_ATTENTE,
-  //   dateCreation: new Date("2025-06-20T09:00:00Z"),
-  // };
-  // const lieuParis: Point = {
-  //   coordinates: [48.8566, 2.3522],
-  // };
-  // const lieuLyon: Point = {
-  //   coordinates: [45.75, 4.85],
-  // };
-  // const lieuMarseille: Point = {
-  //   coordinates: [43.2965, 5.3698],
-  // };
-
-  // Création des données fictives de contrats
   const contratsFictifs: Contrat[] = [
     {
-      id: "7fa42151-6623-4f9e-845b-3cf3d1d71c05",
-      lieu: {
-        coordinates: [11.515, 3.867],
-      },
-      dateDebut: new Date("2025-06-20T08:00:00.000Z"),
-      dateFin: new Date("2025-06-20T12:00:00.000Z"),
-      description: "Contrat test 1",
-      pause: 30,
-      estGabarit: false,
-      dateCreation: new Date("2025-06-18T19:30:35.700Z"),
+      id: "1",
+      lieu: { coordinates: [48.8566, 2.3522] },
+      dateDebut: new Date("2025-07-01T08:00:00Z"),
+      dateFin: new Date("2025-07-01T12:00:00Z"),
+      description: "Installation réseau Paris",
+      pause: 15,
       utilisateur: [
         {
-          idUtilisateur: "2b2ab46d-ff16-464e-a68f-aa9f6c47e047",
-          nom: "Loic",
-          email: "loic62@gmail.com",
-          telephone: "+66666666666",
-          motDePasse:
-            "$2b$10$oKTxvv0uQ5rIL2A4ArEojuRgEwEYo8tLfv28Kse0/LXg53YusPJju",
-          role: Role.ADMIN,
-          isActif: true,
-          dateCreation: new Date("2025-06-17T15:23:44.556Z"),
-          entreprise: [],
-        },
-        {
-          idUtilisateur: "abc-123",
+          idUtilisateur: "u1",
           nom: "Alice",
           email: "alice@example.com",
-          telephone: "+123456789",
-          motDePasse: "hashedpassword",
+          telephone: "+33123456789",
           role: Role.EMPLOYE,
           isActif: true,
-          dateCreation: new Date("2025-06-19T10:00:00.000Z"),
+          dateCreation: new Date(),
           entreprise: [],
+          motDePasse: "",
         },
       ],
       taches: [],
+      estGabarit: false,
+      dateCreation: new Date("2025-06-20T10:00:00Z"),
+      statut: StatutContrat.EN_ATTENTE,
     },
     {
-      id: "25592995-2a2f-4061-b091-73605b350bda",
-      lieu: {
-        coordinates: [11.515, 3.867],
-      },
-      dateDebut: new Date("2025-06-18T09:00:00.000Z"),
-      dateFin: new Date("2025-06-18T17:00:00.000Z"),
-      description: "Contrat de maintenance",
+      id: "2",
+      lieu: { coordinates: [45.75, 4.85] },
+      dateDebut: new Date("2025-07-02T09:00:00Z"),
+      dateFin: new Date("2025-07-02T17:00:00Z"),
+      description: "Maintenance serveur Lyon",
       pause: 30,
-      estGabarit: false,
-      dateCreation: new Date("2025-06-18T19:56:31.747Z"),
       utilisateur: [
         {
-          idUtilisateur: "def-456",
+          idUtilisateur: "u2",
           nom: "Bob",
           email: "bob@example.com",
-          telephone: "+987654321",
-          motDePasse: "hashedpassword",
-          role: Role.EMPLOYE,
+          telephone: "+33456789012",
+          role: Role.MANAGER,
           isActif: true,
-          dateCreation: new Date("2025-06-19T11:00:00.000Z"),
+          dateCreation: new Date(),
           entreprise: [],
+          motDePasse: "",
         },
       ],
       taches: [],
+      estGabarit: false,
+      dateCreation: new Date("2025-06-21T11:00:00Z"),
+      statut: StatutContrat.EN_COURS,
+    },
+    {
+      id: "3",
+      lieu: { coordinates: [43.2965, 5.3698] },
+      dateDebut: new Date("2025-06-30T08:00:00Z"),
+      dateFin: new Date("2025-06-30T16:00:00Z"),
+      description: "Audit sécurité Marseille",
+      pause: 45,
+      utilisateur: [
+        {
+          idUtilisateur: "u3",
+          nom: "Charlie",
+          email: "charlie@example.com",
+          telephone: "+33412345678",
+          role: Role.ADMIN,
+          isActif: true,
+          dateCreation: new Date(),
+          entreprise: [],
+          motDePasse: "",
+        },
+      ],
+      taches: [],
+      estGabarit: false,
+      dateCreation: new Date("2025-06-19T09:00:00Z"),
+      statut: StatutContrat.TERMINE,
     },
   ];
 
+  // Filtrer les contrats par statut
+  const enAttente = contratsFictifs.filter(
+    (c) => c.statut === StatutContrat.EN_ATTENTE
+  );
+  const enCours = contratsFictifs.filter(
+    (c) => c.statut === StatutContrat.EN_COURS
+  );
+  const termines = contratsFictifs.filter(
+    (c) => c.statut === StatutContrat.TERMINE
+  );
+
   return (
-    <div className="flex flex-row flex-wrap gap-4 p-4 justify-start">
-      {contratsFictifs.map((contrat) => (
-        <ContratCard key={contrat.id} contrat={contrat} />
-      ))}
+    <div className="flex gap-6">
+      <KanbanColumn title="En attente" contrats={enAttente} />
+      <KanbanColumn title="En cours" contrats={enCours} />
+      <KanbanColumn title="Terminés" contrats={termines} />
     </div>
   );
 };

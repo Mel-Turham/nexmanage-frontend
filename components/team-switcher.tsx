@@ -225,7 +225,7 @@ export function TeamSwitcher() {
                     {isSwitching ? 'Changement...' : activeCompany.nom}
                   </span>
                   <span className='text-xs text-muted-foreground'>
-                    {activeCompany.domain}
+                    {activeCompany.domaine}
                   </span>
                 </div>
                 <ChevronsUpDown
@@ -280,7 +280,7 @@ export function TeamSwitcher() {
                           <div className='flex flex-col'>
                             <span className='font-medium'>{team.nom}</span>
                             <span className='text-xs text-muted-foreground'>
-                              {team.domain} • {team.totalUsers} utilisateur
+                              {team.domaine} • {team.totalUsers} utilisateur
                               {team.totalUsers > 1 ? 's' : ''}
                             </span>
                           </div>

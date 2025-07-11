@@ -17,8 +17,17 @@ import { Button } from "@/components/ui/button";
 // import { Input } from "@/components/ui/input";
 import Image from "next/image";
 // import { CirclePlus, Search } from "lucide-react";
-import { Search01Icon } from "hugeicons-react";
 import MoreMenu from "./MoreMenu";
+import { CirclePlus } from "lucide-react";
+import CreerDemande from "./creer-demande";
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
+import { Select } from "@radix-ui/react-select";
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface DemandeCongeTableProps {
   demandes: DemandeConge[] | null; // Permet null
@@ -187,37 +196,55 @@ export default function DemandeCongeTable({
             <p className="text-xs text-[#6B7A8F] mt-0.5">{currentDate}</p>
           </div>
         </div>
-        {/* <div className="flex flex-col md:flex-row md:items-center gap-4">
-          <Button
-            className="bg-[#3759B8] text-white rounded-md px-8 py-2 flex items-center space-x-2 text-sm font-medium select-none"
-            onClick={() => alert("Créer une nouvelle demande")}
-          >
-            <span>Créer</span>
-            <CirclePlus className="w-4 h-4" />
-          </Button>
-        </div> */}
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <div className="flex flex-col md:flex-row md:items-center gap-4">
+              <Button
+                className="bg-[#3759B8] text-white rounded-md px-8 py-2 flex items-center space-x-2 text-sm font-medium select-none"
+                // onClick={() => alert("Créer une nouvelle demande")}
+              >
+                <span>Créer</span>
+                <CirclePlus className="w-4 h-4" />
+              </Button>
+            </div>
+          </DialogTrigger>
+          <CreerDemande />
+        </Dialog>
       </header>
 
       {/* Filtres */}
-      <section className="flex  flex-col sm:flex-row  sm:items-center sm:space-x-6 mb-6 space-y-3 sm:space-y-0 w-full ">
-        <select
-          aria-label="Filtrer par type"
-          className={`appearance-none border rounded-md w-full pl-5 pr-10 py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white cursor-pointer`}
-          // TODO: gérer filtre type
-          onChange={() => {}}
-        >
-          <option value="">Tout</option>
-        </select>
-        <select
-          aria-label="Filtrer par ordre"
-          className={`appearance-none border rounded-md w-full pl-5 pr-10 py-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline bg-white cursor-pointer`}
-          // TODO: gérer filtre ordre
-          onChange={() => {}}
-        >
-          <option value="">Ordre</option>
-        </select>
+      <section className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 mb-6 space-y-3 sm:space-y-0 w-full ">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-6 space-y-3 sm:space-y-0 ">
+          <div className="flex flex-row w-full gap-4">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtres" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="nomAZ">Nom ( A - Z )</SelectItem>
+                <SelectItem value="Duree">Duree</SelectItem>
+                <SelectItem value="Debut">Date de debut </SelectItem>
+                <SelectItem value="Fin">Date de fin </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-row w-fit gap-4">
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Statut" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="EN_ATTENTE">EN ATTENTE</SelectItem>
+                <SelectItem value="ACCEPTE">ACCEPTE</SelectItem>
+                <SelectItem value="REFUSE">REFUSE</SelectItem>
+                <SelectItem value="EXPIRER">EXPIRER</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
 
-        <div className="w-full md:w-40%  ml-auto">
+        {/* <div className="w-full md:w-40%  ml-auto">
           <label htmlFor="search" className="sr-only">
             Rechercher
           </label>
@@ -230,7 +257,7 @@ export default function DemandeCongeTable({
               className="py-2 px-4 w-full outline-none"
             />
           </div>
-        </div>
+        </div> */}
       </section>
 
       <div className="flex flex-col justify-between h-full">

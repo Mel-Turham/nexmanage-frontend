@@ -1,69 +1,84 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import Input from "@/components/Input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Employer } from "@/types/employer";
+import { Input } from "@/components/ui/input";
+// import Input from "@/components/Input";
+// import { Input } from '../ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
-export default function EditEmployer({ employer }: { employer: Employer }) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    telephone: "",
-    poste: "",
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as RPNInput from "react-phone-number-input";
+import { useApiMutation } from "@/hooks/apis/use-api";
+import { toast } from "sonner";
+import { employerSchema } from "@/schemas/employer/employer.schema";
+import { FlagComponent } from "@/components/customs/flag-component";
+import { PhoneInput } from "@/components/customs/phone-input";
+import { CountrySelect } from "@/components/customs/country-selected";
+
+export default function EditEmployer() {
+  const [focusedField, setFocusedField] = useState<string>("");
+  const form = useForm<employerSchema>({
+    resolver: zodResolver(employerSchema),
+    defaultValues: {
+      nom: "",
+      email: "",
+      telephone: "",
+    },
   });
 
-  useEffect(() => {
-    if (employer) {
-      setFormData({
-        name: employer.name || "",
-        email: employer.email || "",
-        telephone: employer.telephone || "",
-        poste: employer.Poste || "",
-      });
+  const {
+    handleSubmit,
+    watch
+  } = form;
+  type preRegisterData = Pick<employerSchema, "nom" | "email" | "telephone">;
+  // mutation pre-register
+
+  const { mutateAsync, isPending, isError } = useApiMutation<
+    preRegisterData,
+    unknown
+  >("POST", "#", {
+    onSuccess: (data) => {
+      console.log("Données d'inscription:", data);
+    },
+    onError: (error) => {
+      console.error("Erreur d'inscription:", error);
+      console.error("error : ", isError);
+    },
+  });
+
+  const watchedUsername = watch("nom");
+  const watchedEmail = watch("email");
+
+  const shouldAnimateLabel = (fieldName: string, fieldValue: string) => {
+    return focusedField === fieldName || fieldValue.length > 0;
+  };
+
+  async function onsubmit(data: employerSchema) {
+    try {
+      const { ...rest } = data;
+      await mutateAsync(rest);
+      toast.success("Mise a jours effectuer avec success");
+    } catch (error) {
+      toast.error("Erreur lors de la mise a jours");
+      console.error("Erreur lors de la mise a jours :", error);
     }
-  }, [employer]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Logique de soumission ici
-    console.log("Données modifiées:", formData);
-  };
-
-  const posteOptions = [
-    "Tous les postes",
-    "Poste 1",
-    "Poste 2",
-    "Éducation",
-    "Santé",
-    "Finance",
-    "Retail",
-    "Fabrication",
-    "Autre",
-  ];
-
+  }
   return (
-    <DialogContent className="max-w-md rounded-2xl">
+    <DialogContent className="rounded-2xl  max-w-[300px]">
       <DialogHeader>
         <DialogTitle className="text-xl font-semibold">
           Modifier le profil
@@ -73,75 +88,111 @@ export default function EditEmployer({ employer }: { employer: Employer }) {
         </DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit}>
-        <div className="grid gap-2 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Nom complet</Label>
-            <Input
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              type="text"
-              placeholder="Nom de l'employé"
-              label={""}
-            />
-          </div>
+      <Form {...form}>
+        <form
+          onSubmit={handleSubmit(onsubmit)}
+          className="space-y-4 relative z-20"
+        >
+          <FormField
+            control={form.control}
+            name="nom"
+            render={({ field }) => (
+              <FormItem>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder=""
+                      type="text"
+                      aria-label="Nom d'utilisateur"
+                      className="pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200"
+                      onFocus={() => setFocusedField("username")}
+                      onBlur={() => setFocusedField("")}
+                    />
+                  </FormControl>
+                  <FormLabel
+                    className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                      shouldAnimateLabel("username", watchedUsername)
+                        ? "top-0 text-xs text-[#344EA2] -translate-y-1/2"
+                        : "top-1/2 -translate-y-1/2 text-muted-foreground"
+                    }`}
+                  >
+                    Nom d&apos;utilisateur
+                  </FormLabel>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              type="email"
-              placeholder="email@exemple.com"
-              label={""}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="telephone">Téléphone</Label>
-            <Input
-              id="telephone"
-              name="telephone"
-              value={formData.telephone}
-              onChange={handleChange}
-              type="tel"
-              placeholder="+33 6 12 34 56 78"
-              label={""}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Poste</Label>
-            <Select
-              value={formData.poste}
-              onValueChange={(value) =>
-                setFormData({ ...formData, poste: value })
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Sélectionner un poste" />
-              </SelectTrigger>
-              <SelectContent>
-                {posteOptions.map((option, index) => (
-                  <SelectItem key={index} value={option}>
-                    {option}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <DialogFooter className="mt-4">
-          <Button type="submit" className="px-6">
-            Enregistrer
-          </Button>
-        </DialogFooter>
-      </form>
+          <FormField
+            control={form.control}
+            name="telephone"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormControl>
+                  <div className="w-full">
+                    <RPNInput.default
+                      className="flex w-full"
+                      international
+                      flagComponent={FlagComponent}
+                      inputComponent={PhoneInput}
+                      countrySelectComponent={CountrySelect}
+                      placeholder="Entrez votre numéro"
+                      value={field.value}
+                      onChange={(value) => {
+                        field.onChange(value || "");
+                      }}
+                    />
+                    {fieldState.error && (
+                      <p className="text-destructive text-xs mt-1">
+                        {fieldState.error.message}
+                      </p>
+                    )}
+                  </div>
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <div className="relative">
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="email"
+                      aria-label="Email"
+                      className="pt-6 pb-2 px-3 border focus:border-[#344EA2] transition-all duration-200"
+                      onFocus={() => setFocusedField("email")}
+                      onBlur={() => setFocusedField("")}
+                    />
+                  </FormControl>
+                  <FormLabel
+                    className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                      shouldAnimateLabel("email", watchedEmail!)
+                        ? "top-0 text-xs text-[#344EA2] -translate-y-1/2"
+                        : "top-1/2 -translate-y-1/2 text-muted-foreground"
+                    }`}
+                  >
+                    Email
+                  </FormLabel>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <button
+            disabled={isPending}
+            type="submit"
+            className="custom-button-gradient py-2 w-full disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none"
+          >
+            {isPending ? "%modification en cours..." : "Sauvegarder"}
+          </button>
+        </form>
+      </Form>
     </DialogContent>
   );
 }

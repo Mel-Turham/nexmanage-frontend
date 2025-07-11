@@ -9,7 +9,6 @@ import {
   FilterMailCircleIcon,
   Megaphone02Icon,
   TaskAdd02Icon,
-  UserAdd01Icon,
   WorkHistoryIcon,
 } from "hugeicons-react";
 import TaskManagementPage from "./taches/TaskManagementPage";
@@ -173,10 +172,8 @@ const RightBar = ({
                 className="cursor-pointer hover:text-gray"
                 onClick={() => setIsExpanded(false)}
               />
-              <UserAdd01Icon
-                className="cursor-pointer hover:text-gray"
-                size={20}
-              />
+
+              <InviterEmployer triggerType="icon" />
               <WorkHistoryIcon
                 className="cursor-pointer hover:text-gray"
                 size={20}
@@ -241,3 +238,4 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import InviterEmployer from "@/app/(dashboard)/admin/employer/_components/invite";

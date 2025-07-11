@@ -1,10 +1,10 @@
-import { ApiError } from '@/types/api.types';
+import { ApiError } from "@/types/api.types";
 import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from 'axios';
-import { useAuthStore } from '@/stores/auth-store';
+} from "axios";
+import { useAuthStore } from "@/stores/auth-store";
 
 axios.defaults.withCredentials = true;
 
@@ -12,7 +12,7 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL!,
   timeout: 5000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -25,7 +25,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log(
         `🚀 ${config.method?.toUpperCase()} ${config.url}`,
         config.data
@@ -41,7 +41,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log(
         `✅ ${response.config.method?.toUpperCase()} ${response.config.url}`,
         response.data
@@ -54,7 +54,7 @@ api.interceptors.response.use(
       _retry?: boolean;
     };
     const apiError: ApiError = {
-      message: 'Une erreur est survenue',
+      message: "Une erreur est survenue",
       status: error.response?.status || 500,
     };
 
@@ -62,7 +62,7 @@ api.interceptors.response.use(
     if (
       error.response?.status === 403 &&
       !originalRequest._retry &&
-      typeof window !== 'undefined'
+      typeof window !== "undefined"
     ) {
       originalRequest._retry = true;
 
@@ -74,21 +74,23 @@ api.interceptors.response.use(
         );
 
         const newToken = refreshResponse.data.token;
-        console.log('Nouveau token:', newToken);
+        console.log("Nouveau token:", newToken);
 
         // Stocker le nouveau token dans Zustand
         useAuthStore.getState().setAccessToken(newToken);
 
         // Relancer la requête avec le nouveau token
         if (originalRequest.headers) {
-          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         }
 
         return api(originalRequest); // relance automatique
       } catch (refreshError) {
         // Échec du refresh : rediriger vers login
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
+        console.error("Échec du refresh : rediriger vers login", refreshError);
+
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
         }
       }
     }
@@ -103,12 +105,12 @@ api.interceptors.response.use(
 
       const errors = (data as { errors?: unknown }).errors;
       apiError.errors =
-        errors && typeof errors === 'object' && !Array.isArray(errors)
+        errors && typeof errors === "object" && !Array.isArray(errors)
           ? (errors as Record<string, string[]>)
           : undefined;
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.error(
         `❌ ${error.response?.status} ${error.config?.url}`,
         apiError
