@@ -23,7 +23,6 @@ import {
 import { Input } from '../ui/input';
 import { useApiMutation } from '@/hooks/apis/use-api';
 import { toast } from 'sonner';
-import { Badge } from '../ui/badge';
 
 interface ForgotPasswordResponse {
   success: boolean;

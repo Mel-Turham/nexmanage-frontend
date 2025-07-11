@@ -1,7 +1,6 @@
 "use client";
 
-import type React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   SendHorizontal,
   MessageSquare,
@@ -17,8 +16,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import NewChatModal from "@/components/modal";
-import { Utilisateur } from "@/types";
+import NewChatModal from "@/components/message/modal-new";
+import { Role, Utilisateur } from "@/types";
 
 interface Message {
   id: string;
@@ -252,7 +251,6 @@ export default function WhatsAppStyleChatPage() {
     setConversations(newConversations);
     setMessage("");
 
-    // Simulate message status updates
     setTimeout(() => {
       setConversations((prev) =>
         prev.map((conv) => {
@@ -270,26 +268,61 @@ export default function WhatsAppStyleChatPage() {
     }, 1000);
   };
 
-  // export interface Utilisateur {
-  //   idUtilisateur: string;
-  //   nom: string;
-  //   email?: string;
-  //   motDePasse: string;
-  //   telephone: string;
-  //   role: Role;
-  //   isActif: boolean;
-  //   dateCreation: Date;
-  //   update_at: Date;
-  //   delete_at: Date;
-  //   entreprise: Entreprise[];
-  // }
+  // Liste utilisateurs fictifs pour création nouvelle discussion/groupe
+  const utilisateursDisponibles: Utilisateur[] = [
+    {
+      idUtilisateur: "u1",
+      nom: "Alice",
+      email: "alice@example.com",
+      motDePasse: "",
+      telephone: "",
+      role: Role.EMPLOYE,
+      isActif: false,
+      entreprise: [],
+    },
+    {
+      idUtilisateur: "u2",
+      nom: "Bob",
+      email: "bob@example.com",
+      motDePasse: "",
+      telephone: "",
+      role: Role.EMPLOYE,
+      isActif: false,
+      entreprise: [],
+    },
+    {
+      idUtilisateur: "u3",
+      nom: "Charlie",
+      email: "charlie@example.com",
+      motDePasse: "",
+      telephone: "",
+      role: Role.EMPLOYE,
+      isActif: false,
+      entreprise: [],
+    },
+    {
+      idUtilisateur: "u4",
+      nom: "Denise",
+      email: "denise@example.com",
+      motDePasse: "",
+      telephone: "",
+      role: Role.EMPLOYE,
+      isActif: false,
+      entreprise: [],
+    },
+  ];
+
   const handleAddConversation = (employee: Utilisateur) => {
     const exists = conversations.find((c) => c.name === employee.nom);
     if (!exists) {
       const newConv: Conversation = {
         id: conversations.length + 1,
         name: employee.nom,
-        // initials: employee.initials,
+        initials: employee.nom
+          .split(" ")
+          .map((w) => w[0])
+          .join("")
+          .toUpperCase(),
         avatar: "/user.png",
         preview: "",
         time: "",
@@ -300,6 +333,33 @@ export default function WhatsAppStyleChatPage() {
       setConversations([...conversations, newConv]);
       setCurrentConvId(newConv.id);
     }
+    setIsModalOpen(false);
+  };
+
+  const handleCreateGroup = (groupName: string, members: Utilisateur[]) => {
+    if (!groupName.trim() || members.length === 0) {
+      alert(
+        "Veuillez saisir un nom de groupe et sélectionner au moins un membre."
+      );
+      return;
+    }
+    const newGroupConv: Conversation = {
+      id: conversations.length + 1,
+      name: groupName,
+      initials: groupName
+        .split(" ")
+        .map((w) => w[0])
+        .join("")
+        .toUpperCase(),
+      avatar: "/group.png",
+      preview: "",
+      time: "",
+      unreadCount: 0,
+      isOnline: false,
+      messages: [],
+    };
+    setConversations([...conversations, newGroupConv]);
+    setCurrentConvId(newGroupConv.id);
     setIsModalOpen(false);
   };
 
@@ -329,15 +389,10 @@ export default function WhatsAppStyleChatPage() {
     if (isMobileView) {
       setShowChatList(false);
     }
-
-    // Mark messages as read
     setConversations((prev) =>
-      prev.map((conv) => {
-        if (conv.id === convId) {
-          return { ...conv, unreadCount: 0 };
-        }
-        return conv;
-      })
+      prev.map((conv) =>
+        conv.id === convId ? { ...conv, unreadCount: 0 } : conv
+      )
     );
   };
 
@@ -362,13 +417,6 @@ export default function WhatsAppStyleChatPage() {
               >
                 <MessageSquare size={20} className="text-gray-600" />
               </Button>
-              {/* <Button
-                variant="ghost"
-                size="sm"
-                className="p-2 hover:bg-gray-200 rounded-full"
-              >
-                <MoreVertical size={20} className="text-gray-600" />
-              </Button> */}
             </div>
           </div>
 
@@ -409,7 +457,7 @@ export default function WhatsAppStyleChatPage() {
                       </AvatarFallback>
                     </Avatar>
                     {chat.isOnline && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-Primaire border-2 border-white rounded-full"></div>
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
                     )}
                   </div>
 
@@ -423,7 +471,7 @@ export default function WhatsAppStyleChatPage() {
                           {chat.time}
                         </span>
                         {chat.unreadCount > 0 && (
-                          <Badge className="bg-Primaire text-white text-xs min-w-[20px] h-5 rounded-full flex items-center justify-center">
+                          <Badge className="bg-blue-600 text-white text-xs min-w-[20px] h-5 rounded-full flex items-center justify-center">
                             {chat.unreadCount}
                           </Badge>
                         )}
@@ -484,30 +532,6 @@ export default function WhatsAppStyleChatPage() {
                       : currentConversation.lastSeen || "Hors ligne"}
                   </p>
                 </div>
-
-                {/* <div className="flex items-center gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-2 hover:bg-gray-200 rounded-full"
-                  >
-                    <Phone size={20} className="text-gray-600" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-2 hover:bg-gray-200 rounded-full"
-                  >
-                    <Video size={20} className="text-gray-600" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="p-2 hover:bg-gray-200 rounded-full"
-                  >
-                    <MoreVertical size={20} className="text-gray-600" />
-                  </Button>
-                </div> */}
               </div>
 
               {/* Messages */}
@@ -603,6 +627,8 @@ export default function WhatsAppStyleChatPage() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSelect={handleAddConversation}
+        onCreateGroup={handleCreateGroup}
+        utilisateurs={utilisateursDisponibles}
       />
     </div>
   );

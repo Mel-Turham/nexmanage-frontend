@@ -29,6 +29,13 @@ export enum StatutConge {
   REFUSE = 'REFUSE',
 }
 
+export enum StatutContrat {
+  EN_ATTENTE = "EN_ATTENTE",
+  EN_COURS = "EN_COURS",
+  TERMINE = "TERMINE",
+  ARRIVEE_TARDIVE = "ARRIVEE-TARDIVE",
+}
+
 export type Point = {
   coordinates: [number, number];
 };
@@ -111,6 +118,7 @@ export interface Contrat {
   estGabarit: boolean;
   nomGabarit?: string;
   dateCreation: Date;
+  statut: StatutContrat;
   //   equipements: Equipement[];
 }
 
@@ -192,10 +200,10 @@ export interface MyCompaniesRespose {
 export interface MyEntreprise {
   id: string;
   nom: string;
-  domain: string;
+  domaine: string;
   adresse: string;
   email: string;
-  nbreEmployes: number;
+  nbre_employers: number;
   dateCreation: Date;
   totalUsers: number;
   owner: Owner;
