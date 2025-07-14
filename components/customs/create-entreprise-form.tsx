@@ -47,7 +47,7 @@ const CreateEntrepriseForm = () => {
   const createEntrepriseMutation = useApiMutation<
     unknown,
     CreateEntrepriseSchema
-  >('POST', '/entreprises', {
+  >('POST', '/org/create', {
     onSuccess: (data) => {
       toast.success('Organisation créée avec succès');
       console.log("Données de l'organisation:", data);

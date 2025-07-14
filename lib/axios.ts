@@ -1,9 +1,9 @@
-import { ApiError } from '@/types/api.types';
 import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { ApiError } from '@/types/api.types';
 import { useAuthStore } from '@/stores/auth-store';
 
 axios.defaults.withCredentials = true;
@@ -15,8 +15,6 @@ export const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
-// ✅ Request interceptor asynchrone
 api.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     const token = useAuthStore.getState().accessToken;
@@ -34,9 +32,7 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error: AxiosError) => {
-    return Promise.reject(error);
-  }
+  (error: AxiosError) => Promise.reject(error)
 );
 
 api.interceptors.response.use(
@@ -53,49 +49,52 @@ api.interceptors.response.use(
     const originalRequest = error.config as InternalAxiosRequestConfig & {
       _retry?: boolean;
     };
+
     const apiError: ApiError = {
       message: 'Une erreur est survenue',
       status: error.response?.status || 500,
     };
-
-    // 👉 Gestion automatique du refresh token
     if (
-      error.response?.status === 403 &&
+      error.response?.status === 401 &&
       !originalRequest._retry &&
       typeof window !== 'undefined'
     ) {
       originalRequest._retry = true;
 
       try {
-        const refreshResponse = await api.post(
-          `/auth/refresh-token`,
-          {},
-          { withCredentials: true }
-        );
+        const refreshApi = axios.create({
+          baseURL: process.env.NEXT_PUBLIC_API_URL!,
+          withCredentials: true,
+        });
 
-        const newToken = refreshResponse.data.token;
-        console.log('Nouveau token:', newToken);
+        const response = await refreshApi.post('/auth/refresh-token');
 
-        // Stocker le nouveau token dans Zustand
+        const newToken = response.data.token;
+        console.log('🔄 Nouveau token reçu:', newToken);
+
+        // ✅ Mise à jour du store Zustand
         useAuthStore.getState().setAccessToken(newToken);
 
-        // Relancer la requête avec le nouveau token
+        // ✅ Ajout du nouveau token dans la requête d’origine
         if (originalRequest.headers) {
           originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
         }
 
-        return api(originalRequest); // relance automatique
+        return api(originalRequest); // 🔁 relance la requête automatiquement
       } catch (refreshError) {
-        // Échec du refresh : rediriger vers login
+        console.error('⛔ Refresh token invalide ou expiré:', refreshError);
+
+        // ✅ Redirige vers login si refresh échoue
         if (typeof window !== 'undefined') {
           window.location.href = '/login';
         }
       }
     }
 
-    // Gestion personnalisée des erreurs
+    // ✅ Extraction propre des messages d'erreur du backend
     if (error.response?.data) {
       const data = error.response.data as Record<string, unknown>;
+
       apiError.message =
         (data as { message?: string; error?: string }).message ||
         (data as { error?: string }).error ||

@@ -14,7 +14,7 @@ import {
 } from '../ui/form';
 import { Input } from '../ui/input';
 import { EyeIcon, EyeOffIcon, Frown, Meh, Smile } from 'lucide-react';
-import { use, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useInvitationResponseStore } from '@/stores/invitation-response-store';
 import { useApiMutation } from '@/hooks/apis/use-api';
 import { toast } from 'sonner';
@@ -133,21 +133,19 @@ export function CreatePasswordForm() {
         return;
       }
       const response = await mutateAsync({
-        nom: user.user.result.nom,
-        email: user.user.result.email,
-        phone: user.user.result.phone,
+        nom: user.result.nom,
+        email: user.result.email,
+        phone: user.result.phone,
         password: data.password,
       });
 
       toast.success(response.message, {
         duration: 3000,
-        onAutoClose: () => {
-          router.push('/create-company');
-        },
       });
 
       // supprimer le user dans l'invitation response dans le localstorage
       clearUser();
+      router.push('/create-entreprise');
     } catch (error) {
       console.log(error);
     }

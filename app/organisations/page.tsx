@@ -73,15 +73,15 @@ function OrganisationsPage() {
           </DropdownMenuContent>
         </DropdownMenu>
       </header>
-      <div className='flex items-center justify-between'>
-        <div>
+      <div className='flex items-center justify-between flex-wrap gap-4'>
+        {/* <div>
           <h1 className='text-3xl font-bold text-black/70'>
             Mes Organisations
           </h1>
           <p className='text-base mt-2 tracking-tighter text-gray-500'>
             Gérez et suivez tous vos projets en cours
           </p>
-        </div>
+        </div> */}
         <CreateOrganisation />
       </div>
       <OrganisationsList />
