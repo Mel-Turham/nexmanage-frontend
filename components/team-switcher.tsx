@@ -204,6 +204,7 @@ export function TeamSwitcher() {
                           className='text-xs capitalize'
                           variant={'outline'}
                         >
+                         
                           {org.role}
                         </Badge>
                       </span>

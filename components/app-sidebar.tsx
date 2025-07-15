@@ -1,5 +1,5 @@
-'use client';
-import { usePathname } from 'next/navigation';
+"use client";
+import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -11,15 +11,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from '@/components/ui/sidebar';
-import { TeamSwitcher } from './team-switcher';
+} from "@/components/ui/sidebar";
+import { TeamSwitcher } from "./team-switcher";
 import {
   Analytics02Icon,
   Calendar02Icon,
   CursorPointer02Icon,
   Home01Icon,
   Message01Icon,
-  Settings02Icon,
   UserListIcon,
   WorkHistoryIcon,
 } from 'hugeicons-react';
@@ -27,42 +26,31 @@ import Link from 'next/link';
 const data = {
   navMain: [
     {
-      title: 'Menu principal',
-      url: '#',
+      // title: "Menu principal",
+      // url: "#",
       items: [
-        { title: 'Accueil', icon: Home01Icon, url: '/admin' },
-        { title: 'Planning', icon: Calendar02Icon, url: '/admin/planning' },
-        { title: 'Congés', icon: WorkHistoryIcon, url: '/admin/conges' },
-      ],
-    },
-    {
-      title: 'Menu Secondaire',
-      url: '#',
-      items: [
+        { title: "Accueil", icon: Home01Icon, url: "/admin" },
+        { title: "Planning", icon: Calendar02Icon, url: "/admin/planning" },
+        { title: "Congés", icon: WorkHistoryIcon, url: "/admin/conges" },
         {
-          title: 'Pointages',
+          title: "Pointages",
           icon: CursorPointer02Icon,
-          url: '/admin/pointages',
+          url: "/admin/pointages",
         },
         {
-          title: 'Ressources Humaines',
+          title: "Ressources Humaines",
           icon: UserListIcon,
-          url: '/admin/employer',
+          url: "/admin/employer",
         },
-        { title: 'Messages', icon: Message01Icon, url: '/admin/message' },
-      ],
-    },
-    {
-      title: 'Aide et Analyse',
-      url: '#',
-      items: [
-        { title: 'Rapports', icon: Analytics02Icon, url: '/admin/rapports' },
-        { title: 'Paramètres', icon: Settings02Icon, url: '/admin/parametres' },
+        { title: "Messages", icon: Message01Icon, url: "/admin/message" },
+        { title: "Rapports", icon: Analytics02Icon, url: "/admin/rapports" },
+        // { title: "Paramètres", icon: Settings02Icon, url: "/admin/parametres" },
       ],
     },
   ],
 };
 
+    
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
 
@@ -73,9 +61,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        {data.navMain.map((group) => (
-          <SidebarGroup key={group.title}>
-            <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+        {data.navMain.map((group, index) => (
+          <SidebarGroup key={index}>
+            {/* <SidebarGroupLabel>{group.title}</SidebarGroupLabel> */}
             <SidebarGroupContent>
               <SidebarMenu>
                 {group.items.map((item) => {
@@ -86,21 +74,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton asChild>
                         <Link
+
                           href={`${item.url}`}
                           className={`flex items-center space-x-2 rounded-none px-2 py-3 h-fit transition-all duration-200 ${
                             isActive
-                              ? 'border-l-4 border-Primaire text-Primaire font-semibold bg-bleu-ciel'
-                              : 'text-gray-700 hover:bg-gray-100 hover:text-Primaire'
+                              ? "border-l-4 border-Primaire text-Primaire font-semibold bg-bleu-ciel"
+                              : "text-gray-700 hover:bg-gray-100 hover:text-Primaire"
                           }`}
                         >
                           {Icon && (
                             <Icon
                               size={24}
-                              color={isActive ? '#344EA2' : '#142938'}
-                              className='transition-colors duration-200'
+                              color={isActive ? "#344EA2" : "#142938"}
+                              className="transition-colors duration-200"
                             />
                           )}
-                          <span className='transition-colors duration-200'>
+                          <span className="transition-colors duration-200">
                             {item.title}
                           </span>
                         </Link>

@@ -17,7 +17,7 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useAuthStore } from '@/stores/auth-store';
-
+export function NavUser() {
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -44,7 +44,6 @@ export function NavUser() {
       toast.error('Une erreur est survenue lors de la deconnexion');
     }
   };
-
   return (
     <SidebarMenu className='contents'>
       <SidebarMenuItem className='w-fit'>

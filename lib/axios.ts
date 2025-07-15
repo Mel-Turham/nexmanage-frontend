@@ -1,8 +1,9 @@
+
 import axios, {
   AxiosError,
   AxiosResponse,
   InternalAxiosRequestConfig,
-} from 'axios';
+} from "axios";
 import { ApiError } from '@/types/api.types';
 import { useAuthStore } from '@/stores/auth-store';
 
@@ -12,7 +13,7 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL!,
   timeout: 5000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 api.interceptors.request.use(
@@ -23,7 +24,7 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log(
         `🚀 ${config.method?.toUpperCase()} ${config.url}`,
         config.data
@@ -37,7 +38,7 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response: AxiosResponse) => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.log(
         `✅ ${response.config.method?.toUpperCase()} ${response.config.url}`,
         response.data
@@ -51,13 +52,13 @@ api.interceptors.response.use(
     };
 
     const apiError: ApiError = {
-      message: 'Une erreur est survenue',
+      message: "Une erreur est survenue",
       status: error.response?.status || 500,
     };
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      typeof window !== 'undefined'
+      typeof window !== "undefined"
     ) {
       originalRequest._retry = true;
 
@@ -77,7 +78,7 @@ api.interceptors.response.use(
 
         // ✅ Ajout du nouveau token dans la requête d’origine
         if (originalRequest.headers) {
-          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+          originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
         }
 
         return api(originalRequest); // 🔁 relance la requête automatiquement
@@ -102,12 +103,12 @@ api.interceptors.response.use(
 
       const errors = (data as { errors?: unknown }).errors;
       apiError.errors =
-        errors && typeof errors === 'object' && !Array.isArray(errors)
+        errors && typeof errors === "object" && !Array.isArray(errors)
           ? (errors as Record<string, string[]>)
           : undefined;
     }
 
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       console.error(
         `❌ ${error.response?.status} ${error.config?.url}`,
         apiError
