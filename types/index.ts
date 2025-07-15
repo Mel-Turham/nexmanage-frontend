@@ -229,12 +229,11 @@ interface pagination {
 // Invitation data
 
 export interface InvitationResponse {
-  user: {
-    result: {
-      nom: string;
-      email?: string;
-      phone?: string;
-    };
+  success: boolean;
+  result: {
+    nom: string;
+    email?: string;
+    phone?: string;
   };
 }
 

@@ -52,13 +52,12 @@ function CreateOrganisation() {
   const { mutateAsync, isPending } = useApiMutation<
     unknown,
     CreateEntrepriseSchema
-  >('POST', '/company/create', {
+  >('POST', '/org/create', {
     onSuccess: (data) => {
       console.log('Entreprise created successfully:', data);
       setOpenCreateEntrepriseDialog(false);
       form.reset();
       toast.success('Entreprise créée avec succès');
-
       queryClient.invalidateQueries({ queryKey: ['entreprises'] });
     },
     onError: (error) => {
@@ -97,7 +96,7 @@ function CreateOrganisation() {
           <div className='flex size-6 items-center justify-center rounded-md border bg-transparent'>
             <Plus className='size-4' />
           </div>
-          <div className='font-medium'>Ajouter une Entreprise</div>
+          <div className='font-medium'>Créer une organisation</div>
         </Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[700px]'>
