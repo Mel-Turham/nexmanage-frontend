@@ -25,3 +25,7 @@ export const createEntrepriseSchema = z.object({
 });
 
 export type CreateEntrepriseSchema = z.infer<typeof createEntrepriseSchema>;
+
+export type EditOrganisation = Partial<CreateEntrepriseSchema> & {
+  id: string;
+};

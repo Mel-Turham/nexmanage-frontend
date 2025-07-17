@@ -4,14 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { CreatePasswordSchema } from '@/schemas/auth.schemas/create-password.schema';
 import { createPasswordSchema } from '@/schemas/auth.schemas/create-password.schema';
 import NextManageIcon from '@/icons/logo';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '../ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Input } from '../ui/input';
 import { EyeIcon, EyeOffIcon, Frown, Meh, Smile } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -20,6 +13,7 @@ import { useApiMutation } from '@/hooks/apis/use-api';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
+import { UserStorageData } from '@/types';
 
 export function CreatePasswordForm() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -28,6 +22,9 @@ export function CreatePasswordForm() {
   const [focusedField, setFocusedField] = useState<string>('');
   const { user, clearUser } = useInvitationResponseStore();
   const { setAccessToken } = useAuthStore();
+
+  const item = localStorage.getItem('userInvitation');
+  const userInvited: UserStorageData | null = item ? JSON.parse(item) : null;
 
   const router = useRouter();
 
@@ -62,10 +59,7 @@ export function CreatePasswordForm() {
   const watchedPassword = watch('password');
   const watchedConfirmPassword = watch('confirmPassword');
 
-  const strength = useMemo(
-    () => checkStrength(watchedPassword || ''),
-    [watchedPassword]
-  );
+  const strength = useMemo(() => checkStrength(watchedPassword || ''), [watchedPassword]);
 
   const strengthScore = useMemo(() => {
     return strength.filter((req) => req.met).length;
@@ -83,21 +77,21 @@ export function CreatePasswordForm() {
     if (score === 0) return;
     if (score <= 2)
       return (
-        <span className='flex items-center gap-1 text-red-500'>
-          <Frown size={20} aria-hidden='true' />
+        <span className="flex items-center gap-1 text-red-500">
+          <Frown size={20} aria-hidden="true" />
           Mot de passe faible
         </span>
       );
     if (score === 3)
       return (
-        <span className='flex items-center gap-1 text-amber-500'>
-          <Meh size={20} aria-hidden='true' />
+        <span className="flex items-center gap-1 text-amber-500">
+          <Meh size={20} aria-hidden="true" />
           Mot de passe moyen
         </span>
       );
     return (
-      <span className='flex items-center gap-1 text-emerald-500'>
-        <Smile size={20} aria-hidden='true' />
+      <span className="flex items-center gap-1 text-emerald-500">
+        <Smile size={20} aria-hidden="true" />
         Mot de passe fort
       </span>
     );
@@ -113,7 +107,7 @@ export function CreatePasswordForm() {
     phone?: string;
   };
 
-  const { mutateAsync, isPending } = useApiMutation<
+  const { mutateAsync: createPassword, isPending } = useApiMutation<
     { message: string; token: string },
     dataCreatePassword
   >('POST', '/auth/register', {
@@ -121,97 +115,111 @@ export function CreatePasswordForm() {
       setAccessToken(data.token);
     },
     onError: (error) => {
+      toast.error(error.message || 'Une erreur inconnue est survenue.');
+    },
+  });
+
+  const { mutateAsync: UserInvitedRegister, isPending: isPendingInvited } = useApiMutation<
+    { message: string; token: string; success: boolean },
+    UserStorageData & { password: string }
+  >('POST', '/org/register-company', {
+    onSuccess: (data) => {
+      setAccessToken(data.token);
+    },
+    onError: (error) => {
       console.log(error);
     },
   });
+
   async function onSubmit(data: CreatePasswordSchema) {
     try {
-      if (!user) {
-        toast.warning("Votre compte n'a pas encore ete verifier", {
-          duration: 3000,
+      if (userInvited) {
+        const { isUser, ...rest } = userInvited;
+        const result = await UserInvitedRegister({
+          ...rest,
+          password: data.password,
         });
+
+        toast.success(result.message, { duration: 3000 });
+        localStorage.removeItem('userInvitation');
+        router.push('/dashboard');
         return;
       }
-      const response = await mutateAsync({
+      if (!user) {
+        toast.warning("Votre compte n'a pas encore été vérifié");
+        return;
+      }
+
+      const response = await createPassword({
         nom: user.result.nom,
         email: user.result.email,
         phone: user.result.phone,
         password: data.password,
       });
 
-      toast.success(response.message, {
-        duration: 3000,
-      });
-
-      // supprimer le user dans l'invitation response dans le localstorage
+      toast.success(response.message, { duration: 3000 });
       clearUser();
       router.push('/create-entreprise');
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      toast.error('Une erreur est survenue lors de la création du mot de passe');
     }
   }
 
   return (
-    <div className='flex flex-col gap-4 min-h-screen'>
+    <div className="flex min-h-screen flex-col gap-4">
       <NextManageIcon />
-      <div className='flex flex-col min-h-[50svh] justify-center items-center gap-4 w-full '>
-        <div className='relative z-10'>
-          <h1 className='text-3xl font-semibold  text-[#344EA2]'>
-            Créer un mots de passe
-          </h1>
-          <p className='text-base tracking-tighter font-medium text-center mt-2 text-muted-foreground'>
+      <div className="flex min-h-[50svh] w-full flex-col items-center justify-center gap-4">
+        <div className="relative z-10">
+          <h1 className="text-3xl font-semibold text-[#344EA2]">Créer un mots de passe</h1>
+          <p className="text-muted-foreground mt-2 text-center text-base font-medium tracking-tighter">
             Créer facilement votre mots de passe
           </p>
         </div>
         <Form {...form}>
-          <form
-            className='space-y-4 max-w-md lg:w-[500px]'
-            onSubmit={handleSubmit(onSubmit)}
-          >
+          <form className="max-w-md space-y-4 lg:w-[500px]" onSubmit={handleSubmit(onSubmit)}>
             <FormField
               control={control}
-              name='password'
+              name="password"
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative'>
+                  <div className="relative">
                     <FormControl>
-                      <div className='relative'>
+                      <div className="relative">
                         <Input
                           {...field}
-                          placeholder=''
+                          placeholder=""
                           type={isVisible ? 'text' : 'password'}
-                          aria-label='Votre mot de passe'
-                          className={`pt-6 pb-2 px-3 pr-10 transition-all duration-200 ${
+                          aria-label="Votre mot de passe"
+                          className={`px-3 pt-6 pr-10 pb-2 transition-all duration-200 ${
                             form.formState.errors.password
-                              ? 'border-red-500 focus:border-red-500 ring-red-500 focus:ring-red-500'
+                              ? 'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500'
                               : 'border focus:border-[#344EA2]'
                           }`}
                           onFocus={() => setFocusedField('password')}
                           onBlur={() => setFocusedField('')}
                         />
                         <FormLabel
-                          className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
+                          className={`bg-background pointer-events-none absolute left-3 px-1 transition-all duration-200 ${
                             shouldAnimateLabel('password', watchedPassword)
-                              ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
-                              : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                              ? 'top-0 -translate-y-1/2 text-xs text-[#344EA2]'
+                              : 'text-muted-foreground top-1/2 -translate-y-1/2'
                           }`}
                         >
                           Votre mot de passe
                         </FormLabel>
                         <button
-                          className='text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer'
-                          type='button'
+                          className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 cursor-pointer items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                          type="button"
                           onClick={toggleVisibility}
-                          aria-label={
-                            isVisible ? 'Hide password' : 'Show password'
-                          }
+                          aria-label={isVisible ? 'Hide password' : 'Show password'}
                           aria-pressed={isVisible}
-                          aria-controls='password'
+                          aria-controls="password"
                         >
                           {isVisible ? (
-                            <EyeOffIcon size={16} aria-hidden='true' />
+                            <EyeOffIcon size={16} aria-hidden="true" />
                           ) : (
-                            <EyeIcon size={16} aria-hidden='true' />
+                            <EyeIcon size={16} aria-hidden="true" />
                           )}
                         </button>
                       </div>
@@ -220,24 +228,24 @@ export function CreatePasswordForm() {
 
                   {/* Indicateur de force du mot de passe */}
                   {watchedPassword && (
-                    <div className='mt-2'>
+                    <div className="mt-2">
                       <div
-                        className='bg-border h-1 w-full  overflow-hidden rounded-full'
-                        role='progressbar'
+                        className="bg-border h-1 w-full overflow-hidden rounded-full"
+                        role="progressbar"
                         aria-valuenow={strengthScore}
                         aria-valuemin={0}
                         aria-valuemax={4}
-                        aria-label='Password strength'
+                        aria-label="Password strength"
                       >
                         <div
                           className={`h-full ${getStrengthColor(
-                            strengthScore
+                            strengthScore,
                           )} transition-all duration-500 ease-out`}
                           style={{ width: `${(strengthScore / 4) * 100}%` }}
                         />
                       </div>
                       {/* Description de la force du mot de passe */}
-                      <p className='text-foreground text-xs mt-2 font-medium'>
+                      <p className="text-foreground mt-2 text-xs font-medium">
                         {getStrengthText(strengthScore)}
                       </p>
                     </div>
@@ -250,53 +258,48 @@ export function CreatePasswordForm() {
 
             <FormField
               control={form.control}
-              name='confirmPassword'
+              name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <div className='relative'>
+                  <div className="relative">
                     <FormControl>
-                      <div className='relative'>
+                      <div className="relative">
                         <Input
                           {...field}
-                          placeholder=''
+                          placeholder=""
                           type={isPasswordVisible ? 'text' : 'password'}
-                          aria-label='Confirmer le mot de passe'
+                          aria-label="Confirmer le mot de passe"
                           className={`${
                             form.formState.errors.confirmPassword
-                              ? 'border-red-500 focus:border-red-500 ring-red-500 focus:ring-red-500'
-                              : 'pt-6 pb-2 px-3 pr-10 border focus:border-[#344EA2] transition-all duration-200'
+                              ? 'border-red-500 ring-red-500 focus:border-red-500 focus:ring-red-500'
+                              : 'border px-3 pt-6 pr-10 pb-2 transition-all duration-200 focus:border-[#344EA2]'
                           } `}
                           onFocus={() => setFocusedField('confirmPassword')}
                           onBlur={() => setFocusedField('')}
                         />
                         <FormLabel
-                          className={`absolute left-3 transition-all duration-200 pointer-events-none bg-background px-1 ${
-                            shouldAnimateLabel(
-                              'confirmPassword',
-                              watchedConfirmPassword
-                            )
-                              ? 'top-0 text-xs text-[#344EA2] -translate-y-1/2'
-                              : 'top-1/2 -translate-y-1/2 text-muted-foreground'
+                          className={`bg-background pointer-events-none absolute left-3 px-1 transition-all duration-200 ${
+                            shouldAnimateLabel('confirmPassword', watchedConfirmPassword)
+                              ? 'top-0 -translate-y-1/2 text-xs text-[#344EA2]'
+                              : 'text-muted-foreground top-1/2 -translate-y-1/2'
                           }`}
                         >
                           Confirmer le mot de passe
                         </FormLabel>
                         <button
-                          className='text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer'
-                          type='button'
+                          className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 cursor-pointer items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                          type="button"
                           onClick={togglePasswordVisibility}
                           aria-label={
-                            isPasswordVisible
-                              ? 'Hide confirmPassword'
-                              : 'Show confirmPassword'
+                            isPasswordVisible ? 'Hide confirmPassword' : 'Show confirmPassword'
                           }
                           aria-pressed={isPasswordVisible}
-                          aria-controls='confirmPassword'
+                          aria-controls="confirmPassword"
                         >
                           {isPasswordVisible ? (
-                            <EyeOffIcon size={16} aria-hidden='true' />
+                            <EyeOffIcon size={16} aria-hidden="true" />
                           ) : (
-                            <EyeIcon size={16} aria-hidden='true' />
+                            <EyeIcon size={16} aria-hidden="true" />
                           )}
                         </button>
                       </div>
@@ -308,12 +311,12 @@ export function CreatePasswordForm() {
             />
             <button
               disabled={
-                !watchedConfirmPassword || !watchedPassword || isPending
+                !watchedConfirmPassword || !watchedPassword || isPending || isPendingInvited
               }
-              type='submit'
-              className='custom-button-gradient py-2 w-full disabled:opacity-30 disabled:cursor-not-allowed disabled:pointer-events-none'
+              type="submit"
+              className="custom-button-gradient w-full py-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-30"
             >
-              {isPending ? 'Creation en cours...' : 'Création de mots de passe'}
+              {isPending || isPendingInvited ? 'Creation en cours...' : 'Création de mots de passe'}
             </button>
           </form>
         </Form>

@@ -3,8 +3,6 @@ import { Manrope } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'sonner';
 import { ProviderQueryClient } from '@/providers/QueryClient';
-import { Suspense } from 'react';
-import Loading from './laoding';
 
 import { CompanyProvider } from '@/hooks/use-company-context';
 import { AuthProvider } from '@/providers/auth-provider';
@@ -24,14 +22,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='fr'>
+    <html lang="fr">
       <body className={`${manrope.className} antialiased`}>
-        <Toaster position='top-right' closeButton richColors />
+        <Toaster position="top-right" closeButton richColors />
         <CompanyProvider>
           <ProviderQueryClient>
-            <Suspense fallback={<Loading />}>
-              <AuthProvider>{children}</AuthProvider>
-            </Suspense>
+            <AuthProvider>{children}</AuthProvider>
           </ProviderQueryClient>
         </CompanyProvider>
       </body>

@@ -17,7 +17,6 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { useAuthStore } from '@/stores/auth-store';
-export function NavUser() {
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { toast } from 'sonner';
@@ -37,7 +36,6 @@ export function NavUser() {
       toast.success('Deconnexion effectuer avec success', {
         duration: 4000,
       });
-      localStorage.clear();
       router.push('/login');
     } catch (error) {
       console.log(error);

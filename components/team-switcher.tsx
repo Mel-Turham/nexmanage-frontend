@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronsUpDown, Plus, Search } from 'lucide-react';
+import { ChevronsUpDown, Plus } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -127,13 +127,6 @@ export function TeamSwitcher() {
     setOpenCreateEntrepriseDialog(true);
   };
 
-  React.useEffect(() => {
-    // mettre la premire organisation actif si actifOrg est null
-    if (!activeOrg) {
-      setActiveOrg(organisations[0]);
-    }
-  }, [activeOrg, setActiveOrg]);
-
   const onSubmit = async (data: CreateEntrepriseSchema) => {
     const loadingId = toast.loading("Création de l'entreprise en cours...");
     try {
@@ -171,7 +164,7 @@ export function TeamSwitcher() {
                   <span className='truncate font-semibold text-lg'>
                     {activeOrg?.nom}
                   </span>
-                  <span className='text-xs text-muted-foreground'>
+                  <span className='text-xs text-muted-foreground truncate'>
                     {activeOrg?.domain}
                   </span>
                 </div>
@@ -204,7 +197,6 @@ export function TeamSwitcher() {
                           className='text-xs capitalize'
                           variant={'outline'}
                         >
-                         
                           {org.role}
                         </Badge>
                       </span>

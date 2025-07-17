@@ -30,10 +30,10 @@ export enum StatutConge {
 }
 
 export enum StatutContrat {
-  EN_ATTENTE = "EN_ATTENTE",
-  EN_COURS = "EN_COURS",
-  TERMINE = "TERMINE",
-  ARRIVEE_TARDIVE = "ARRIVEE-TARDIVE",
+  EN_ATTENTE = 'EN_ATTENTE',
+  EN_COURS = 'EN_COURS',
+  TERMINE = 'TERMINE',
+  ARRIVEE_TARDIVE = 'ARRIVEE-TARDIVE',
 }
 
 export type Point = {
@@ -132,13 +132,6 @@ export interface Tache {
   dateCreation: Date;
   contrat?: Contrat[];
 }
-
-// export class Equipement {
-//   id: string;
-//   nom: string;
-//   type: string;
-//   contrat: Contrat;
-// }
 
 export interface Présence {
   id: string;
@@ -239,4 +232,72 @@ export interface InvitationResponse {
 
 export interface Iregister {
   token: string;
+}
+
+export interface EditOrgResponse {
+  success: boolean;
+  message: string;
+  result: Result;
+}
+
+export interface Result {
+  id: string;
+  nom: string;
+  domain: string;
+  email: string;
+  role: UserRole;
+  joinedAt: string;
+  adresse: string;
+  nbreEmployes: number;
+  createAt: string;
+  updatedAt: string;
+  deletedAt: null;
+}
+
+export interface UserInvitationResponse {
+  result: {
+    invitation: {
+      isUser: boolean;
+      email: string;
+      phone: string;
+      organisationId: string;
+      role: UserRole;
+    };
+  };
+  success: boolean;
+}
+
+export interface UserStorageData {
+  isUser?: boolean;
+  email: string;
+  phone: string;
+  organisationId: string;
+  role: string;
+}
+
+export interface Users {
+  success: boolean;
+  users: User[];
+}
+
+export interface User {
+  id: string;
+  nom: null | string;
+  email: string;
+  phone: string;
+  joinedAt: Date;
+  role: string;
+}
+
+export interface JwtPayload {
+  userId: string;
+  exp?: number;
+  iat?: number;
+  sub?: string;
+}
+
+export interface EditUser {
+  nom: string;
+  email: string;
+  phone: string;
 }

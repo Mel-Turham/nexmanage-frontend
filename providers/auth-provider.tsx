@@ -1,34 +1,40 @@
 'use client';
-
-import Loading from '@/app/laoding';
 import { api } from '@/lib/axios';
 import { useAuthStore } from '@/stores/auth-store';
 import { User } from '@/types';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useAuthStore((state) => state.setUser);
-  const accessToken = useAuthStore((state) => state.accessToken);
   const setOrganisations = useAuthStore((state) => state.setOrganisations);
+  const accessToken = useAuthStore((state) => state.accessToken);
+  const isLoggedOut = useAuthStore((state) => state.isLoggedOut);
 
-  const { isLoading } = useQuery<User, unknown>({
+  const { data, isLoading } = useQuery<User>({
     queryKey: ['me'],
     queryFn: async () => {
       const response = await api.get('/auth/me');
-      console.log('Me response', response.data.user);
-      setUser(response.data.user.user);
-      setOrganisations(response.data.user.organisations);
-
-      return response.data.user;
+      const user = response.data.user.user;
+      const organisations = response.data.user.organisations;
+      setUser(user);
+      setOrganisations(organisations);
+      return response.data;
     },
-    enabled: !!accessToken,
+    enabled: !!accessToken && !isLoggedOut,
     retry: false,
     refetchOnWindowFocus: false,
+    refetchOnMount: true,
   });
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  console.log(data);
+
+  useEffect(() => {
+    if (data) {
+      setUser(data.user.user);
+      setOrganisations(data.user.organisations);
+    }
+  }, [data, setUser, setOrganisations, isLoggedOut]);
 
   return <>{children}</>;
 }

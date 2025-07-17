@@ -30,7 +30,6 @@ import { toast } from 'sonner';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '../ui/button';
 import { Plus } from 'lucide-react';
-
 import { useRouter } from 'next/navigation';
 
 function CreateOrganisation() {

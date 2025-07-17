@@ -1,13 +1,12 @@
-import React from "react";
-import EmployerTable from "./_components/EmployerTable";
-import employers from "@/data/employers.json";
+import EquipesList from '@/components/equipes/equipes-list';
+import { InvitationDialogue } from '@/components/equipes/invitation-dialogue';
+import React from 'react';
 
 const Page = () => {
   return (
-    <div className="h-full">
-      <main className="p-6 h-full">
-        <EmployerTable employers={employers} />
-      </main>
+    <div className='p-4 space-y-4'>
+      <InvitationDialogue />
+      <EquipesList />
     </div>
   );
 };
